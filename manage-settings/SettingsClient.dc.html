@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Manage Settings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF}
+a{color:#3F0FB7}a:hover{color:#2E098B}
+button{font-family:inherit;cursor:pointer}
+select,input{font-family:inherit}
+.kz-ico{fill:none;stroke:currentColor;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round}
+.kz-input:hover{border-color:#94A3B8}
+.kz-input:focus{outline:none;border-color:#3F0FB7;box-shadow:0 0 0 3px rgba(63,15,183,0.10)}
+.kz-navitem:hover{background:#F1F5F9}
+.kz-primary:hover{background:#2E098B !important}
+.kz-ghost:hover{background:#F8FAFC}
+.kz-ghost-neg:hover{background:#FEF2F2}
+.kz-outline:hover{background:#F1EEFC !important}
+.kz-link:hover{text-decoration:underline;text-underline-offset:4px}
+.kz-cb{appearance:none;-webkit-appearance:none;width:18px;height:18px;margin:0;border:2px solid #94A3B8;border-radius:4px;background:#FFFFFF;cursor:pointer;display:grid;place-content:center}
+.kz-cb:checked{background:#3F0FB7;border-color:#3F0FB7}
+.kz-cb:checked::after{content:"";width:9px;height:5px;border-left:2px solid #FFFFFF;border-bottom:2px solid #FFFFFF;transform:translateY(-1px) rotate(-45deg)}
+.kz-cbhit{width:40px;height:40px;border-radius:9999px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.kz-cbhit:hover{background:#F1EEFC}
+@keyframes kzToastIn{from{opacity:0;transform:translate(-50%,-8px) scale(.97)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+@keyframes kzShrink{from{width:100%}to{width:0%}}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #FFFFFF; font-family: Inter, sans-serif; color: #1E293B; display: flex; flex-direction: column">
+  <header style="height: 80px; flex: none; background: #F1EEFC; display: flex; align-items: center; gap: 16px; padding: 0 24px; box-sizing: border-box; position: sticky; top: 0; z-index: 200">
+    <span style="font-size: 30px; font-weight: 700; letter-spacing: -0.02em; color: #020617">Keyz</span>
+    <span style="width: 1px; height: 22px; background: #CBD5E1"></span>
+    <span style="font-size: 18px; font-weight: 600; color: #3F0FB7">Client Portal</span>
+    <span style="flex: 1"></span>
+    <span style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #334155"><svg class="kz-ico" width="22" height="22" viewBox="0 0 24 24"><path d="M20.5,16.5V11c0-3.651-2.309-6.756-5.541-7.959C14.738,1.603,13.5,0.5,12,0.5S9.258,1.603,9.037,3.041C5.805,4.244,3.5,7.349,3.5,11v5.5c0,1.657-1.344,3-3,3h23C21.841,19.5,20.5,18.157,20.5,16.5z"></path><path d="M15,19.5c0,1.657-1.344,3-3,3c-1.659,0-3-1.343-3-3"></path></svg></span>
+    <span style="width: 1px; height: 22px; background: #CBD5E1"></span>
+    <a href="ClientMenu.dc.html" aria-label="Open account menu" style="width: 36px; height: 36px; border-radius: 9999px; background: {{ photoBg }}; text-decoration: none; color: #FFFFFF; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{ initials }}</a>
+  </header>
+  <div style="flex: 1; display: flex; min-height: 0">
+    <nav aria-label="Main" style="width: 80px; flex: none; background: #F1EEFC; border-right: 1px solid #D4DCE8; display: flex; flex-direction: column; padding-top: 8px">
+      <span style="height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #334155; font-size: 12px"><svg class="kz-ico" width="22" height="22" viewBox="0 0 24 24"><path d="M1.5 11.5L12 2.5l10.5 9"></path><path d="M4 9.5v13h16v-13"></path><path d="M9.5 22.5v-7h5v7"></path></svg>Home</span>
+      <span style="height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #334155; font-size: 12px"><svg class="kz-ico" width="22" height="22" viewBox="0 0 24 24"><polygon points="20.5,23.5 3.5,23.5 3.5,0.5 14.5,0.5 20.5,6.5"></polygon><polyline points="14.5,0.5 14.5,6.5 20.5,6.5"></polyline><polyline points="10.5,8.5 8,11 6.5,9.5"></polyline><polyline points="10.5,14.5 8,17 6.5,15.5"></polyline><line x1="12.5" y1="10.5" x2="16.5" y2="10.5"></line><line x1="12.5" y1="16.5" x2="16.5" y2="16.5"></line></svg>My Plan</span>
+      <span style="height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #334155; font-size: 12px"><svg class="kz-ico" width="22" height="22" viewBox="0 0 24 24"><polygon points="20.5,23.5 3.5,23.5 3.5,0.5 14.5,0.5 20.5,6.5"></polygon><polyline points="14.5,0.5 14.5,6.5 20.5,6.5"></polyline><line x1="7.5" y1="10.5" x2="16.5" y2="10.5"></line><line x1="7.5" y1="14.5" x2="16.5" y2="14.5"></line><line x1="7.5" y1="18.5" x2="13" y2="18.5"></line></svg>My Data</span>
+      <span style="height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #334155; font-size: 12px"><svg class="kz-ico" width="22" height="22" viewBox="0 0 24 24"><polygon points="20.5,23.5 3.5,23.5 3.5,0.5 14.5,0.5 20.5,6.5"></polygon><polyline points="14.5,0.5 14.5,6.5 20.5,6.5"></polyline><polyline points="9,13 12,10 15,13"></polyline><line x1="12" y1="10" x2="12" y2="18.5"></line></svg>My Upload</span>
+      <span style="height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #334155; font-size: 12px"><svg class="kz-ico" width="22" height="22" viewBox="0 0 24 24"><path d="M12 5.5C9.5 3.5 5.5 3 1.5 3.5v16c4-.5 8 0 10.5 2 2.5-2 6.5-2.5 10.5-2v-16c-4-.5-8 0-10.5 2z"></path><line x1="12" y1="5.5" x2="12" y2="21.5"></line></svg>Learn</span>
+    </nav>
+    <main style="flex: 999 1 560px; min-width: 0; padding: 24px; box-sizing: border-box">
+      <div style="max-width: 1200px; margin: 0 auto">
+        <div style="padding: 8px 0 24px; text-align: left">
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 14px; line-height: 20px; margin-bottom: 16px"><a href="#" style="text-decoration: none">Home</a><span style="color: #94A3B8">/</span><span style="color: #475569">Manage Settings</span></div>
+          <h1 style="margin: 0; font-size: 28px; line-height: 1.25; font-weight: 500; color: #020617">Manage Settings</h1>
+          <p style="margin: 4px 0 0; font-size: 16px; line-height: 1.6; color: #465770">Manage your profile and settings.</p>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px">
+          <aside aria-label="Settings sections" style="flex: 1 1 260px; max-width: 300px; display: flex; flex-direction: column; padding: 8px 12px 16px; box-sizing: border-box; background: #FAFBFD; border: 1px solid #CBD5E1; border-radius: 12px">
+          <div style="padding: 16px 12px 8px; font-size: 16px; font-weight: 600; color: #0F172A">Personal Info</div>
+          <button type="button" class="kz-navitem" onClick="{{ nav.name.go }}" aria-current="{{ nav.name.cur }}" style="height: 44px; padding: 0 12px; border: none; border-radius: 8px; background: {{ nav.name.bg }}; color: {{ nav.name.fg }}; font-size: 16px; font-weight: {{ nav.name.weight }}; text-align: left">Name</button>
+          <button type="button" class="kz-navitem" onClick="{{ nav.contact.go }}" aria-current="{{ nav.contact.cur }}" style="height: 44px; padding: 0 12px; border: none; border-radius: 8px; background: {{ nav.contact.bg }}; color: {{ nav.contact.fg }}; font-size: 16px; font-weight: {{ nav.contact.weight }}; text-align: left">Contact Info</button>
+          <button type="button" class="kz-navitem" onClick="{{ nav.photo.go }}" aria-current="{{ nav.photo.cur }}" style="height: 44px; padding: 0 12px; border: none; border-radius: 8px; background: {{ nav.photo.bg }}; color: {{ nav.photo.fg }}; font-size: 16px; font-weight: {{ nav.photo.weight }}; text-align: left">Photo</button>
+          <button type="button" class="kz-navitem" onClick="{{ nav.account.go }}" aria-current="{{ nav.account.cur }}" style="height: 44px; padding: 0 12px; border: none; border-radius: 8px; background: {{ nav.account.bg }}; color: {{ nav.account.fg }}; font-size: 16px; font-weight: {{ nav.account.weight }}; text-align: left">Account</button>
+          <div style="padding: 16px 12px 8px; font-size: 16px; font-weight: 600; color: #0F172A">Preferences</div>
+          <button type="button" class="kz-navitem" onClick="{{ nav.notifications.go }}" aria-current="{{ nav.notifications.cur }}" style="height: 44px; padding: 0 12px; border: none; border-radius: 8px; background: {{ nav.notifications.bg }}; color: {{ nav.notifications.fg }}; font-size: 16px; font-weight: {{ nav.notifications.weight }}; text-align: left">Notification Preferences</button>
+          <button type="button" class="kz-navitem" onClick="{{ nav.appearance.go }}" aria-current="{{ nav.appearance.cur }}" style="height: 44px; padding: 0 12px; border: none; border-radius: 8px; background: {{ nav.appearance.bg }}; color: {{ nav.appearance.fg }}; font-size: 16px; font-weight: {{ nav.appearance.weight }}; text-align: left">Appearance</button>
+          <button type="button" class="kz-navitem" onClick="{{ nav.language.go }}" aria-current="{{ nav.language.cur }}" style="height: 44px; padding: 0 12px; border: none; border-radius: 8px; background: {{ nav.language.bg }}; color: {{ nav.language.fg }}; font-size: 16px; font-weight: {{ nav.language.weight }}; text-align: left">Portal Language</button>
+          <div style="padding: 16px 12px 8px; font-size: 16px; font-weight: 600; color: #0F172A">Security & Privacy</div>
+          <button type="button" class="kz-navitem" onClick="{{ nav.password.go }}" aria-current="{{ nav.password.cur }}" style="height: 44px; padding: 0 12px; border: none; border-radius: 8px; background: {{ nav.password.bg }}; color: {{ nav.password.fg }}; font-size: 16px; font-weight: {{ nav.password.weight }}; text-align: left">Password</button>
+          <button type="button" class="kz-navitem" onClick="{{ nav.questions.go }}" aria-current="{{ nav.questions.cur }}" style="height: 44px; padding: 0 12px; border: none; border-radius: 8px; background: {{ nav.questions.bg }}; color: {{ nav.questions.fg }}; font-size: 16px; font-weight: {{ nav.questions.weight }}; text-align: left">Security Questions</button>
+          <div style="height: 1px; background: #E2E8F0; margin: 16px 12px 8px"></div>
+          <a href="#" style="height: 40px; padding: 0 12px; display: flex; align-items: center; gap: 8px; font-size: 14px; color: #3F0FB7; text-decoration: none">Privacy Policy <svg class="kz-ico" width="14" height="14" viewBox="0 0 24 24"><polyline points="14.5,0.5 23.5,0.5 23.5,9.5"></polyline><line x1="23.5" y1="0.5" x2="11" y2="13"></line><polyline points="19.5,15 19.5,23.5 0.5,23.5 0.5,4.5 9,4.5"></polyline></svg></a>
+          <a href="#" style="height: 40px; padding: 0 12px; display: flex; align-items: center; gap: 8px; font-size: 14px; color: #3F0FB7; text-decoration: none">Terms and Conditions <svg class="kz-ico" width="14" height="14" viewBox="0 0 24 24"><polyline points="14.5,0.5 23.5,0.5 23.5,9.5"></polyline><line x1="23.5" y1="0.5" x2="11" y2="13"></line><polyline points="19.5,15 19.5,23.5 0.5,23.5 0.5,4.5 9,4.5"></polyline></svg></a>
+          </aside>
+          <section style="flex: 999 1 560px; min-width: 0; padding: 24px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: left">
+          <sc-if value="{{ sec.name }}" hint-placeholder-val="{{ true }}">
+            <h2 style="margin: 0; font-size: 20px; line-height: 1.4; font-weight: 500; color: #0F172A">Name</h2>
+            <p style="margin: 4px 0 24px; font-size: 14px; line-height: 1.6; color: #64748B">How your name shows across Keyz.</p>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px">
+              <label style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 20px; color: #64748B">Display name
+                <input type="text" class="kz-input" value="{{ dName }}" onChange="{{ setDName }}" style="height: 52px; padding: 0 12px; border: 1px solid {{ eNameBorder }}; border-radius: 4px; background: #FAFBFD; color: #020617; font-size: 18px">
+                <sc-if value="{{ eNameHas }}" hint-placeholder-val="{{ false }}"><span style="font-size: 14px; color: #C00000">{{ eNameMsg }}</span></sc-if>
+                <span style="font-size: 14px; color: #64748B">Shown in the portal and to your counselor.</span>
+              </label>
+              <div></div>
+              <div style="display: flex; flex-direction: column; gap: 4px; text-align: left"><span style="font-size: 14px; line-height: 20px; color: #64748B">Legal name</span><span style="font-size: 18px; line-height: 1.6; color: #0F172A">Maria Rivera</span><span style="font-size: 14px; color: #64748B">From your application. Contact your counselor to correct it.</span></div>
+              <div style="display: flex; flex-direction: column; gap: 4px; text-align: left"><span style="font-size: 14px; line-height: 20px; color: #64748B">Date of birth</span><span style="font-size: 18px; line-height: 1.6; color: #0F172A">Mar 14, 1988</span><span style="font-size: 14px; color: #64748B">Used to confirm your identity.</span></div>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 32px">
+              <button type="button" class="kz-primary" onClick="{{ saveName }}" style="height: 44px; padding: 10px 28px; border: none; border-radius: 8px; background: #3F0FB7; color: #FFFFFF; font-size: 16px; font-weight: 600">Save Changes</button>
+              <button type="button" class="kz-ghost" onClick="{{ cancel }}" style="height: 44px; padding: 10px 20px; border: none; border-radius: 8px; background: transparent; color: #1E293B; font-size: 16px; font-weight: 600">Cancel</button>
+              <sc-if value="{{ noChange }}" hint-placeholder-val="{{ false }}"><span style="font-size: 14px; color: #64748B">No changes to save yet.</span></sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ sec.contact }}" hint-placeholder-val="{{ false }}">
+            <h2 style="margin: 0; font-size: 20px; line-height: 1.4; font-weight: 500; color: #0F172A">Contact Info</h2>
+            <p style="margin: 4px 0 24px; font-size: 14px; line-height: 1.6; color: #64748B">How we reach you about your case.</p>
+            <sc-if value="{{ phoneEdit }}" hint-placeholder-val="{{ true }}">
+              <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px">
+                <label style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 20px; color: #64748B">Mobile phone
+                <input type="tel" class="kz-input" value="{{ dPhone }}" onChange="{{ setDPhone }}" style="height: 52px; padding: 0 12px; border: 1px solid {{ ePhoneBorder }}; border-radius: 4px; background: #FAFBFD; color: #020617; font-size: 18px">
+                <sc-if value="{{ ePhoneHas }}" hint-placeholder-val="{{ false }}"><span style="font-size: 14px; color: #C00000">{{ ePhoneMsg }}</span></sc-if>
+                <span style="font-size: 14px; color: #64748B">If you change it, we will text a code to confirm.</span>
+              </label>
+                <div style="display: flex; flex-direction: column; gap: 4px; text-align: left"><span style="font-size: 14px; line-height: 20px; color: #64748B">Email</span><span style="font-size: 18px; line-height: 1.6; color: #0F172A">{{ email }}</span><span style="font-size: 14px; color: #64748B">To change your email, contact your housing counselor.</span></div>
+                <label style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 20px; color: #64748B">Backup phone (optional)
+                <input type="tel" class="kz-input" value="{{ dBPhone }}" onChange="{{ setDBPhone }}" style="height: 52px; padding: 0 12px; border: 1px solid {{ eBPhoneBorder }}; border-radius: 4px; background: #FAFBFD; color: #020617; font-size: 18px">
+                <sc-if value="{{ eBPhoneHas }}" hint-placeholder-val="{{ false }}"><span style="font-size: 14px; color: #C00000">{{ eBPhoneMsg }}</span></sc-if>
+              </label>
+                <label style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 20px; color: #64748B">Backup email (optional)
+                <input type="email" class="kz-input" value="{{ dBEmail }}" onChange="{{ setDBEmail }}" style="height: 52px; padding: 0 12px; border: 1px solid {{ eBEmailBorder }}; border-radius: 4px; background: #FAFBFD; color: #020617; font-size: 18px">
+                <sc-if value="{{ eBEmailHas }}" hint-placeholder-val="{{ false }}"><span style="font-size: 14px; color: #C00000">{{ eBEmailMsg }}</span></sc-if>
+              </label>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 32px">
+              <button type="button" class="kz-primary" onClick="{{ saveContact }}" style="height: 44px; padding: 10px 28px; border: none; border-radius: 8px; background: #3F0FB7; color: #FFFFFF; font-size: 16px; font-weight: 600">Save Changes</button>
+              <button type="button" class="kz-ghost" onClick="{{ cancel }}" style="height: 44px; padding: 10px 20px; border: none; border-radius: 8px; background: transparent; color: #1E293B; font-size: 16px; font-weight: 600">Cancel</button>
+              <sc-if value="{{ noChange }}" hint-placeholder-val="{{ false }}"><span style="font-size: 14px; color: #64748B">No changes to save yet.</span></sc-if>
+            </div>
+            </sc-if>
+            <sc-if value="{{ phoneVerify }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; flex-direction: column; gap: 16px; max-width: 420px">
+                <div style="padding: 16px; border-radius: 8px; background: #E9EDFF; color: #1225A8; font-size: 14px; line-height: 1.6">We texted a 6-digit code to <b>{{ dPhone }}</b>. Enter it below to confirm your new number.</div>
+                <label style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 20px; color: #64748B">Verification code
+                <input type="text" class="kz-input" value="{{ code }}" onChange="{{ setCode }}" style="height: 52px; padding: 0 12px; border: 1px solid {{ eCodeBorder }}; border-radius: 4px; background: #FAFBFD; color: #020617; font-size: 18px">
+                <sc-if value="{{ eCodeHas }}" hint-placeholder-val="{{ false }}"><span style="font-size: 14px; color: #C00000">{{ eCodeMsg }}</span></sc-if>
+                <span style="font-size: 14px; color: #64748B">For this demo, any 6 digits work.</span>
+              </label>
+                <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px">
+                  <button type="button" class="kz-primary" onClick="{{ verify }}" style="height: 44px; padding: 10px 28px; border: none; border-radius: 8px; background: #3F0FB7; color: #FFFFFF; font-size: 16px; font-weight: 600">Verify</button>
+                  <button type="button" class="kz-ghost" onClick="{{ backToEdit }}" style="height: 44px; padding: 10px 20px; border: none; border-radius: 8px; background: transparent; color: #1E293B; font-size: 16px; font-weight: 600">Back</button>
+                  <button type="button" class="kz-link" onClick="{{ resend }}" style="padding: 0; border: none; background: transparent; color: #3F0FB7; font-size: 14px">{{ resendLabel }}</button>
+                </div>
+              </div>
+            </sc-if>
+          </sc-if>
+          <sc-if value="{{ sec.account }}" hint-placeholder-val="{{ false }}">
+            <h2 style="margin: 0; font-size: 20px; line-height: 1.4; font-weight: 500; color: #0F172A">Account</h2>
+            <p style="margin: 4px 0 24px; font-size: 14px; line-height: 1.6; color: #64748B">Your account status and the language you prefer.</p>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px">
+              <div style="display: flex; flex-direction: column; gap: 8px; text-align: left"><span style="font-size: 14px; line-height: 20px; color: #64748B">Account status</span><span style="align-self: flex-start; padding: 6px 12px; border-radius: 9999px; background: #F0FDF4; color: #1F7A3A; font-size: 14px; line-height: 16px; font-weight: 500; display: inline-flex; align-items: center; gap: 8px"><span style="width: 7px; height: 7px; border-radius: 50%; background: #008800"></span>Active</span><span style="font-size: 14px; color: #64748B">Set by your counselor. Other statuses: Inactive, Graduated, On hold.</span></div>
+              <div></div>
+              <label style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 20px; color: #64748B">Preferred language
+                <select class="kz-input" value="{{ dLang }}" onChange="{{ setDLang }}" style="height: 52px; padding: 0 12px; border: 1px solid #CBD5E1; border-radius: 4px; background: #FAFBFD; color: #020617; font-size: 18px">
+                  <option value="English">English</option><option value="Spanish">Spanish</option><option value="Chinese">Chinese</option><option value="Vietnamese">Vietnamese</option><option value="Korean">Korean</option><option value="Tagalog">Tagalog</option><option value="Other">Other</option>
+                </select>
+                <span style="font-size: 14px; color: #64748B">Shared with your counselor so they can support you. The portal stays in English.</span>
+              </label>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 32px">
+              <button type="button" class="kz-primary" onClick="{{ saveAccount }}" style="height: 44px; padding: 10px 28px; border: none; border-radius: 8px; background: #3F0FB7; color: #FFFFFF; font-size: 16px; font-weight: 600">Save Changes</button>
+              <button type="button" class="kz-ghost" onClick="{{ cancel }}" style="height: 44px; padding: 10px 20px; border: none; border-radius: 8px; background: transparent; color: #1E293B; font-size: 16px; font-weight: 600">Cancel</button>
+              <sc-if value="{{ noChange }}" hint-placeholder-val="{{ false }}"><span style="font-size: 14px; color: #64748B">No changes to save yet.</span></sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ sec.photo }}" hint-placeholder-val="{{ false }}">
+            <h2 style="margin: 0; font-size: 20px; line-height: 1.4; font-weight: 500; color: #0F172A">Photo</h2>
+            <p style="margin: 4px 0 24px; font-size: 14px; line-height: 1.6; color: #64748B">Shown on your profile and next to your messages.</p>
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 24px">
+              <span style="width: 96px; height: 96px; border-radius: 9999px; background: {{ photoBg }}; color: #FFFFFF; font-size: 32px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{ initials }}</span>
+              <div style="display: flex; flex-direction: column; gap: 12px">
+                <div style="display: flex; flex-wrap: wrap; gap: 16px">
+                  <button type="button" class="kz-outline" onClick="{{ uploadPhoto }}" style="height: 40px; padding: 7px 24px; border: 1px solid #3F0FB7; border-radius: 8px; background: #FFFFFF; color: #3F0FB7; font-size: 14px; font-weight: 600">Upload Photo</button>
+                  <sc-if value="{{ hasPhoto }}" hint-placeholder-val="{{ false }}"><button type="button" class="kz-ghost-neg" onClick="{{ removePhoto }}" style="height: 40px; padding: 8px 16px; border: none; border-radius: 8px; background: transparent; color: #C00000; font-size: 14px; font-weight: 600">Remove</button></sc-if>
+                </div>
+                <span style="font-size: 14px; color: #64748B">JPG or PNG, up to 5 MB. Without a photo, your initials are shown.</span>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ sec.notifications }}" hint-placeholder-val="{{ false }}">
+            <h2 style="margin: 0; font-size: 20px; line-height: 1.4; font-weight: 500; color: #0F172A">Notification Preferences</h2>
+            <p style="margin: 4px 0 24px; font-size: 14px; line-height: 1.6; color: #64748B">Choose how you hear from Keyz. Urgent items and in-app notifications are always on.</p>
+            <div style="border: 1px solid #CBD5E1; border-radius: 8px; overflow: hidden">
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) 96px 96px 96px; align-items: center; padding: 12px 16px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; font-size: 14px; font-weight: 600; color: #475569"><span>Notify me about</span><span style="text-align: center">Email</span><span style="text-align: center">Text</span><span style="text-align: center">Push</span></div>
+              <sc-for list="{{ prefRows }}" as="r" hint-placeholder-count="4">
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 96px 96px 96px; align-items: center; padding: 12px 16px; border-bottom: 1px solid #E2E8F0">
+                  <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 500; color: #0F172A">{{ r.label }}</span><span style="font-size: 14px; color: #64748B">{{ r.desc }}</span></span>
+                  <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="3">
+                    <span style="display: flex; justify-content: center">
+                      <sc-if value="{{ c.locked }}" hint-placeholder-val="{{ false }}"><span style="font-size: 14px; color: #475569">Always on</span></sc-if>
+                      <sc-if value="{{ c.open }}" hint-placeholder-val="{{ true }}"><label class="kz-cbhit"><input type="checkbox" class="kz-cb" checked="{{ c.on }}" onChange="{{ c.toggle }}" aria-label="{{ c.aria }}"></label></sc-if>
+                    </span>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ smsWarn }}" hint-placeholder-val="{{ false }}"><p style="margin: 12px 0 0; font-size: 14px; color: #92400E">Text messages go to {{ phone }}. Standard message rates may apply.</p></sc-if>
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 32px">
+              <button type="button" class="kz-primary" onClick="{{ savePrefs }}" style="height: 44px; padding: 10px 28px; border: none; border-radius: 8px; background: #3F0FB7; color: #FFFFFF; font-size: 16px; font-weight: 600">Save Changes</button>
+              <button type="button" class="kz-ghost" onClick="{{ cancel }}" style="height: 44px; padding: 10px 20px; border: none; border-radius: 8px; background: transparent; color: #1E293B; font-size: 16px; font-weight: 600">Cancel</button>
+              <sc-if value="{{ noChange }}" hint-placeholder-val="{{ false }}"><span style="font-size: 14px; color: #64748B">No changes to save yet.</span></sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ sec.appearance }}" hint-placeholder-val="{{ false }}">
+            <h2 style="margin: 0; font-size: 20px; line-height: 1.4; font-weight: 500; color: #0F172A">Appearance</h2>
+            <p style="margin: 4px 0 24px; font-size: 14px; line-height: 1.6; color: #64748B">Choose how Keyz looks on this device.</p>
+            <div role="radiogroup" aria-label="Theme" style="display: inline-flex; padding: 3px; border: 1px solid #CBD5E1; border-radius: 4px; background: #FAFBFD">
+              <sc-for list="{{ themes }}" as="t" hint-placeholder-count="3">
+                <button type="button" role="radio" aria-checked="{{ t.on }}" onClick="{{ t.pick }}" style="height: 34px; padding: 0 20px; border: none; border-radius: 3px; background: {{ t.bg }}; color: {{ t.fg }}; font-size: 16px; font-weight: {{ t.weight }}">{{ t.label }}</button>
+              </sc-for>
+            </div>
+            <p style="margin: 12px 0 0; font-size: 14px; color: #64748B">Match my device follows your computer or phone setting.</p>
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 32px">
+              <button type="button" class="kz-primary" onClick="{{ saveTheme }}" style="height: 44px; padding: 10px 28px; border: none; border-radius: 8px; background: #3F0FB7; color: #FFFFFF; font-size: 16px; font-weight: 600">Save Changes</button>
+              <button type="button" class="kz-ghost" onClick="{{ cancel }}" style="height: 44px; padding: 10px 20px; border: none; border-radius: 8px; background: transparent; color: #1E293B; font-size: 16px; font-weight: 600">Cancel</button>
+              <sc-if value="{{ noChange }}" hint-placeholder-val="{{ false }}"><span style="font-size: 14px; color: #64748B">No changes to save yet.</span></sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ sec.language }}" hint-placeholder-val="{{ false }}">
+            <h2 style="margin: 0; font-size: 20px; line-height: 1.4; font-weight: 500; color: #0F172A">Portal Language</h2>
+            <p style="margin: 4px 0 24px; font-size: 14px; line-height: 1.6; color: #64748B">The language the portal is shown in.</p>
+            <div style="display: flex; flex-direction: column; gap: 4px; text-align: left"><span style="font-size: 14px; line-height: 20px; color: #64748B">Portal language</span><span style="font-size: 18px; line-height: 1.6; color: #0F172A">English</span><span style="font-size: 14px; color: #64748B">More languages are coming. Your preferred language for your counselor is under Account.</span></div>
+          </sc-if>
+          <sc-if value="{{ sec.password }}" hint-placeholder-val="{{ false }}">
+            <h2 style="margin: 0; font-size: 20px; line-height: 1.4; font-weight: 500; color: #0F172A">Password</h2>
+            <p style="margin: 4px 0 24px; font-size: 14px; line-height: 1.6; color: #64748B">Keep your account secure.</p>
+            <div style="display: flex; flex-direction: column; gap: 4px; text-align: left"><span style="font-size: 14px; line-height: 20px; color: #64748B">Password</span><span style="font-size: 18px; line-height: 1.6; color: #0F172A">Last changed Aug 12, 2026</span></div>
+            <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start">
+              <button type="button" class="kz-outline" onClick="{{ askReset }}" style="height: 40px; padding: 7px 24px; border: 1px solid #3F0FB7; border-radius: 8px; background: #FFFFFF; color: #3F0FB7; font-size: 14px; font-weight: 600">Reset Password</button>
+              <sc-if value="{{ resetAsked }}" hint-placeholder-val="{{ false }}">
+                <div style="max-width: 560px; padding: 16px; border-radius: 8px; background: #E9EDFF; color: #1225A8; font-size: 14px; line-height: 1.6">To reset your password, we will sign you out and take you to the Keyz sign-in page. Choose <b>Forgot password</b> there and we will email you a reset link.
+                  <div style="display: flex; gap: 16px; margin-top: 12px">
+                    <button type="button" class="kz-primary" onClick="{{ confirmReset }}" style="height: 40px; padding: 8px 24px; border: none; border-radius: 8px; background: #3F0FB7; color: #FFFFFF; font-size: 14px; font-weight: 600">Sign Out and Reset</button>
+                    <button type="button" class="kz-ghost" onClick="{{ cancelReset }}" style="height: 40px; padding: 8px 16px; border: none; border-radius: 8px; background: transparent; color: #1E293B; font-size: 14px; font-weight: 600">Cancel</button>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ sec.questions }}" hint-placeholder-val="{{ false }}">
+            <h2 style="margin: 0; font-size: 20px; line-height: 1.4; font-weight: 500; color: #0F172A">Security Questions</h2>
+            <p style="margin: 4px 0 24px; font-size: 14px; line-height: 1.6; color: #64748B">Used to confirm it is you if you are locked out.</p>
+            <div style="display: flex; flex-direction: column; gap: 4px; text-align: left"><span style="font-size: 14px; line-height: 20px; color: #64748B">Security questions</span><span style="font-size: 18px; line-height: 1.6; color: #0F172A">{{ qStatus }}</span><span style="font-size: 14px; color: #64748B">You will choose your questions the next time you sign in.</span></div>
+            <div style="margin-top: 24px"><button type="button" class="kz-outline" onClick="{{ setupQ }}" style="height: 40px; padding: 7px 24px; border: 1px solid #3F0FB7; border-radius: 8px; background: #FFFFFF; color: #3F0FB7; font-size: 14px; font-weight: 600">{{ qLabel }}</button></div>
+          </sc-if>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+  <sc-if value="{{ showToast }}" hint-placeholder-val="{{ false }}">
+    <div role="status" aria-live="polite" style="position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 500; display: inline-flex; align-items: center; padding-left: 24px; max-width: 90vw; animation: kzToastIn .2s ease">
+      <span aria-hidden="true" style="position: absolute; left: 0; z-index: 2; width: 48px; height: 48px; box-sizing: border-box; border-radius: 9999px; background: #1F7A3A; border: 2px solid #FFFFFF; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg class="kz-ico" width="22" height="22" viewBox="0 0 24 24" style="stroke-width: 1.75"><polyline points="20,6 9.5,16.5 4,11"></polyline></svg></span>
+      <div style="position: relative; overflow: hidden; display: inline-flex; align-items: center; min-width: 300px; max-width: 440px; padding: 28px 24px 28px 36px; box-sizing: border-box; border-radius: 12px; background: #1F7A3A; box-shadow: 0 8px 24px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.14)">
+        <div style="text-align: left"><div style="font-size: 14px; font-weight: 700; color: #FFFFFF">{{ toastTitle }}</div><div style="margin-top: 3px; font-size: 12px; color: rgba(255,255,255,0.72)">{{ toastSub }}</div></div>
+        <div aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 0; height: 3px"><div style="height: 100%; background: rgba(255,255,255,0.40); animation: kzShrink 4s linear forwards"></div></div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const saved = { name: 'Maria Rivera', phone: '(555) 201-4477', bPhone: '', bEmail: 'maria.r.personal@example.com', lang: 'Spanish', theme: 'light',
+      prefs: { action: { email: true, sms: false, push: true }, updates: { email: true, sms: false, push: false }, reminders: { email: true, sms: false, push: false } } };
+    this.state = { sec: 'name', saved: saved, d: JSON.parse(JSON.stringify(saved)), err: {}, phoneStep: 'edit', code: '', resent: false, noChange: false,
+      toast: null, hasPhoto: false, resetAsked: false, qSet: false };
+    this.t = null;
+  }
+  componentWillUnmount() { if (this.t) clearTimeout(this.t); }
+  toast(title, sub) {
+    this.setState({ toast: { title: title, sub: sub } });
+    if (this.t) clearTimeout(this.t);
+    this.t = setTimeout(() => this.setState({ toast: null }), 4000);
+  }
+  upd(k, v) { const d = Object.assign({}, this.state.d); d[k] = v; this.setState({ d: d, err: {}, noChange: false }); }
+  digits(s) { return (s || '').replace(/[^0-9]/g, ''); }
+  fmt(s) { const x = this.digits(s); return x.length === 10 ? '(' + x.slice(0,3) + ') ' + x.slice(3,6) + '-' + x.slice(6) : s; }
+  commit(keys, title) {
+    const s = this.state;
+    const changed = keys.some((k) => JSON.stringify(s.d[k]) !== JSON.stringify(s.saved[k]));
+    if (!changed) { this.setState({ noChange: true }); return; }
+    const saved = Object.assign({}, s.saved); keys.forEach((k) => { saved[k] = JSON.parse(JSON.stringify(s.d[k])); });
+    this.setState({ saved: saved, noChange: false });
+    this.toast(title, 'Your changes are saved.');
+  }
+  renderVals() {
+    const s = this.state, V2 = true;
+    const ids = ['name', 'contact', 'account'].concat(V2 ? ['photo', 'notifications', 'appearance', 'language', 'password', 'questions'] : []);
+    const A = '#3F0FB7', L = '#F1EEFC';
+    const nav = {}, sec = {};
+    ids.forEach((id) => {
+      const on = s.sec === id;
+      sec[id] = on;
+      nav[id] = { bg: on ? L : 'transparent', fg: on ? A : '#334155', weight: on ? 600 : 400, cur: on ? 'page' : 'false',
+        go: () => this.setState({ sec: id, d: JSON.parse(JSON.stringify(s.saved)), err: {}, phoneStep: 'edit', code: '', noChange: false, resetAsked: false }) };
+    });
+    const e = (k) => s.err[k];
+    const errVals = {};
+    ['eName', 'ePhone', 'eBPhone', 'eBEmail', 'eCode'].forEach((k) => {
+      errVals[k + 'Has'] = !!e(k); errVals[k + 'Msg'] = e(k) || ''; errVals[k + 'Border'] = e(k) ? '#C00000' : '#CBD5E1';
+    });
+    const prefDefs = [
+      { id: 'urgent', label: 'Urgent', desc: 'Things that block your case', locked: true },
+      { id: 'action', label: 'Action needed', desc: 'Documents, approvals and requests' },
+      { id: 'updates', label: 'Updates', desc: 'Reports shared, progress on your case' },
+      { id: 'reminders', label: 'Reminders', desc: 'Goals coming due or past due' }
+    ];
+    const chans = [['email', 'Email'], ['sms', 'Text'], ['push', 'Push']];
+    const prefRows = prefDefs.map((r) => Object.assign({}, r, { cells: chans.map((c) => {
+      const on = r.locked ? true : !!s.d.prefs[r.id][c[0]];
+      return { locked: !!r.locked, open: !r.locked, on: on, aria: r.label + ' by ' + c[1],
+        toggle: () => { const p = JSON.parse(JSON.stringify(s.d.prefs)); p[r.id][c[0]] = !on; this.upd('prefs', p); } };
+    }) }));
+    const smsWarn = prefDefs.some((r) => !r.locked && s.d.prefs[r.id].sms);
+    const themes = [['light', 'Light'], ['dark', 'Dark'], ['device', 'Match my device']].map((t) => {
+      const on = s.d.theme === t[0];
+      return { label: t[1], on: on ? 'true' : 'false', bg: on ? '#E6DDFB' : 'transparent', fg: on ? A : '#334155', weight: on ? 600 : 400, pick: () => this.upd('theme', t[0]) };
+    });
+    return Object.assign({
+      nav: nav, sec: sec,
+      initials: 'MR',
+      photoBg: s.hasPhoto ? '#475569' : A,
+      hasPhoto: s.hasPhoto,
+      email: 'maria.rivera@example.com', phone: s.saved.phone,
+      dName: s.d.name, dPhone: s.d.phone, dBPhone: s.d.bPhone, dBEmail: s.d.bEmail, dLang: s.d.lang, code: s.code,
+      setDName: (ev) => this.upd('name', ev.target.value),
+      setDPhone: (ev) => this.upd('phone', ev.target.value),
+      setDBPhone: (ev) => this.upd('bPhone', ev.target.value),
+      setDBEmail: (ev) => this.upd('bEmail', ev.target.value),
+      setDLang: (ev) => this.upd('lang', ev.target.value),
+      setCode: (ev) => this.setState({ code: ev.target.value, err: {} }),
+      noChange: s.noChange,
+      cancel: () => this.setState({ d: JSON.parse(JSON.stringify(s.saved)), err: {}, noChange: false, phoneStep: 'edit' }),
+      saveName: () => {
+        if (!s.d.name.trim()) { this.setState({ err: { eName: 'Enter a display name.' } }); return; }
+        this.commit(['name'], 'Name updated');
+      },
+      saveContact: () => {
+        const err = {};
+        if (this.digits(s.d.phone).length !== 10) err.ePhone = 'Enter a 10-digit phone number.';
+        if (s.d.bPhone && this.digits(s.d.bPhone).length !== 10) err.eBPhone = 'Enter a 10-digit phone number, or leave it blank.';
+        if (s.d.bEmail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.d.bEmail)) err.eBEmail = 'Enter an email like name@example.com, or leave it blank.';
+        if (Object.keys(err).length) { this.setState({ err: err }); return; }
+        if (this.digits(s.d.phone) !== this.digits(s.saved.phone)) { this.setState({ phoneStep: 'verify', code: '', resent: false }); return; }
+        this.commit(['bPhone', 'bEmail'], 'Contact info updated');
+      },
+      phoneEdit: s.phoneStep === 'edit',
+      phoneVerify: s.phoneStep === 'verify',
+      verify: () => {
+        if (this.digits(s.code).length !== 6) { this.setState({ err: { eCode: 'Enter the 6-digit code from the text.' } }); return; }
+        const d = Object.assign({}, s.d, { phone: this.fmt(s.d.phone) });
+        const saved = Object.assign({}, s.saved, { phone: d.phone, bPhone: d.bPhone, bEmail: d.bEmail });
+        this.setState({ d: d, saved: saved, phoneStep: 'edit', code: '' });
+        this.toast('Phone number confirmed', 'We will use ' + d.phone + ' from now on.');
+      },
+      backToEdit: () => this.setState({ phoneStep: 'edit', err: {} }),
+      resend: () => this.setState({ resent: true }),
+      resendLabel: s.resent ? 'Code sent again' : 'Resend code',
+      saveAccount: () => this.commit(['lang'], 'Language preference saved'),
+      prefRows: prefRows, smsWarn: smsWarn,
+      savePrefs: () => this.commit(['prefs'], 'Notification preferences saved'),
+      themes: themes,
+      saveTheme: () => this.commit(['theme'], 'Appearance saved'),
+      uploadPhoto: () => { this.setState({ hasPhoto: true }); this.toast('Photo updated', 'Your new photo is showing across Keyz.'); },
+      removePhoto: () => { this.setState({ hasPhoto: false }); this.toast('Photo removed', 'Your initials are showing instead.'); },
+      askReset: () => this.setState({ resetAsked: true }),
+      cancelReset: () => this.setState({ resetAsked: false }),
+      confirmReset: () => { this.setState({ resetAsked: false }); this.toast('Signing you out', 'In the real portal, this opens the Keyz sign-in page.'); },
+      resetAsked: s.resetAsked,
+      qStatus: s.qSet ? 'Set up next sign-in' : '--',
+      qLabel: s.qSet ? 'Requested' : 'Set Up Security Questions',
+      setupQ: () => { this.setState({ qSet: true }); this.toast('Security questions requested', 'You will set them up the next time you sign in.'); },
+      showToast: !!s.toast,
+      toastTitle: s.toast ? s.toast.title : '',
+      toastSub: s.toast ? s.toast.sub : ''
+    }, errVals);
+  }
+}
+</script>
+</body>
+</html>
