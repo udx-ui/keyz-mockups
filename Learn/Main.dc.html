@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Learn Library</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF}
+a{color:#3F0FB7}a:hover{color:#2E098B}
+button{font-family:inherit;cursor:pointer}
+.kz-card{transition:box-shadow .15s ease}
+.kz-card:hover{box-shadow:0 6px 20px rgba(15,23,42,0.12) !important}
+.kz-open::after{content:"";position:absolute;inset:0}
+.kz-open:focus-visible{outline:2px solid #3F0FB7;outline-offset:2px}
+.kz-above{position:relative;z-index:1}
+.kz-act:hover{border-color:#3F0FB7 !important}
+.kz-src:hover{text-decoration:underline;text-underline-offset:3px}
+.kz-gt:hover{color:#2E098B !important;text-decoration:underline;text-underline-offset:4px}
+.kz-chip:hover{border-color:#3F0FB7 !important}
+.kz-outline:hover{background:#F1EEFC !important}
+.kz-ib:hover{background:#E6DDFB}
+@keyframes kzToastIn{from{opacity:0;transform:translate(-50%,-8px) scale(.97)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+@keyframes kzShrink{from{width:100%}to{width:0%}}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #FFFFFF; font-family: Inter, sans-serif; color: #1E293B; display: flex; flex-direction: column">
+  <header style="height: 80px; flex: none; background: #F1EEFC; display: flex; align-items: center; gap: 16px; padding: 0 24px; box-sizing: border-box">
+    <span style="font-size: 30px; font-weight: 700; letter-spacing: -0.02em; color: #020617">Keyz</span>
+    <span style="width: 1px; height: 22px; background: #CBD5E1"></span>
+    <span style="font-size: 18px; font-weight: 600; color: #3F0FB7">Client Portal</span>
+    <span style="flex: 1"></span>
+    <span style="width: 36px; height: 36px; border-radius: 9999px; background: #3F0FB7; color: #FFFFFF; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center">MR</span>
+  </header>
+  <div style="flex: 1; display: flex; min-height: 0">
+    <nav aria-label="Main" style="width: 80px; flex: none; background: #F1EEFC; border-right: 1px solid #D4DCE8; display: flex; flex-direction: column; padding-top: 8px">
+      <span style="height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: #334155; font-weight: 400; background: transparent; border-right: 2px solid transparent"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 11.5L12 2.5l10.5 9"></path><path d="M4 9.5v13h16v-13"></path><path d="M9.5 22.5v-7h5v7"></path></svg>Home</span>
+      <span style="height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: #334155; font-weight: 400; background: transparent; border-right: 2px solid transparent"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><polygon points="20.5,23.5 3.5,23.5 3.5,0.5 14.5,0.5 20.5,6.5"></polygon><polyline points="10.5,8.5 8,11 6.5,9.5"></polyline><polyline points="10.5,14.5 8,17 6.5,15.5"></polyline></svg>My Plan</span>
+      <span style="height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: #334155; font-weight: 400; background: transparent; border-right: 2px solid transparent"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><polygon points="20.5,23.5 3.5,23.5 3.5,0.5 14.5,0.5 20.5,6.5"></polygon><line x1="7.5" y1="10.5" x2="16.5" y2="10.5"></line><line x1="7.5" y1="14.5" x2="16.5" y2="14.5"></line></svg>My Data</span>
+      <span style="height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: #3F0FB7; font-weight: 600; background: #E6DDFB; border-right: 2px solid #3F0FB7"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5C9.5 3.5 5.5 3 1.5 3.5v16c4-.5 8 0 10.5 2 2.5-2 6.5-2.5 10.5-2v-16c-4-.5-8 0-10.5 2z"></path><line x1="12" y1="5.5" x2="12" y2="21.5"></line></svg>Learn</span>
+    </nav>
+    <main style="flex: 999 1 560px; min-width: 0; padding: 24px; box-sizing: border-box">
+      <div style="max-width: 1440px; margin: 0 auto">
+        <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+        <div style="padding: 8px 0 0; text-align: left">
+          <div style="display: flex; gap: 8px; font-size: 14px; margin-bottom: 16px"><a href="#" style="text-decoration: none">Home</a><span style="color: #94A3B8">/</span><span style="color: #475569">Learn</span></div>
+          <h1 style="margin: 0; font-size: 28px; line-height: 1.25; font-weight: 500; color: #020617">Learn</h1>
+          <p style="margin: 4px 0 0; max-width: 820px; font-size: 16px; line-height: 1.6; color: #465770">Videos, articles, and guides to help you get mortgage ready. Some are ours, some come from trusted sources, and we always say which.</p>
+        </div>
+        <div style="height: 24px"></div>
+        <label style="display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 12px; margin-bottom: 16px; border: 1px solid #CBD5E1; border-radius: 4px; background: #FAFBFD; color: #64748B">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="8"></circle><line x1="16" y1="16" x2="22.5" y2="22.5"></line></svg>
+          <input aria-label="Search the library" placeholder="Search articles, videos and guides" value="{{ search }}" onChange="{{ setSearch }}" style="flex: 1; min-width: 0; border: none; outline: none; background: transparent; font-family: inherit; font-size: 16px; color: #020617">
+          <sc-if value="{{ hasSearch }}" hint-placeholder-val="{{ false }}"><button type="button" class="kz-gt" onClick="{{ clearSearch }}" style="padding: 0; border: none; background: none; color: #3F0FB7; font-size: 14px">Clear</button></sc-if>
+        </label>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 16px">
+          <sc-for list="{{ chips }}" as="c" hint-placeholder-count="9"><button type="button" class="kz-chip" onClick="{{ c.pick }}" aria-pressed="{{ c.on }}" style="height: 36px; padding: 8px 12px; border: 1px solid {{ c.border }}; border-radius: 9999px; background: {{ c.bg }}; color: {{ c.fg }}; font-size: 14px; display: flex; align-items: center; gap: 8px; white-space: nowrap">{{ c.label }}<sc-if value="{{ c.hasCount }}" hint-placeholder-val="{{ false }}"><span style="min-width: 20px; height: 20px; padding: 0 6px; box-sizing: border-box; border-radius: 9999px; background: {{ c.countBg }}; color: {{ c.countFg }}; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{ c.count }}</span></sc-if></button></sc-for>
+          <span style="flex: 1"></span>
+          <button type="button" class="kz-outline" onClick="{{ toggleFilters }}" aria-expanded="{{ filtersOpen }}" style="height: 36px; padding: 5px 16px; border: 1px solid #3F0FB7; border-radius: 8px; background: {{ filterBtnBg }}; color: #3F0FB7; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="7" y1="12" x2="17" y2="12"></line><line x1="11" y1="18" x2="13" y2="18"></line></svg>Filters
+            <sc-if value="{{ hasActiveFilters }}" hint-placeholder-val="{{ false }}"><span style="min-width: 20px; height: 20px; padding: 0 6px; box-sizing: border-box; border-radius: 9999px; background: #3F0FB7; color: #FFFFFF; font-size: 12px; display: flex; align-items: center; justify-content: center">{{ activeFilterCount }}</span></sc-if>
+          </button>
+        </div>
+        <sc-if value="{{ filtersOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-wrap: wrap; gap: 24px 32px; padding: 20px; margin-bottom: 24px; border: 1px solid #CBD5E1; border-radius: 12px; background: #FAFBFD; text-align: left">
+            <div role="group" aria-label="Format" style="display: flex; flex-direction: column; gap: 8px">
+              <span style="font-size: 14px; font-weight: 600; color: #334155">Format</span>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{ formatChips }}" as="c" hint-placeholder-count="6"><button type="button" class="kz-chip" onClick="{{ c.pick }}" aria-pressed="{{ c.on }}" style="height: 36px; padding: 8px 12px; border: 1px solid {{ c.border }}; border-radius: 9999px; background: {{ c.bg }}; color: {{ c.fg }}; font-size: 14px; display: flex; align-items: center; gap: 8px; white-space: nowrap">{{ c.label }}<sc-if value="{{ c.hasCount }}" hint-placeholder-val="{{ false }}"><span style="min-width: 20px; height: 20px; padding: 0 6px; box-sizing: border-box; border-radius: 9999px; background: {{ c.countBg }}; color: {{ c.countFg }}; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{ c.count }}</span></sc-if></button></sc-for></div>
+            </div>
+            <label style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 600; color: #334155">Source
+              <select value="{{ fSource }}" onChange="{{ setSource }}" style="height: 36px; min-width: 200px; padding: 0 10px; border: 1px solid #CBD5E1; border-radius: 4px; background: #FFFFFF; color: #020617; font-family: inherit; font-size: 14px; font-weight: 400">
+                <sc-for list="{{ sourceOptions }}" as="o" hint-placeholder-count="5"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+              </select>
+            </label>
+            <div role="group" aria-label="Language" style="display: flex; flex-direction: column; gap: 8px">
+              <span style="font-size: 14px; font-weight: 600; color: #334155">Language</span>
+              <div style="display: inline-flex; padding: 3px; border: 1px solid #CBD5E1; border-radius: 4px; background: #FFFFFF">
+                <sc-for list="{{ langOptions }}" as="l" hint-placeholder-count="3"><button type="button" onClick="{{ l.pick }}" aria-pressed="{{ l.on }}" style="height: 28px; padding: 0 14px; border: none; border-radius: 3px; background: {{ l.bg }}; color: {{ l.fg }}; font-size: 14px; font-weight: {{ l.weight }}">{{ l.label }}</button></sc-for>
+              </div>
+            </div>
+            <div style="display: flex; align-items: flex-end; gap: 16px; margin-left: auto">
+              <button type="button" class="kz-gt" onClick="{{ clearFilters }}" style="height: 36px; padding: 0; border: none; background: none; color: #3F0FB7; font-size: 14px">Clear all</button>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ showResultsNote }}" hint-placeholder-val="{{ false }}"><p style="margin: 0 0 24px; font-size: 14px; color: #64748B; text-align: left">{{ resultsNote }}</p></sc-if>
+        <div style="height: 16px"></div>
+
+        <sc-if value="{{ showBookmarks }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 16px">
+          <h2 style="margin: 0; padding-left: 12px; border-left: 4px solid #3F0FB7; font-size: 22px; line-height: 1.3; font-weight: 500; color: #0F172A">My Bookmarks</h2>
+          
+        </div>
+          <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px">
+            <sc-for list="{{ bookmarkList }}" as="it" hint-placeholder-count="2"><article class="kz-card" style="position: relative; display: flex; align-items: center; gap: 16px; padding: 10px; border: 1px solid #CBD5E1; border-radius: 12px; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.07); text-align: left">
+        <span style="width: 52px; height: 52px; flex: none; border-radius: 8px; background: {{ it.bar }}; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><sc-if value="{{ it.g_link }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7" stroke-width="1.8"></path><path d="M9 7h8v8" stroke-width="1.8"></path></svg></sc-if><sc-if value="{{ it.g_video }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l11 7-11 7V5z" fill="currentColor" stroke="none"></path></svg></sc-if><sc-if value="{{ it.g_article }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1.5" stroke-width="1.6"></rect><path d="M7.5 8H16.5M7.5 12H16.5M7.5 16H13" stroke-width="1.4"></path></svg></sc-if></span>
+        <div style="flex: 1; min-width: 0">
+          <p style="margin: 0 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px; font-weight: 500; line-height: 1.4">
+            <span style="color: #3F0FB7">{{ it.topicLabel }}</span> <span style="color: #64748B; font-weight: 400">•</span>
+            <sc-if value="{{ it.sourced }}" hint-placeholder-val="{{ true }}"><button type="button" class="kz-src kz-above" onClick="{{ it.openSource }}" style="padding: 0; border: none; background: none; color: #64748B; font-size: 14px; font-weight: 400">{{ it.source }}</button></sc-if>
+            <sc-if value="{{ it.authored }}" hint-placeholder-val="{{ false }}"><span style="color: #64748B; font-weight: 400">Keyz</span></sc-if>
+          </p>
+          <sc-if value="{{ it.sourced }}" hint-placeholder-val="{{ true }}"><a class="kz-open" href="{{ it.url }}" target="_blank" rel="noopener noreferrer" onClick="{{ it.visit }}" style="display: block; margin: 0 0 4px; font-size: 16px; font-weight: 500; line-height: 1.4; color: #1E293B; text-decoration: none">{{ it.title }}</a></sc-if>
+          <sc-if value="{{ it.authored }}" hint-placeholder-val="{{ false }}"><button type="button" class="kz-open" onClick="{{ it.open }}" style="display: block; margin: 0 0 4px; padding: 0; border: none; background: none; text-align: left; font-size: 16px; font-weight: 500; line-height: 1.4; color: #1E293B">{{ it.title }}</button></sc-if>
+          <p style="margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 12px; line-height: 1.5; color: #64748B">{{ it.subline }}
+            <sc-if value="{{ it.isEs }}" hint-placeholder-val="{{ false }}"><span style="padding: 1px 8px; border-radius: 9999px; background: #F1F5F9; color: #334155; font-weight: 600">Español</span></sc-if>
+            <sc-if value="{{ it.isCourse }}" hint-placeholder-val="{{ false }}"><span style="padding: 1px 8px; border-radius: 9999px; background: #FFF1DA; color: #92400E; font-weight: 600">Certificate course</span></sc-if>
+          </p>
+        </div>
+        <span class="kz-above" style="display: flex; gap: 4px; flex: none">
+            <button type="button" class="kz-act" onClick="{{ it.bm }}" aria-label="{{ it.bmLabel }}" aria-pressed="{{ it.bmOn }}" style="width: 26px; height: 26px; padding: 0; border-radius: 9999px; border: 1px solid {{ it.bmBorder }}; background: {{ it.bmBg }}; color: {{ it.bmFg }}; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2.5h14v19l-7-5-7 5z"></path></svg></button>
+          </span>
+      </article></sc-for>
+          </div>
+          <sc-if value="{{ noBookmarks }}" hint-placeholder-val="{{ false }}"><div style="padding: 40px 24px; border: 1px dashed #CBD5E1; border-radius: 12px; text-align: center; font-size: 14px; color: #64748B">Nothing saved yet. Tap the bookmark on any card to keep it here.</div></sc-if>
+        </sc-if>
+
+        <sc-if value="{{ showPicked }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-bottom: 32px">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 16px">
+          <h2 style="margin: 0; padding-left: 12px; border-left: 4px solid #3F0FB7; font-size: 22px; line-height: 1.3; font-weight: 500; color: #0F172A">Picked for where you are</h2>
+          
+        </div>
+            <p style="margin: -8px 0 16px; font-size: 14px; color: #64748B; text-align: left">Based on your current step: My Data.</p>
+            <div style="display: flex; gap: 24px; overflow-x: auto; padding-bottom: 4px"><sc-for list="{{ picked }}" as="it" hint-placeholder-count="3"><article class="kz-card" style="position: relative; width: calc((100% - 72px) / 4); min-width: 200px; flex: none; border: 1px solid #CBD5E1; border-radius: 12px; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.07); overflow: hidden; text-align: left">
+        <div style="height: 6px; background: {{ it.bar }}"></div>
+        <div style="padding: 14px">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px">
+            <span style="width: 34px; height: 34px; border-radius: 8px; background: {{ it.tint }}; color: {{ it.accent }}; display: flex; align-items: center; justify-content: center"><sc-if value="{{ it.g_link }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7" stroke-width="1.8"></path><path d="M9 7h8v8" stroke-width="1.8"></path></svg></sc-if><sc-if value="{{ it.g_video }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l11 7-11 7V5z" fill="currentColor" stroke="none"></path></svg></sc-if><sc-if value="{{ it.g_article }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1.5" stroke-width="1.6"></rect><path d="M7.5 8H16.5M7.5 12H16.5M7.5 16H13" stroke-width="1.4"></path></svg></sc-if></span>
+          <span class="kz-above" style="display: flex; gap: 4px; flex: none">
+            <button type="button" class="kz-act" onClick="{{ it.bm }}" aria-label="{{ it.bmLabel }}" aria-pressed="{{ it.bmOn }}" style="width: 26px; height: 26px; padding: 0; border-radius: 9999px; border: 1px solid {{ it.bmBorder }}; background: {{ it.bmBg }}; color: {{ it.bmFg }}; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2.5h14v19l-7-5-7 5z"></path></svg></button>
+            <button type="button" class="kz-act" onClick="{{ it.dismiss }}" aria-label="Not useful right now" style="width: 26px; height: 26px; padding: 0; border-radius: 9999px; border: 1px solid #CBD5E1; background: #FFFFFF; color: #475569; display: flex; align-items: center; justify-content: center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 4l16 16M20 4L4 20"></path></svg></button>
+          </span>
+          </div>
+          <p style="margin: 0 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px; font-weight: 500; line-height: 1.4">
+            <span style="color: #3F0FB7">{{ it.topicLabel }}</span> <span style="color: #64748B; font-weight: 400">•</span>
+            <sc-if value="{{ it.sourced }}" hint-placeholder-val="{{ true }}"><button type="button" class="kz-src kz-above" onClick="{{ it.openSource }}" style="padding: 0; border: none; background: none; color: #64748B; font-size: 14px; font-weight: 400">{{ it.source }}</button></sc-if>
+            <sc-if value="{{ it.authored }}" hint-placeholder-val="{{ false }}"><span style="color: #64748B; font-weight: 400">Keyz</span></sc-if>
+          </p>
+          <sc-if value="{{ it.sourced }}" hint-placeholder-val="{{ true }}"><a class="kz-open" href="{{ it.url }}" target="_blank" rel="noopener noreferrer" onClick="{{ it.visit }}" style="display: block; margin: 0 0 4px; font-size: 16px; font-weight: 500; line-height: 1.4; color: #1E293B; text-decoration: none">{{ it.title }}</a></sc-if>
+          <sc-if value="{{ it.authored }}" hint-placeholder-val="{{ false }}"><button type="button" class="kz-open" onClick="{{ it.open }}" style="display: block; margin: 0 0 4px; padding: 0; border: none; background: none; text-align: left; font-size: 16px; font-weight: 500; line-height: 1.4; color: #1E293B">{{ it.title }}</button></sc-if>
+          <p style="margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 12px; line-height: 1.5; color: #64748B">{{ it.subline }}
+            <sc-if value="{{ it.isEs }}" hint-placeholder-val="{{ false }}"><span style="padding: 1px 8px; border-radius: 9999px; background: #F1F5F9; color: #334155; font-weight: 600">Español</span></sc-if>
+            <sc-if value="{{ it.isCourse }}" hint-placeholder-val="{{ false }}"><span style="padding: 1px 8px; border-radius: 9999px; background: #FFF1DA; color: #92400E; font-weight: 600">Certificate course</span></sc-if>
+          </p>
+        </div>
+      </article></sc-for></div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showVideos }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-bottom: 32px">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 16px">
+          <h2 style="margin: 0; padding-left: 12px; border-left: 4px solid #3F0FB7; font-size: 22px; line-height: 1.3; font-weight: 500; color: #0F172A">Keyz Videos</h2>
+          
+        </div>
+            <div style="display: flex; gap: 24px; overflow-x: auto; padding-bottom: 4px"><sc-for list="{{ videos }}" as="it" hint-placeholder-count="4"><article class="kz-card" style="position: relative; width: calc((100% - 72px) / 4); min-width: 200px; flex: none; border: 1px solid #CBD5E1; border-radius: 12px; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.07); overflow: hidden; text-align: left">
+        <div style="height: 6px; background: {{ it.bar }}"></div>
+        <div style="padding: 14px">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px">
+            <span style="width: 34px; height: 34px; border-radius: 8px; background: {{ it.tint }}; color: {{ it.accent }}; display: flex; align-items: center; justify-content: center"><sc-if value="{{ it.g_link }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7" stroke-width="1.8"></path><path d="M9 7h8v8" stroke-width="1.8"></path></svg></sc-if><sc-if value="{{ it.g_video }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l11 7-11 7V5z" fill="currentColor" stroke="none"></path></svg></sc-if><sc-if value="{{ it.g_article }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1.5" stroke-width="1.6"></rect><path d="M7.5 8H16.5M7.5 12H16.5M7.5 16H13" stroke-width="1.4"></path></svg></sc-if></span>
+          <span class="kz-above" style="display: flex; gap: 4px; flex: none">
+            <button type="button" class="kz-act" onClick="{{ it.bm }}" aria-label="{{ it.bmLabel }}" aria-pressed="{{ it.bmOn }}" style="width: 26px; height: 26px; padding: 0; border-radius: 9999px; border: 1px solid {{ it.bmBorder }}; background: {{ it.bmBg }}; color: {{ it.bmFg }}; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2.5h14v19l-7-5-7 5z"></path></svg></button>
+          </span>
+          </div>
+          <p style="margin: 0 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px; font-weight: 500; line-height: 1.4">
+            <span style="color: #3F0FB7">{{ it.topicLabel }}</span> <span style="color: #64748B; font-weight: 400">•</span>
+            <sc-if value="{{ it.sourced }}" hint-placeholder-val="{{ true }}"><button type="button" class="kz-src kz-above" onClick="{{ it.openSource }}" style="padding: 0; border: none; background: none; color: #64748B; font-size: 14px; font-weight: 400">{{ it.source }}</button></sc-if>
+            <sc-if value="{{ it.authored }}" hint-placeholder-val="{{ false }}"><span style="color: #64748B; font-weight: 400">Keyz</span></sc-if>
+          </p>
+          <sc-if value="{{ it.sourced }}" hint-placeholder-val="{{ true }}"><a class="kz-open" href="{{ it.url }}" target="_blank" rel="noopener noreferrer" onClick="{{ it.visit }}" style="display: block; margin: 0 0 4px; font-size: 16px; font-weight: 500; line-height: 1.4; color: #1E293B; text-decoration: none">{{ it.title }}</a></sc-if>
+          <sc-if value="{{ it.authored }}" hint-placeholder-val="{{ false }}"><button type="button" class="kz-open" onClick="{{ it.open }}" style="display: block; margin: 0 0 4px; padding: 0; border: none; background: none; text-align: left; font-size: 16px; font-weight: 500; line-height: 1.4; color: #1E293B">{{ it.title }}</button></sc-if>
+          <p style="margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 12px; line-height: 1.5; color: #64748B">{{ it.subline }}
+            <sc-if value="{{ it.isEs }}" hint-placeholder-val="{{ false }}"><span style="padding: 1px 8px; border-radius: 9999px; background: #F1F5F9; color: #334155; font-weight: 600">Español</span></sc-if>
+            <sc-if value="{{ it.isCourse }}" hint-placeholder-val="{{ false }}"><span style="padding: 1px 8px; border-radius: 9999px; background: #FFF1DA; color: #92400E; font-weight: 600">Certificate course</span></sc-if>
+          </p>
+        </div>
+      </article></sc-for></div>
+          </div>
+        </sc-if>
+
+        <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="3">
+          <div style="margin-bottom: 32px">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 16px">
+          <h2 style="margin: 0; padding-left: 12px; border-left: 4px solid #3F0FB7; font-size: 22px; line-height: 1.3; font-weight: 500; color: #0F172A">{{ sec.label }}</h2><span style="font-size: 14px; color: #64748B">{{ sec.countLabel }}</span>
+          <button type="button" class="kz-gt" onClick="{{ sec.viewAll }}" style="padding: 0; border: none; background: none; color: #3F0FB7; font-size: 14px; display: flex; align-items: center; gap: 8px">View all <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="18.5,7.5 23.5,12.5 18.5,17.5"></polyline><line x1="23.5" y1="12.5" x2="0.5" y2="12.5"></line></svg></button>
+        </div>
+            <div style="display: flex; gap: 24px; overflow-x: auto; padding-bottom: 4px"><sc-for list="{{ sec.items }}" as="it" hint-placeholder-count="4"><article class="kz-card" style="position: relative; width: calc((100% - 72px) / 4); min-width: 200px; flex: none; border: 1px solid #CBD5E1; border-radius: 12px; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.07); overflow: hidden; text-align: left">
+        <div style="height: 6px; background: {{ it.bar }}"></div>
+        <div style="padding: 14px">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px">
+            <span style="width: 34px; height: 34px; border-radius: 8px; background: {{ it.tint }}; color: {{ it.accent }}; display: flex; align-items: center; justify-content: center"><sc-if value="{{ it.g_link }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7" stroke-width="1.8"></path><path d="M9 7h8v8" stroke-width="1.8"></path></svg></sc-if><sc-if value="{{ it.g_video }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l11 7-11 7V5z" fill="currentColor" stroke="none"></path></svg></sc-if><sc-if value="{{ it.g_article }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1.5" stroke-width="1.6"></rect><path d="M7.5 8H16.5M7.5 12H16.5M7.5 16H13" stroke-width="1.4"></path></svg></sc-if></span>
+          <span class="kz-above" style="display: flex; gap: 4px; flex: none">
+            <button type="button" class="kz-act" onClick="{{ it.bm }}" aria-label="{{ it.bmLabel }}" aria-pressed="{{ it.bmOn }}" style="width: 26px; height: 26px; padding: 0; border-radius: 9999px; border: 1px solid {{ it.bmBorder }}; background: {{ it.bmBg }}; color: {{ it.bmFg }}; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2.5h14v19l-7-5-7 5z"></path></svg></button>
+          </span>
+          </div>
+          <p style="margin: 0 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px; font-weight: 500; line-height: 1.4">
+            <span style="color: #3F0FB7">{{ it.topicLabel }}</span> <span style="color: #64748B; font-weight: 400">•</span>
+            <sc-if value="{{ it.sourced }}" hint-placeholder-val="{{ true }}"><button type="button" class="kz-src kz-above" onClick="{{ it.openSource }}" style="padding: 0; border: none; background: none; color: #64748B; font-size: 14px; font-weight: 400">{{ it.source }}</button></sc-if>
+            <sc-if value="{{ it.authored }}" hint-placeholder-val="{{ false }}"><span style="color: #64748B; font-weight: 400">Keyz</span></sc-if>
+          </p>
+          <sc-if value="{{ it.sourced }}" hint-placeholder-val="{{ true }}"><a class="kz-open" href="{{ it.url }}" target="_blank" rel="noopener noreferrer" onClick="{{ it.visit }}" style="display: block; margin: 0 0 4px; font-size: 16px; font-weight: 500; line-height: 1.4; color: #1E293B; text-decoration: none">{{ it.title }}</a></sc-if>
+          <sc-if value="{{ it.authored }}" hint-placeholder-val="{{ false }}"><button type="button" class="kz-open" onClick="{{ it.open }}" style="display: block; margin: 0 0 4px; padding: 0; border: none; background: none; text-align: left; font-size: 16px; font-weight: 500; line-height: 1.4; color: #1E293B">{{ it.title }}</button></sc-if>
+          <p style="margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 12px; line-height: 1.5; color: #64748B">{{ it.subline }}
+            <sc-if value="{{ it.isEs }}" hint-placeholder-val="{{ false }}"><span style="padding: 1px 8px; border-radius: 9999px; background: #F1F5F9; color: #334155; font-weight: 600">Español</span></sc-if>
+            <sc-if value="{{ it.isCourse }}" hint-placeholder-val="{{ false }}"><span style="padding: 1px 8px; border-radius: 9999px; background: #FFF1DA; color: #92400E; font-weight: 600">Certificate course</span></sc-if>
+          </p>
+        </div>
+      </article></sc-for></div>
+          </div>
+        </sc-for>
+        <sc-if value="{{ nothingFound }}" hint-placeholder-val="{{ false }}"><div style="padding: 48px 24px; border: 1px dashed #CBD5E1; border-radius: 12px; text-align: center"><p style="margin: 0 0 4px; font-size: 18px; font-weight: 500; color: #0F172A">No matches</p><p style="margin: 0; font-size: 14px; color: #64748B">Try a different word or clear your filters.</p></div></sc-if>
+        </sc-if>
+        <sc-if value="{{ isTopic }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 8px 0 24px; text-align: left">
+          <div style="display: flex; gap: 8px; font-size: 14px; margin-bottom: 16px"><a href="#" style="text-decoration: none">Home</a><span style="color: #94A3B8">/</span><button type="button" class="kz-gt" onClick="{{ goHome }}" style="padding: 0; border: none; background: none; color: #3F0FB7; font-size: 14px">Learn</button><span style="color: #94A3B8">/</span><span style="color: #475569">{{ tv.label }}</span></div>
+          <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+            <div><h1 style="margin: 0; font-size: 28px; line-height: 1.25; font-weight: 500; color: #020617">{{ tv.label }}</h1><p style="margin: 4px 0 0; font-size: 16px; color: #465770">{{ tv.countLabel }}</p></div>
+            <button type="button" class="kz-outline" onClick="{{ goHome }}" style="height: 40px; padding: 7px 24px; border: 1px solid #3F0FB7; border-radius: 8px; background: #FFFFFF; color: #3F0FB7; font-size: 14px; font-weight: 600">Back to Learn</button>
+          </div>
+        </div>
+        <div role="group" aria-label="Sub-category" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px"><sc-for list="{{ tv.subChips }}" as="c" hint-placeholder-count="4"><button type="button" class="kz-chip" onClick="{{ c.pick }}" aria-pressed="{{ c.on }}" style="height: 36px; padding: 8px 12px; border: 1px solid {{ c.border }}; border-radius: 9999px; background: {{ c.bg }}; color: {{ c.fg }}; font-size: 14px; display: flex; align-items: center; gap: 8px; white-space: nowrap">{{ c.label }}<sc-if value="{{ c.hasCount }}" hint-placeholder-val="{{ false }}"><span style="min-width: 20px; height: 20px; padding: 0 6px; box-sizing: border-box; border-radius: 9999px; background: {{ c.countBg }}; color: {{ c.countFg }}; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{ c.count }}</span></sc-if></button></sc-for></div>
+        <div style="display: flex; flex-direction: column; gap: 12px"><sc-for list="{{ tv.items }}" as="it" hint-placeholder-count="5"><article class="kz-card" style="position: relative; display: flex; align-items: center; gap: 16px; padding: 10px; border: 1px solid #CBD5E1; border-radius: 12px; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.07); text-align: left">
+        <span style="width: 52px; height: 52px; flex: none; border-radius: 8px; background: {{ it.bar }}; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><sc-if value="{{ it.g_link }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7" stroke-width="1.8"></path><path d="M9 7h8v8" stroke-width="1.8"></path></svg></sc-if><sc-if value="{{ it.g_video }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l11 7-11 7V5z" fill="currentColor" stroke="none"></path></svg></sc-if><sc-if value="{{ it.g_article }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1.5" stroke-width="1.6"></rect><path d="M7.5 8H16.5M7.5 12H16.5M7.5 16H13" stroke-width="1.4"></path></svg></sc-if></span>
+        <div style="flex: 1; min-width: 0">
+          <p style="margin: 0 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px; font-weight: 500; line-height: 1.4">
+            <span style="color: #3F0FB7">{{ it.topicLabel }}</span> <span style="color: #64748B; font-weight: 400">•</span>
+            <sc-if value="{{ it.sourced }}" hint-placeholder-val="{{ true }}"><button type="button" class="kz-src kz-above" onClick="{{ it.openSource }}" style="padding: 0; border: none; background: none; color: #64748B; font-size: 14px; font-weight: 400">{{ it.source }}</button></sc-if>
+            <sc-if value="{{ it.authored }}" hint-placeholder-val="{{ false }}"><span style="color: #64748B; font-weight: 400">Keyz</span></sc-if>
+          </p>
+          <sc-if value="{{ it.sourced }}" hint-placeholder-val="{{ true }}"><a class="kz-open" href="{{ it.url }}" target="_blank" rel="noopener noreferrer" onClick="{{ it.visit }}" style="display: block; margin: 0 0 4px; font-size: 16px; font-weight: 500; line-height: 1.4; color: #1E293B; text-decoration: none">{{ it.title }}</a></sc-if>
+          <sc-if value="{{ it.authored }}" hint-placeholder-val="{{ false }}"><button type="button" class="kz-open" onClick="{{ it.open }}" style="display: block; margin: 0 0 4px; padding: 0; border: none; background: none; text-align: left; font-size: 16px; font-weight: 500; line-height: 1.4; color: #1E293B">{{ it.title }}</button></sc-if>
+          <p style="margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 12px; line-height: 1.5; color: #64748B">{{ it.subline }}
+            <sc-if value="{{ it.isEs }}" hint-placeholder-val="{{ false }}"><span style="padding: 1px 8px; border-radius: 9999px; background: #F1F5F9; color: #334155; font-weight: 600">Español</span></sc-if>
+            <sc-if value="{{ it.isCourse }}" hint-placeholder-val="{{ false }}"><span style="padding: 1px 8px; border-radius: 9999px; background: #FFF1DA; color: #92400E; font-weight: 600">Certificate course</span></sc-if>
+          </p>
+        </div>
+        <span class="kz-above" style="display: flex; gap: 4px; flex: none">
+            <button type="button" class="kz-act" onClick="{{ it.bm }}" aria-label="{{ it.bmLabel }}" aria-pressed="{{ it.bmOn }}" style="width: 26px; height: 26px; padding: 0; border-radius: 9999px; border: 1px solid {{ it.bmBorder }}; background: {{ it.bmBg }}; color: {{ it.bmFg }}; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2.5h14v19l-7-5-7 5z"></path></svg></button>
+          </span>
+      </article></sc-for></div>
+        </sc-if>
+        <sc-if value="{{ isSource }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 8px 0 24px; text-align: left">
+          <div style="display: flex; gap: 8px; font-size: 14px; margin-bottom: 16px"><a href="#" style="text-decoration: none">Home</a><span style="color: #94A3B8">/</span><button type="button" class="kz-gt" onClick="{{ goHome }}" style="padding: 0; border: none; background: none; color: #3F0FB7; font-size: 14px">Learn</button><span style="color: #94A3B8">/</span><span style="color: #475569">{{ sv.name }}</span></div>
+          <div style="padding: 24px; border: 1px solid #CBD5E1; border-radius: 12px; background: #FAFBFD">
+            <p style="margin: 0 0 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: #3F0FB7">{{ sv.eyebrow }}</p>
+            <h1 style="margin: 0 0 8px; font-size: 26px; line-height: 1.3; font-weight: 500; color: #020617">{{ sv.hero }}</h1>
+            <p style="margin: 0 0 16px; max-width: 720px; font-size: 16px; line-height: 1.6; color: #334155">{{ sv.blurb }}</p>
+            <a href="{{ sv.site }}" target="_blank" rel="noopener noreferrer" class="kz-outline" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 7px 24px; box-sizing: border-box; border: 1px solid #3F0FB7; border-radius: 8px; background: #FFFFFF; color: #3F0FB7; font-size: 14px; font-weight: 600; text-decoration: none">Visit {{ sv.domain }} <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 17L17 7"></path><path d="M9 7h8v8"></path></svg></a>
+          </div>
+          <div style="display: flex; gap: 12px; margin-top: 16px; padding: 16px 20px; background: #FFF1DA; border: 1px solid #FBD07A; border-radius: 12px; font-size: 14px; line-height: 1.6; color: #92400E">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="flex: none; margin-top: 2px"><circle cx="12" cy="12" r="11"></circle><line x1="12" y1="10.5" x2="12" y2="17.5"></line><line x1="12" y1="6.5" x2="12" y2="6.6"></line></svg>
+            <span><b>{{ sv.noticeLead }}</b> {{ sv.notice }}</span>
+          </div>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 16px">
+          <h2 style="margin: 0; padding-left: 12px; border-left: 4px solid #3F0FB7; font-size: 22px; line-height: 1.3; font-weight: 500; color: #0F172A">A few things worth a look</h2>
+          
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px"><sc-for list="{{ sv.items }}" as="it" hint-placeholder-count="3"><article class="kz-card" style="position: relative; display: flex; align-items: center; gap: 16px; padding: 10px; border: 1px solid #CBD5E1; border-radius: 12px; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.07); text-align: left">
+        <span style="width: 52px; height: 52px; flex: none; border-radius: 8px; background: {{ it.bar }}; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><sc-if value="{{ it.g_link }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7" stroke-width="1.8"></path><path d="M9 7h8v8" stroke-width="1.8"></path></svg></sc-if><sc-if value="{{ it.g_video }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l11 7-11 7V5z" fill="currentColor" stroke="none"></path></svg></sc-if><sc-if value="{{ it.g_article }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1.5" stroke-width="1.6"></rect><path d="M7.5 8H16.5M7.5 12H16.5M7.5 16H13" stroke-width="1.4"></path></svg></sc-if></span>
+        <div style="flex: 1; min-width: 0">
+          <p style="margin: 0 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px; font-weight: 500; line-height: 1.4">
+            <span style="color: #3F0FB7">{{ it.topicLabel }}</span> <span style="color: #64748B; font-weight: 400">•</span>
+            <sc-if value="{{ it.sourced }}" hint-placeholder-val="{{ true }}"><button type="button" class="kz-src kz-above" onClick="{{ it.openSource }}" style="padding: 0; border: none; background: none; color: #64748B; font-size: 14px; font-weight: 400">{{ it.source }}</button></sc-if>
+            <sc-if value="{{ it.authored }}" hint-placeholder-val="{{ false }}"><span style="color: #64748B; font-weight: 400">Keyz</span></sc-if>
+          </p>
+          <sc-if value="{{ it.sourced }}" hint-placeholder-val="{{ true }}"><a class="kz-open" href="{{ it.url }}" target="_blank" rel="noopener noreferrer" onClick="{{ it.visit }}" style="display: block; margin: 0 0 4px; font-size: 16px; font-weight: 500; line-height: 1.4; color: #1E293B; text-decoration: none">{{ it.title }}</a></sc-if>
+          <sc-if value="{{ it.authored }}" hint-placeholder-val="{{ false }}"><button type="button" class="kz-open" onClick="{{ it.open }}" style="display: block; margin: 0 0 4px; padding: 0; border: none; background: none; text-align: left; font-size: 16px; font-weight: 500; line-height: 1.4; color: #1E293B">{{ it.title }}</button></sc-if>
+          <p style="margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 12px; line-height: 1.5; color: #64748B">{{ it.subline }}
+            <sc-if value="{{ it.isEs }}" hint-placeholder-val="{{ false }}"><span style="padding: 1px 8px; border-radius: 9999px; background: #F1F5F9; color: #334155; font-weight: 600">Español</span></sc-if>
+            <sc-if value="{{ it.isCourse }}" hint-placeholder-val="{{ false }}"><span style="padding: 1px 8px; border-radius: 9999px; background: #FFF1DA; color: #92400E; font-weight: 600">Certificate course</span></sc-if>
+          </p>
+        </div>
+        <span class="kz-above" style="display: flex; gap: 4px; flex: none">
+            <button type="button" class="kz-act" onClick="{{ it.bm }}" aria-label="{{ it.bmLabel }}" aria-pressed="{{ it.bmOn }}" style="width: 26px; height: 26px; padding: 0; border-radius: 9999px; border: 1px solid {{ it.bmBorder }}; background: {{ it.bmBg }}; color: {{ it.bmFg }}; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2.5h14v19l-7-5-7 5z"></path></svg></button>
+          </span>
+      </article></sc-for></div>
+        <p style="margin: 24px 0 0; font-size: 14px; color: #64748B; text-align: left">Every link on this page opens {{ sv.domain }} in a new tab.</p>
+        </sc-if>
+      </div>
+    </main>
+  </div>
+
+  <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 400; background: rgba(15,23,42,0.45); display: flex; align-items: center; justify-content: center; padding: 16px">
+      <div role="dialog" aria-modal="true" aria-label="{{ m.title }}" style="width: 600px; max-width: 100%; box-sizing: border-box; padding: 24px; background: #FFFFFF; border-radius: 16px; box-shadow: 0 16px 40px rgba(0,0,0,0.12); text-align: left">
+        <div style="display: flex; align-items: flex-start; gap: 16px">
+          <div style="flex: 1">
+            <p style="margin: 0 0 4px; font-size: 14px; font-weight: 600"><span style="color: #3F0FB7">{{ m.topicLabel }}</span> <span style="color: #64748B">• Keyz</span></p>
+            <h2 style="margin: 0; font-size: 22px; line-height: 1.3; font-weight: 500; color: #0F172A">{{ m.title }}</h2>
+          </div>
+          <button type="button" class="kz-ib" onClick="{{ closeModal }}" aria-label="Close" style="width: 32px; height: 32px; padding: 0; border: none; border-radius: 9999px; background: transparent; color: #475569; display: flex; align-items: center; justify-content: center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 4l16 16M20 4L4 20"></path></svg></button>
+        </div>
+        <sc-if value="{{ m.isVideo }}" hint-placeholder-val="{{ false }}"><div style="margin-top: 16px; height: 240px; border-radius: 12px; background: #0F172A; color: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 14px"><svg width="40" height="40" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7V5z" fill="#FFFFFF"></path></svg>[Keyz YouTube video plays here]</div></sc-if>
+        <p style="margin: 16px 0 0; font-size: 16px; line-height: 1.6; color: #334155">{{ m.desc }}</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: 24px">
+          <sc-if value="{{ m.isVideo }}" hint-placeholder-val="{{ false }}"><a href="#" class="kz-outline" style="height: 40px; padding: 7px 24px; box-sizing: border-box; display: inline-flex; align-items: center; border: 1px solid #3F0FB7; border-radius: 8px; background: #FFFFFF; color: #3F0FB7; font-size: 14px; font-weight: 600; text-decoration: none">Watch on YouTube</a></sc-if>
+          <button type="button" onClick="{{ closeModal }}" style="height: 40px; padding: 8px 24px; border: none; border-radius: 8px; background: #3F0FB7; color: #FFFFFF; font-size: 14px; font-weight: 600">Done</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showToast }}" hint-placeholder-val="{{ false }}">
+    <div role="status" aria-live="polite" style="position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 500; display: inline-flex; align-items: center; padding-left: 24px; max-width: 90vw; animation: kzToastIn .2s ease">
+      <span aria-hidden="true" style="position: absolute; left: 0; z-index: 2; width: 48px; height: 48px; box-sizing: border-box; border-radius: 9999px; background: #1F7A3A; border: 2px solid #FFFFFF; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9.5,16.5 4,11"></polyline></svg></span>
+      <div style="position: relative; overflow: hidden; display: inline-flex; align-items: center; gap: 16px; min-width: 300px; max-width: 440px; padding: 28px 24px 28px 36px; box-sizing: border-box; border-radius: 12px; background: #1F7A3A; box-shadow: 0 8px 24px rgba(0,0,0,0.10)">
+        <span style="flex: 1; font-size: 14px; font-weight: 700; color: #FFFFFF; text-align: left">{{ toastTitle }}</span>
+        <sc-if value="{{ toastUndo }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ undo }}" style="padding: 0; border: none; background: none; color: rgba(255,255,255,0.9); font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: underline; text-underline-offset: 3px">Undo</button></sc-if>
+        <div aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 0; height: 3px"><div style="height: 100%; background: rgba(255,255,255,0.40); animation: kzShrink 4s linear forwards"></div></div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2400}}'>
+const LIB = [{"topic": "credit", "sub": "Reports", "title": "Credit reports and scores", "source": "CFPB", "tier": "public", "format": "guide", "lang": "en", "url": "https://www.consumerfinance.gov/consumer-tools/credit-reports-and-scores/", "desc": "Learn what is in your credit reports, how scores work, and how to get your reports for free.", "id": "s1"}, {"topic": "credit", "sub": "Reports", "title": "Free Credit Reports", "source": "FTC", "tier": "public", "format": "article", "lang": "en", "url": "https://consumer.ftc.gov/articles/free-credit-reports", "desc": "How to get your free credit reports from AnnualCreditReport.com and avoid look-alike websites.", "id": "s2"}, {"topic": "credit", "sub": "Reports", "title": "Informes de crédito gratuitos", "source": "FTC", "tier": "public", "format": "article", "lang": "es", "url": "https://consumidor.ftc.gov/articulos/informes-de-credito-gratuitos", "desc": "Cómo obtener sus informes de crédito gratuitos y revisarlos para encontrar errores o fraude.", "id": "s3"}, {"topic": "credit", "sub": "Fixing Errors", "title": "How do I dispute an error on my credit report?", "source": "CFPB", "tier": "public", "format": "article", "lang": "en", "url": "https://www.consumerfinance.gov/ask-cfpb/how-do-i-dispute-an-error-on-my-credit-report-en-314/", "desc": "Steps to fix a mistake on your credit report before you apply for a mortgage.", "id": "s4"}, {"topic": "credit", "sub": "Building Credit", "title": "How do I get and keep a good credit score?", "source": "CFPB", "tier": "public", "format": "article", "lang": "en", "url": "https://www.consumerfinance.gov/ask-cfpb/how-do-i-get-and-keep-a-good-credit-score-en-318/", "desc": "Simple habits that help you build a strong credit score and keep it there.", "id": "s5"}, {"topic": "credit", "sub": "Building Credit", "title": "CreditSmart Essentials", "source": "Freddie Mac", "tier": "link-only", "format": "course", "lang": "en", "url": "https://creditsmart.freddiemac.com/paths/essentials", "desc": "A free, self-paced course on managing money and building good credit at your own pace.", "id": "s6"}, {"topic": "down-payment", "sub": "Planning", "title": "Figure out how much you want to spend", "source": "CFPB", "tier": "public", "format": "guide", "lang": "en", "url": "https://www.consumerfinance.gov/owning-a-home/prepare/figure-out-how-much-you-want-to-spend/", "desc": "Decide on a comfortable home price and down payment before you start shopping.", "id": "s7"}, {"topic": "down-payment", "sub": "Saving", "title": "Savings Goal Calculator", "source": "Investor.gov", "tier": "kai", "format": "tool", "lang": "en", "url": "https://www.investor.gov/financial-tools-calculators/calculators/savings-goal-calculator", "desc": "See how much you need to save each month to reach your down payment goal.", "id": "s8"}, {"topic": "down-payment", "sub": "Mortgage Insurance", "title": "What is mortgage insurance and how does it work?", "source": "CFPB", "tier": "public", "format": "article", "lang": "en", "url": "https://www.consumerfinance.gov/ask-cfpb/what-is-mortgage-insurance-and-how-does-it-work-en-1953/", "desc": "Why a smaller down payment usually means paying mortgage insurance, and how it affects your costs.", "id": "s9"}, {"topic": "down-payment", "sub": "Low-Down Loans", "title": "Special loan programs", "source": "CFPB", "tier": "public", "format": "guide", "lang": "en", "url": "https://www.consumerfinance.gov/owning-a-home/special-loan-programs/", "desc": "Loan programs that can lower your down payment or help first-time buyers qualify.", "id": "s10"}, {"topic": "down-payment", "sub": "Low-Down Loans", "title": "VA-backed Veterans home loans", "source": "VA", "tier": "public", "format": "guide", "lang": "en", "url": "https://www.va.gov/housing-assistance/home-loans/", "desc": "Veterans and service members may buy a home with no down payment through VA loans.", "id": "s11"}, {"topic": "down-payment", "sub": "Low-Down Loans", "title": "Single Family Housing Guaranteed Loan Program", "source": "USDA", "tier": "public", "format": "guide", "lang": "en", "url": "https://rd.usda.gov/programs-services/single-family-housing-guaranteed-loan-program", "desc": "USDA loans help buyers in eligible rural areas purchase a home with no down payment.", "id": "s12"}, {"topic": "mortgage", "sub": "Closing Documents", "title": "Loan Estimate Explainer", "source": "CFPB", "tier": "public", "format": "tool", "lang": "en", "url": "https://www.consumerfinance.gov/owning-a-home/loan-estimate/", "desc": "An interactive, page-by-page walkthrough of the Loan Estimate you get from each lender.", "id": "s13"}, {"topic": "mortgage", "sub": "Closing Documents", "title": "Closing Disclosure Explainer", "source": "CFPB", "tier": "public", "format": "tool", "lang": "en", "url": "https://www.consumerfinance.gov/owning-a-home/closing-disclosure/", "desc": "Understand every section of your Closing Disclosure and what to check before closing day.", "id": "s14"}, {"topic": "mortgage", "sub": "Rates & Offers", "title": "Explore interest rates", "source": "CFPB", "tier": "public", "format": "tool", "lang": "en", "url": "https://www.consumerfinance.gov/owning-a-home/explore-rates/", "desc": "See what interest rates you might get based on your credit score, loan type, and location.", "id": "s15"}, {"topic": "mortgage", "sub": "Rates & Offers", "title": "A Consumer's Guide to Mortgage Lock-Ins", "source": "Federal Reserve", "tier": "public", "format": "guide", "lang": "en", "url": "https://www.federalreserve.gov/pubs/lockins/default.htm", "desc": "How locking in your interest rate works and what to ask your lender about it.", "id": "s16"}, {"topic": "mortgage", "sub": "Loan Programs", "title": "Let FHA Loans Help You", "source": "HUD", "tier": "public", "format": "guide", "lang": "en", "url": "https://www.hud.gov/helping-americans/loans", "desc": "FHA loans offer low down payments, low closing costs, and easier credit qualifying.", "id": "s17"}, {"topic": "mortgage", "sub": "Loan Programs", "title": "VA home loan types", "source": "VA", "tier": "public", "format": "guide", "lang": "en", "url": "https://www.va.gov/housing-assistance/home-loans/loan-types", "desc": "Compare VA purchase, refinance, and direct loan options to see which fits you.", "id": "s18"}, {"topic": "mortgage", "sub": "Loan Basics", "title": "On the Move: Mortgage Basics", "source": "St. Louis Fed", "tier": "public", "format": "article", "lang": "en", "url": "https://fraser.stlouisfed.org/title/page-one-economics-5939/move-mortgage-basics-701290", "desc": "A short, plain-language read on how mortgages, interest, and monthly payments work.", "id": "s19"}, {"topic": "budgeting", "sub": "Budgeting", "title": "Money Basics Guide to Budgeting and Savings", "source": "NCUA", "tier": "public", "format": "guide", "lang": "en", "url": "https://mycreditunion.gov/brochure-publications/brochure/money-basics-guide-budgeting-and-savings", "desc": "Build a simple budget and start saving toward your goals, including a home.", "id": "s20"}, {"topic": "budgeting", "sub": "Banking", "title": "Money Basics Guide to Savings and Checking Accounts", "source": "NCUA", "tier": "public", "format": "guide", "lang": "en", "url": "https://mycreditunion.gov/brochure-publications/brochure/money-basics-guide-savings-and-checking-accounts", "desc": "How savings and checking accounts work and how to pick the right one.", "id": "s21"}, {"topic": "budgeting", "sub": "Banking", "title": "Money Smart", "source": "FDIC", "tier": "public", "format": "course", "lang": "en", "url": "https://www.fdic.gov/consumer-resource-center/money-smart", "desc": "Free FDIC lessons on banking, budgeting, credit, and saving for everyday money skills.", "id": "s22"}, {"topic": "budgeting", "sub": "Saving & Investing", "title": "Save and Invest", "source": "MyMoney.gov", "tier": "public", "format": "article", "lang": "en", "url": "https://www.mymoney.gov/saveandinvest", "desc": "Why saving regularly, even small amounts, builds a cushion for emergencies and big goals.", "id": "s23"}, {"topic": "budgeting", "sub": "Saving & Investing", "title": "Compound Interest Calculator", "source": "Investor.gov", "tier": "kai", "format": "tool", "lang": "en", "url": "https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator", "desc": "See how your savings can grow over time when interest builds on interest.", "id": "s24"}, {"topic": "budgeting", "sub": "Retirement", "title": "Top 10 Ways to Prepare for Retirement", "source": "DOL", "tier": "kai", "format": "checklist", "lang": "en", "url": "https://dol.gov/ebsa/Publications/10_ways_to_prepare.html", "desc": "Ten practical steps to keep saving for retirement while you also plan to buy a home.", "id": "s25"}, {"topic": "basics", "sub": "Getting Started", "title": "Buying a house: Tools and resources for homebuyers", "source": "CFPB", "tier": "public", "format": "guide", "lang": "en", "url": "https://www.consumerfinance.gov/owning-a-home/", "desc": "A step-by-step roadmap of the homebuying process, from preparing to closing.", "id": "s26"}, {"topic": "basics", "sub": "Getting Started", "title": "Your Home Loan Toolkit: A Step-by-Step Guide", "source": "CFPB", "tier": "public", "format": "guide", "lang": "en", "url": "https://files.consumerfinance.gov/f/documents/cfpb_your-home-loan-toolkit.pdf", "desc": "A printable workbook that helps you choose the right mortgage and understand your costs.", "id": "s27"}, {"topic": "basics", "sub": "Counseling", "title": "Housing counselors near you", "source": "CFPB", "tier": "public", "format": "tool", "lang": "en", "url": "https://www.consumerfinance.gov/find-a-housing-counselor/", "desc": "Find a HUD-approved housing counselor by ZIP code for free or low-cost help.", "id": "s28"}, {"topic": "basics", "sub": "Courses", "title": "How to buy a home with Homebuyer U", "source": "Freddie Mac", "tier": "link-only", "format": "course", "lang": "en", "url": "https://creditsmart.freddiemac.com/free-homebuying-education", "desc": "A free homebuyer course that covers every step and can earn a homebuyer education certificate.", "id": "s29"}, {"topic": "basics", "sub": "Courses", "title": "HomeView Your Free Homeownership Education Course", "source": "Fannie Mae", "tier": "link-only", "format": "course", "lang": "en", "url": "https://www.fanniemae.com/education", "desc": "A free online course on buying and owning a home, with a certificate when you finish.", "id": "s30"}, {"topic": "basics", "sub": "Inspection", "title": "For Your Protection: Get a Home Inspection", "source": "HUD", "tier": "public", "format": "checklist", "lang": "en", "url": "https://www.hud.gov/sites/dfiles/OCHCO/documents/92564-CN.pdf", "desc": "Why a professional home inspection matters and what it checks before you buy.", "id": "s31"}, {"topic": "keeping-home", "sub": "Foreclosure Help", "title": "How to avoid foreclosure", "source": "CFPB", "tier": "public", "format": "guide", "lang": "en", "url": "https://www.consumerfinance.gov/consumer-tools/mortgages/how-to-avoid-foreclosure/", "desc": "What to do right away if you are behind on your mortgage or worried about falling behind.", "id": "s32"}, {"topic": "keeping-home", "sub": "Insurance", "title": "What's Your Flood Risk?", "source": "FEMA", "tier": "kai", "format": "tool", "lang": "en", "url": "https://www.floodsmart.gov/flood-zones-and-maps/what-is-my-flood-risk", "desc": "Check your home's flood risk and learn whether you need flood insurance.", "id": "s33"}, {"topic": "keeping-home", "sub": "Insurance", "title": "Everyone Needs Flood Insurance", "source": "FEMA", "tier": "kai", "format": "article", "lang": "en", "url": "https://agents.floodsmart.gov/sites/default/files/media/document/2025-07/fema-nfip-everyone-needs-flood-insurance-fact-sheet-05-2023.pdf", "desc": "A short fact sheet explaining why regular homeowners insurance does not cover flood damage.", "id": "s34"}, {"topic": "keeping-home", "sub": "Taxes", "title": "Publication 530, Tax Information for Homeowners", "source": "IRS", "tier": "kai", "format": "guide", "lang": "en", "url": "https://www.irs.gov/publications/p530", "desc": "Which home costs, like property taxes and mortgage interest, may lower your taxes.", "id": "s35"}, {"topic": "keeping-home", "sub": "Taxes", "title": "Publication 936, Home Mortgage Interest Deduction", "source": "IRS", "tier": "kai", "format": "guide", "lang": "en", "url": "https://www.irs.gov/publications/p936", "desc": "How the mortgage interest deduction works and what your Form 1098 shows.", "id": "s36"}, {"topic": "keeping-home", "sub": "Taxes", "title": "Publication 523, Selling Your Home", "source": "IRS", "tier": "kai", "format": "guide", "lang": "en", "url": "https://www.irs.gov/publications/p523", "desc": "Tax rules to know if you sell your home someday, including how gains are handled.", "id": "s37"}, {"topic": "keeping-home", "sub": "Maintenance", "title": "Home Improvements", "source": "HUD", "tier": "public", "format": "guide", "lang": "en", "url": "https://www.hud.gov/helping-americans/home-improvements", "desc": "Federal loan programs and tips for paying for repairs and improvements safely.", "id": "s38"}, {"topic": "protect", "sub": "Scams", "title": "Mortgage Relief Scams", "source": "FTC", "tier": "public", "format": "article", "lang": "en", "url": "https://consumer.ftc.gov/articles/mortgage-relief-scams", "desc": "Spot fake offers to save your home and learn where to get real, free help.", "id": "s39"}, {"topic": "protect", "sub": "Scams", "title": "Estafas de alivio para deudores hipotecarios", "source": "FTC", "tier": "public", "format": "article", "lang": "es", "url": "https://consumidor.ftc.gov/articulos/estafas-de-alivio-para-deudores-hipotecarios", "desc": "Cómo reconocer ofertas falsas para salvar su casa y dónde encontrar ayuda gratuita y confiable.", "id": "s40"}, {"topic": "protect", "sub": "Scams", "title": "Beware of mortgage closing scams", "source": "CFPB", "tier": "public", "format": "article", "lang": "en", "url": "https://www.consumerfinance.gov/owning-a-home/beware-mortgage-closing-scams/", "desc": "Protect your closing money from email wire-fraud scams that target homebuyers.", "id": "s41"}, {"topic": "protect", "sub": "Fair Housing", "title": "Fair Housing Rights and Obligations", "source": "HUD", "tier": "public", "format": "article", "lang": "en", "url": "https://hud.gov/stat/fheo/rights-obligations", "desc": "Your rights under the Fair Housing Act and how to file a discrimination complaint with HUD.", "id": "s42"}, {"topic": "protect", "sub": "Fair Housing", "title": "Mortgage Discrimination", "source": "FTC", "tier": "public", "format": "article", "lang": "en", "url": "https://consumer.ftc.gov/articles/mortgage-discrimination", "desc": "Lenders cannot treat you unfairly because of race, sex, age, and more. Know your rights.", "id": "s43"}, {"topic": "protect", "sub": "Debt Collection", "title": "Debt collection", "source": "CFPB", "tier": "public", "format": "guide", "lang": "en", "url": "https://www.consumerfinance.gov/consumer-tools/debt-collection/", "desc": "Your rights when a debt collector contacts you, plus sample letters you can send.", "id": "s44"}];
+const TOPICS = [['credit','Credit'],['down-payment','Down Payment'],['mortgage','Mortgage Process'],['budgeting','Budgeting & Saving'],['basics','Homeownership Basics'],['keeping-home','Keeping Your Home'],['protect','Protect Yourself']];
+const FORMATS = [['article','Article'],['guide','Guide'],['video','Video'],['course','Course'],['tool','Tool'],['checklist','Checklist']];
+const KEYZ_BAR = 'linear-gradient(90deg,#3F0FB7,#8E72F4)';
+const SRC_BAR = 'linear-gradient(90deg,#475569,#94A3B8)';
+const PICKED = [
+  { id: 'p1', topic: 'basics', title: 'What to have ready before you add your data', format: 'article', sub: '4 min read', desc: 'A short checklist of the documents and numbers that make My Data faster to finish.' },
+  { id: 'p2', topic: 'credit', title: 'Why we ask about your credit before your target', format: 'video', sub: '3 min video', desc: 'How your credit shapes the home price and loan options your counselor will talk through with you.' },
+  { id: 'p3', topic: 'down-payment', title: 'Documents you can gather now to move faster', format: 'article', sub: '5 min read', desc: 'Pay stubs, bank statements and tax forms: what lenders ask for and how far back they look.' }
+];
+const VIDEOS = [
+  { id: 'v1', topic: 'basics', title: '[Keyz video] Getting started with Keyz', format: 'video', sub: 'Video · Placeholder', desc: '[Placeholder] Swap in a real video from the Keyz YouTube channel.' },
+  { id: 'v2', topic: 'basics', title: '[Keyz video] How your action plan works', format: 'video', sub: 'Video · Placeholder', desc: '[Placeholder] Swap in a real video from the Keyz YouTube channel.' },
+  { id: 'v3', topic: 'credit', title: '[Keyz video] Reading your readiness report', format: 'video', sub: 'Video · Placeholder', desc: '[Placeholder] Swap in a real video from the Keyz YouTube channel.' },
+  { id: 'v4', topic: 'basics', title: '[Keyz video] Working with your housing counselor', format: 'video', sub: 'Video · Placeholder', desc: '[Placeholder] Swap in a real video from the Keyz YouTube channel.' }
+];
+const SOURCES = {
+  'HUD': ['the U.S. Department of Housing and Urban Development', 'hud.gov', 'https://www.hud.gov/helping-americans', 'Housing help from HUD'],
+  'CFPB': ['the Consumer Financial Protection Bureau', 'consumerfinance.gov', 'https://www.consumerfinance.gov/consumer-tools/', 'Consumer tools from the CFPB'],
+  'FTC': ['the Federal Trade Commission', 'consumer.ftc.gov', 'https://consumer.ftc.gov/', 'Plain-language money guides from the FTC'],
+  'Federal Reserve': ['the Federal Reserve Board', 'federalreserve.gov', 'https://www.federalreserve.gov/consumers.htm', 'Consumer guides from the Federal Reserve'],
+  'St. Louis Fed': ['the Federal Reserve Bank of St. Louis', 'stlouisfed.org', 'https://www.stlouisfed.org/education', 'Economic education from the St. Louis Fed'],
+  'FDIC': ['the Federal Deposit Insurance Corporation', 'fdic.gov', 'https://www.fdic.gov/consumer-resource-center', 'Money Smart and banking basics from the FDIC'],
+  'NCUA': ['the National Credit Union Administration', 'mycreditunion.gov', 'https://mycreditunion.gov/', 'Money basics from the NCUA'],
+  'VA': ['the U.S. Department of Veterans Affairs', 'va.gov', 'https://www.va.gov/housing-assistance/home-loans/', 'VA home loan help'],
+  'USDA': ['USDA Rural Development', 'rd.usda.gov', 'https://www.rd.usda.gov/', 'Rural home loans from the USDA'],
+  'MyMoney.gov': ['MyMoney.gov, the U.S. Treasury-led financial literacy site', 'mymoney.gov', 'https://www.mymoney.gov/', 'Saving and spending basics from MyMoney.gov'],
+  'Freddie Mac': ['Freddie Mac', 'creditsmart.freddiemac.com', 'https://creditsmart.freddiemac.com/', 'CreditSmart courses from Freddie Mac'],
+  'Fannie Mae': ['Fannie Mae', 'fanniemae.com', 'https://www.fanniemae.com/education', 'HomeView from Fannie Mae'],
+  'IRS': ['the Internal Revenue Service', 'irs.gov', 'https://www.irs.gov/publications/', 'Tax guides for homeowners from the IRS'],
+  'FEMA': ['FEMA and the National Flood Insurance Program', 'floodsmart.gov', 'https://www.floodsmart.gov/', 'Flood risk and insurance from FEMA'],
+  'Investor.gov': ['the U.S. Securities and Exchange Commission', 'investor.gov', 'https://www.investor.gov/', 'Saving and investing tools from Investor.gov'],
+  'DOL': ['the U.S. Department of Labor', 'dol.gov', 'https://www.dol.gov/agencies/ebsa', 'Retirement basics from the Department of Labor']
+};
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { view: 'home', chip: 'all', topic: null, sub: 'all', source: null, search: '', filtersOpen: false,
+      fFormats: {}, fSource: 'all', fLang: 'all', bm: {}, dismissed: {}, introOpen: true, modal: null, toast: null };
+    this.t = null;
+  }
+  componentWillUnmount() { if (this.t) clearTimeout(this.t); }
+  toast(title, undo) {
+    this.setState({ toast: { title: title, undo: undo || null } });
+    if (this.t) clearTimeout(this.t);
+    this.t = setTimeout(() => this.setState({ toast: null }), 4000);
+  }
+  label(t) { const f = TOPICS.filter((x) => x[0] === t)[0]; return f ? f[1] : t; }
+  fmt(f) { const x = FORMATS.filter((y) => y[0] === f)[0]; return x ? x[1] : f; }
+  decorate(it, authored) {
+    const s = this.state, on = !!s.bm[it.id];
+    const sourced = !authored, link = it.tier === 'link-only';
+    const src = sourced ? SOURCES[it.source] : null;
+    return Object.assign({}, it, {
+      sourced: sourced, authored: !!authored,
+      topicLabel: this.label(it.topic),
+      bar: authored ? KEYZ_BAR : SRC_BAR,
+      tint: authored ? '#F1EEFC' : '#F8FAFC',
+      accent: authored ? '#3F0FB7' : '#334155',
+      g_link: sourced, g_video: !!authored && it.format === 'video', g_article: !!authored && it.format !== 'video',
+      subline: authored ? it.sub : (link ? this.fmt(it.format) + ' · Opens on ' + (src ? src[1] : '') : this.fmt(it.format) + ' · ' + it.sub),
+      isEs: it.lang === 'es', isCourse: it.format === 'course' && link,
+      bmOn: on ? 'true' : 'false', bmLabel: on ? 'Remove bookmark' : 'Bookmark for later',
+      bmBg: on ? '#3F0FB7' : '#FFFFFF', bmFg: on ? '#FFFFFF' : '#475569', bmBorder: on ? '#3F0FB7' : '#CBD5E1',
+      bm: (e) => { if (e && e.preventDefault) { e.preventDefault(); e.stopPropagation(); }
+        const b = Object.assign({}, this.state.bm); if (b[it.id]) delete b[it.id]; else b[it.id] = true;
+        this.setState({ bm: b }); if (b[it.id]) this.toast('Saved to your bookmarks'); },
+      dismiss: () => { const d = Object.assign({}, this.state.dismissed); d[it.id] = true; this.setState({ dismissed: d });
+        this.toast('Card removed', () => { const d2 = Object.assign({}, this.state.dismissed); delete d2[it.id]; this.setState({ dismissed: d2, toast: null }); }); },
+      open: () => this.setState({ modal: it }),
+      openSource: (e) => { if (e && e.preventDefault) { e.preventDefault(); e.stopPropagation(); } this.setState({ view: 'source', source: it.source }); },
+      visit: () => {}
+    });
+  }
+  passes(it) {
+    const s = this.state, q = s.search.trim().toLowerCase();
+    if (q && (it.title + ' ' + (it.desc || '') + ' ' + (it.source || 'Keyz')).toLowerCase().indexOf(q) < 0) return false;
+    const fsel = Object.keys(s.fFormats).filter((k) => s.fFormats[k]);
+    if (fsel.length && fsel.indexOf(it.format) < 0) return false;
+    if (s.fSource !== 'all' && (it.source || 'Keyz') !== s.fSource) return false;
+    if (s.fLang !== 'all' && (it.lang || 'en') !== s.fLang) return false;
+    return true;
+  }
+  chipsFor(list, cur, pick) {
+    return list.map((c) => { const on = cur === c.id; return Object.assign({}, c, { on: on ? 'true' : 'false',
+      bg: on ? '#F1EEFC' : '#FFFFFF', border: on ? '#3F0FB7' : '#CBD5E1', fg: on ? '#3F0FB7' : '#334155',
+      hasCount: c.count !== undefined, countBg: on ? '#FFFFFF' : '#F1F5F9', countFg: on ? '#3F0FB7' : '#334155',
+      pick: () => pick(c.id) }); });
+  }
+  renderVals() {
+    const s = this.state;
+    const goHome = () => this.setState({ view: 'home', topic: null, source: null, sub: 'all' });
+    const allKeyz = PICKED.concat(VIDEOS);
+    const bmCount = Object.keys(s.bm).length;
+    const chips = this.chipsFor([{ id: 'all', label: 'All' }].concat(TOPICS.map((t) => ({ id: t[0], label: t[1] }))).concat([{ id: 'bookmarks', label: 'My Bookmarks', count: bmCount }]), s.chip, (id) => this.setState({ chip: id }));
+    const fsel = Object.keys(s.fFormats).filter((k) => s.fFormats[k]);
+    const activeCount = fsel.length + (s.fSource !== 'all' ? 1 : 0) + (s.fLang !== 'all' ? 1 : 0);
+    const narrowing = activeCount > 0 || !!s.search.trim();
+    const formatChips = this.chipsFor(FORMATS.map((f) => ({ id: f[0], label: f[1] })), null, (id) => { const m = Object.assign({}, this.state.fFormats); m[id] = !m[id]; this.setState({ fFormats: m }); })
+      .map((c) => { const on = !!s.fFormats[c.id]; return Object.assign(c, { on: on ? 'true' : 'false', bg: on ? '#F1EEFC' : '#FFFFFF', border: on ? '#3F0FB7' : '#CBD5E1', fg: on ? '#3F0FB7' : '#334155' }); });
+    const srcNames = ['Keyz'].concat(Object.keys(SOURCES));
+    const sourceOptions = [{ value: 'all', label: 'All sources' }].concat(srcNames.map((n) => ({ value: n, label: n })));
+    const langOptions = [['all', 'All'], ['en', 'English'], ['es', 'Español']].map((l) => { const on = s.fLang === l[0];
+      return { label: l[1], on: on ? 'true' : 'false', bg: on ? '#E6DDFB' : 'transparent', fg: on ? '#3F0FB7' : '#334155', weight: on ? 600 : 400, pick: () => this.setState({ fLang: l[0] }) }; });
+
+    const isAll = s.chip === 'all', isBm = s.chip === 'bookmarks';
+    const sections = isBm ? [] : TOPICS.filter((t) => isAll || s.chip === t[0]).map((t) => {
+      const its = LIB.filter((i) => i.topic === t[0] && this.passes(i)).map((i) => this.decorate(i, false));
+      return { label: t[1], items: its, countLabel: its.length + (its.length === 1 ? ' resource' : ' resources'),
+        viewAll: () => this.setState({ view: 'topic', topic: t[0], sub: 'all' }) };
+    }).filter((x) => x.items.length > 0);
+    const picked = PICKED.filter((p) => !s.dismissed[p.id] && this.passes(p)).map((p) => this.decorate(p, true));
+    const videos = VIDEOS.filter((v) => this.passes(v)).map((v) => this.decorate(v, true));
+    const showPicked = isAll && !narrowing && picked.length > 0;
+    const showVideos = (isAll || s.chip === 'basics') && videos.length > 0;
+    const everything = LIB.map((i) => this.decorate(i, false)).concat(allKeyz.map((k) => this.decorate(k, true)));
+    const bookmarkList = everything.filter((i) => s.bm[i.id]);
+    const shown = sections.reduce((n, x) => n + x.items.length, 0) + (showVideos ? videos.length : 0);
+
+    let tv = { label: '', countLabel: '', subChips: [], items: [] };
+    if (s.view === 'topic' && s.topic) {
+      const all = LIB.filter((i) => i.topic === s.topic);
+      const subs = []; all.forEach((i) => { if (subs.indexOf(i.sub) < 0) subs.push(i.sub); });
+      const its = all.filter((i) => s.sub === 'all' || i.sub === s.sub);
+      tv = { label: this.label(s.topic), countLabel: all.length + ' resources',
+        subChips: this.chipsFor([{ id: 'all', label: 'All', count: all.length }].concat(subs.map((x) => ({ id: x, label: x, count: all.filter((i) => i.sub === x).length }))), s.sub, (id) => this.setState({ sub: id })),
+        items: its.map((i) => this.decorate(i, false)) };
+    }
+    let sv = { name: '', eyebrow: '', hero: '', blurb: '', site: '#', domain: '', noticeLead: '', notice: '', items: [] };
+    if (s.view === 'source' && s.source && SOURCES[s.source]) {
+      const d = SOURCES[s.source]; const its = LIB.filter((i) => i.source === s.source);
+      const tier = its.length ? its[0].tier : 'public';
+      sv = { name: s.source, hero: d[3], site: d[2], domain: d[1],
+        eyebrow: tier === 'link-only' ? 'TRUSTED SOURCE · LINK ONLY' : 'TRUSTED SOURCE · PUBLIC DOMAIN',
+        blurb: '[Placeholder editorial copy] Why Keyz recommends ' + s.source + ' and what you will find there.',
+        noticeLead: tier === 'link-only' ? 'You will finish this on ' + d[1] + '.' : 'Free to use.',
+        notice: tier === 'link-only' ? d[0] + ' allows personal, non-commercial use only, so Keyz links to it instead of showing it here.'
+          : 'Content from ' + d[0] + ', a U.S. government agency, is in the public domain.' + (tier === 'kai' ? ' KAI also uses it to answer your questions.' : ''),
+        items: its.map((i) => this.decorate(i, false)) };
+    }
+    const m = s.modal ? { title: s.modal.title, desc: s.modal.desc, topicLabel: this.label(s.modal.topic), isVideo: s.modal.format === 'video' } : { title: '', desc: '', topicLabel: '', isVideo: false };
+    return {
+      isHome: s.view === 'home', isTopic: s.view === 'topic', isSource: s.view === 'source', goHome: goHome,
+      introOpen: s.introOpen, introClosed: !s.introOpen, closeIntro: () => this.setState({ introOpen: false }),
+      search: s.search, hasSearch: !!s.search, setSearch: (e) => this.setState({ search: e.target.value }), clearSearch: () => this.setState({ search: '' }),
+      chips: chips, filtersOpen: s.filtersOpen, toggleFilters: () => this.setState({ filtersOpen: !s.filtersOpen }),
+      filterBtnBg: s.filtersOpen ? '#F1EEFC' : '#FFFFFF', hasActiveFilters: activeCount > 0, activeFilterCount: activeCount,
+      formatChips: formatChips, sourceOptions: sourceOptions, fSource: s.fSource, setSource: (e) => this.setState({ fSource: e.target.value }),
+      langOptions: langOptions, clearFilters: () => this.setState({ fFormats: {}, fSource: 'all', fLang: 'all' }),
+      showResultsNote: narrowing && !isBm, resultsNote: shown + (shown === 1 ? ' result' : ' results'),
+      showBookmarks: isBm, bookmarkList: bookmarkList, noBookmarks: isBm && bookmarkList.length === 0,
+      showPicked: showPicked, picked: picked, showVideos: showVideos && !isBm, videos: videos,
+      sections: sections, nothingFound: !isBm && sections.length === 0 && !(showVideos && videos.length),
+      tv: tv, sv: sv,
+      modalOpen: !!s.modal, m: m, closeModal: () => this.setState({ modal: null }),
+      showToast: !!s.toast, toastTitle: s.toast ? s.toast.title : '', toastUndo: !!(s.toast && s.toast.undo),
+      undo: () => { if (s.toast && s.toast.undo) s.toast.undo(); }
+    };
+  }
+}
+</script>
+</body>
+</html>
