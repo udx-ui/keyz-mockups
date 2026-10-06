@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Client Notifications</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF}
+a{color:#3F0FB7}a:hover{color:#2E098B}
+button{font-family:inherit;cursor:pointer}
+select{font-family:inherit}
+.kz-ico{fill:none;stroke:currentColor;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round}
+.kz-cb{appearance:none;-webkit-appearance:none;width:18px;height:18px;margin:0;border:2px solid #94A3B8;border-radius:4px;background:#FFFFFF;cursor:pointer;display:grid;place-content:center}
+.kz-cb:checked{background:#3F0FB7;border-color:#3F0FB7}
+.kz-cb:checked::after{content:"";width:9px;height:5px;border-left:2px solid #FFFFFF;border-bottom:2px solid #FFFFFF;transform:translateY(-1px) rotate(-45deg)}
+.kz-cb:focus-visible{outline:2px solid #3F0FB7;outline-offset:2px}
+.kz-cb-hit{width:40px;height:40px;flex:none;border-radius:9999px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.kz-cb-hit:hover{background:#F1EEFC}
+.kz-card{position:relative;transition:border-color .12s, background .12s}
+.kz-card:hover{border-color:#94A3B8 !important}
+.kz-open::after{content:"";position:absolute;inset:0;border-radius:12px}
+.kz-open:focus-visible{outline:2px solid #3F0FB7;outline-offset:2px}
+.kz-above{position:relative;z-index:1}
+.kz-chip:hover{border-color:#3F0FB7 !important}
+.kz-gt:hover{color:#2E098B !important;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.kz-ghost-p:hover{background:#E6DDFB;color:#2E098B !important}
+.kz-ghost-neg:hover{background:#FEF2F2}
+.kz-ib:hover{background:#F1EEFC}
+.kz-topbtn:hover{background:#FFFFFF}
+.kz-clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@keyframes kzToastIn{from{opacity:0;transform:translate(-50%,-8px) scale(.97)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+@keyframes kzShrink{from{width:100%}to{width:0%}}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #FFFFFF; font-family: Inter, sans-serif; color: #1E293B; display: flex; flex-direction: column">
+
+  <header style="height: 80px; flex: none; background: #F1EEFC; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 0 24px; box-sizing: border-box; position: sticky; top: 0; z-index: 200">
+    <span style="font-size: 30px; font-weight: 700; letter-spacing: -0.02em; color: #020617">Keyz</span>
+    <span style="width: 1px; height: 22px; background: #CBD5E1"></span>
+    <span style="font-size: 18px; font-weight: 600; color: #3F0FB7">Client Portal</span>
+    <span style="flex: 1"></span>
+    <label style="flex: 0 1 380px; height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 12px; box-sizing: border-box; background: #FFFFFF; border-radius: 4px; color: #64748B">
+      <svg class="kz-ico" width="18" height="18" viewBox="0 0 24 24"><circle cx="9.5" cy="9.5" r="9"></circle><line x1="16" y1="16" x2="23.5" y2="23.5"></line></svg>
+      <input aria-label="Search" placeholder="Search field" style="flex: 1; min-width: 0; border: none; outline: none; background: transparent; font-family: inherit; font-size: 16px; color: #020617">
+    </label>
+    <span style="flex: 1"></span>
+    <span class="kz-topbtn" style="position: relative; width: 40px; height: 40px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; color: #334155">
+      <svg class="kz-ico" width="22" height="22" viewBox="0 0 24 24"><path d="M20.5,16.5V11c0-3.651-2.309-6.756-5.541-7.959C14.738,1.603,13.5,0.5,12,0.5S9.258,1.603,9.037,3.041C5.805,4.244,3.5,7.349,3.5,11v5.5c0,1.657-1.344,3-3,3h23C21.841,19.5,20.5,18.157,20.5,16.5z"></path><path d="M15,19.5c0,1.657-1.344,3-3,3c-1.659,0-3-1.343-3-3"></path></svg>
+      <sc-if value="{{ hasUnread }}" hint-placeholder-val="{{ true }}">
+        <span style="position: absolute; top: 4px; right: 2px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 9999px; background: #C00000; color: #FFFFFF; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{ unreadTotal }}</span>
+      </sc-if>
+    </span>
+    <span style="width: 36px; height: 36px; border-radius: 9999px; background: #3F0FB7; color: #FFFFFF; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center">MR</span>
+  </header>
+
+  <div style="flex: 1; display: flex; min-height: 0">
+    <nav aria-label="Main" style="width: 80px; flex: none; background: #F1EEFC; border-right: 1px solid #D4DCE8; display: flex; flex-direction: column; padding-top: 8px">
+      <span style="height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #334155; font-size: 12px">
+        <svg class="kz-ico" width="22" height="22" viewBox="0 0 24 24"><path d="M1.5 11.5L12 2.5l10.5 9"></path><path d="M4 9.5v13h16v-13"></path><path d="M9.5 22.5v-7h5v7"></path></svg>Home
+      </span>
+      <span style="height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #334155; font-size: 12px">
+        <svg class="kz-ico" width="22" height="22" viewBox="0 0 24 24"><polygon points="20.5,23.5 3.5,23.5 3.5,0.5 14.5,0.5 20.5,6.5"></polygon><polyline points="14.5,0.5 14.5,6.5 20.5,6.5"></polyline><polyline points="10.5,8.5 8,11 6.5,9.5"></polyline><polyline points="10.5,14.5 8,17 6.5,15.5"></polyline><line x1="12.5" y1="10.5" x2="16.5" y2="10.5"></line><line x1="12.5" y1="16.5" x2="16.5" y2="16.5"></line></svg>My Plan
+      </span>
+      <span style="height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #334155; font-size: 12px">
+        <svg class="kz-ico" width="22" height="22" viewBox="0 0 24 24"><polygon points="20.5,23.5 3.5,23.5 3.5,0.5 14.5,0.5 20.5,6.5"></polygon><polyline points="14.5,0.5 14.5,6.5 20.5,6.5"></polyline><line x1="7.5" y1="10.5" x2="16.5" y2="10.5"></line><line x1="7.5" y1="14.5" x2="16.5" y2="14.5"></line><line x1="7.5" y1="18.5" x2="13" y2="18.5"></line></svg>My Data
+      </span>
+      <span style="height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #334155; font-size: 12px">
+        <svg class="kz-ico" width="22" height="22" viewBox="0 0 24 24"><polygon points="20.5,23.5 3.5,23.5 3.5,0.5 14.5,0.5 20.5,6.5"></polygon><polyline points="14.5,0.5 14.5,6.5 20.5,6.5"></polyline><polyline points="9,13 12,10 15,13"></polyline><line x1="12" y1="10" x2="12" y2="18.5"></line></svg>My Upload
+      </span>
+      <span style="height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #334155; font-size: 12px">
+        <svg class="kz-ico" width="22" height="22" viewBox="0 0 24 24"><path d="M12 5.5C9.5 3.5 5.5 3 1.5 3.5v16c4-.5 8 0 10.5 2 2.5-2 6.5-2.5 10.5-2v-16c-4-.5-8 0-10.5 2z"></path><line x1="12" y1="5.5" x2="12" y2="21.5"></line></svg>Learn
+      </span>
+    </nav>
+
+    <main style="flex: 999 1 560px; min-width: 0; padding: 24px 24px 64px; box-sizing: border-box">
+      <div style="max-width: 1440px; margin: 0 auto">
+
+        <div style="display: flex; flex-direction: column; gap: 8px; padding-top: 16px; padding-bottom: 24px; text-align: left">
+          <div style="display: flex; align-items: center; gap: 16px">
+            <h1 style="margin: 0; font-size: 28px; line-height: 1.25; font-weight: 500; color: #020617">Notifications</h1>
+            <span style="min-width: 40px; height: 32px; padding: 0 10px; box-sizing: border-box; border: 1px solid #3F0FB7; border-radius: 9999px; color: #3F0FB7; font-size: 16px; display: flex; align-items: center; justify-content: center">{{ totalLabel }}</span>
+          </div>
+          <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #465770">Search and manage your notifications in one place.</p>
+        </div>
+
+        <div style="position: sticky; top: 80px; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; min-height: 68px; box-sizing: border-box; padding: 12px 12px 12px 4px; margin-bottom: 16px; border-radius: 12px; background: {{ toolbarBg }}">
+          <label class="kz-cb-hit">
+            <input type="checkbox" class="kz-cb" checked="{{ allSelected }}" onChange="{{ toggleAll }}" aria-label="Select all shown">
+          </label>
+          <sc-if value="{{ noSelection }}" hint-placeholder-val="{{ true }}">
+            <div role="group" aria-label="Show" style="display: flex; flex-wrap: wrap; gap: 8px">
+              <sc-for list="{{ chips }}" as="c" hint-placeholder-count="4">
+                <button type="button" class="kz-chip" onClick="{{ c.pick }}" aria-pressed="{{ c.on }}" style="height: 36px; padding: 8px 12px; box-sizing: border-box; border: 1px solid {{ c.border }}; border-radius: 9999px; background: {{ c.bg }}; color: {{ c.fg }}; font-size: 14px; display: flex; align-items: center; gap: 8px; white-space: nowrap">
+                  {{ c.label }}
+                  <span style="min-width: 22px; height: 20px; padding: 0 6px; box-sizing: border-box; border-radius: 9999px; background: {{ c.countBg }}; color: {{ c.countFg }}; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{ c.count }}</span>
+                </button>
+              </sc-for>
+            </div>
+            <span style="width: 1px; height: 24px; background: #CBD5E1"></span>
+            <select aria-label="Received" value="{{ range }}" onChange="{{ setRange }}" style="height: 36px; min-width: 150px; padding: 0 10px; border: 1px solid #CBD5E1; border-radius: 4px; background: #FAFBFD; color: #020617; font-size: 14px">
+              <option value="any">Any time</option>
+              <option value="today">Today</option>
+              <option value="week">This week</option>
+              <option value="lastweek">Last week</option>
+              <option value="month">This month</option>
+            </select>
+            <select aria-label="Type" value="{{ type }}" onChange="{{ setType }}" style="height: 36px; min-width: 150px; padding: 0 10px; border: 1px solid #CBD5E1; border-radius: 4px; background: #FAFBFD; color: #020617; font-size: 14px">
+              <option value="all">All types</option>
+              <option value="reports">Reports</option>
+              <option value="documents">Documents</option>
+              <option value="plan">My Plan</option>
+              <option value="credit">Credit</option>
+            </select>
+            <sc-if value="{{ filtered }}" hint-placeholder-val="{{ false }}">
+              <button type="button" class="kz-gt" onClick="{{ clearFilters }}" style="height: 36px; padding: 0 4px; border: none; background: transparent; color: #3F0FB7; font-size: 14px">Clear filters</button>
+            </sc-if>
+            <span style="margin-left: auto; font-size: 14px; color: #64748B">{{ shownLabel }}</span>
+          </sc-if>
+          <sc-if value="{{ hasSelection }}" hint-placeholder-val="{{ false }}">
+            <span style="display: flex; align-items: center; gap: 12px; white-space: nowrap">
+              <span style="font-size: 16px; font-weight: 600; color: #1E293B">{{ selText }}</span>
+              <sc-if value="{{ narrowed }}" hint-placeholder-val="{{ false }}"><span style="font-size: 14px; color: #64748B">{{ filterSummary }}</span></sc-if>
+            </span>
+            <span style="width: 1px; height: 24px; background: #CBD5E1"></span>
+            <button type="button" class="kz-ghost-p" onClick="{{ bulkRead }}" style="height: 40px; padding: 8px 16px; border: none; border-radius: 8px; background: transparent; color: #3F0FB7; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap">
+              <svg class="kz-ico" width="16" height="16" viewBox="0 0 24 24"><path d="M12 5.5C9.5 3.5 5.5 3 1.5 3.5v16c4-.5 8 0 10.5 2 2.5-2 6.5-2.5 10.5-2v-16c-4-.5-8 0-10.5 2z"></path><line x1="12" y1="5.5" x2="12" y2="21.5"></line></svg>Mark as Read
+            </button>
+            <button type="button" class="kz-ghost-p" onClick="{{ bulkUnread }}" style="height: 40px; padding: 8px 16px; border: none; border-radius: 8px; background: transparent; color: #3F0FB7; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap">
+              <svg class="kz-ico" width="16" height="16" viewBox="0 0 24 24"><path d="M5 0.5h13.5v20H5c-1.4 0-2.5 1.1-2.5 2.5V3c0-1.4 1.1-2.5 2.5-2.5z"></path><path d="M2.5 23c0-1.4 1.1-2.5 2.5-2.5"></path><path d="M5 23.5h13.5"></path></svg>Mark as Unread
+            </button>
+            <button type="button" class="kz-ghost-neg" onClick="{{ bulkDelete }}" style="height: 40px; padding: 8px 16px; border: none; border-radius: 8px; background: transparent; color: #C00000; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap">
+              <svg class="kz-ico" width="16" height="16" viewBox="0 0 24 24"><path d="M19.5 3.5H3.5V23.5H19.5V3.5Z"></path><path d="M15.5 0.5H7.5V3.5H15.5V0.5Z"></path><path d="M1 3.5H23"></path><path d="M7.5 7V19"></path><path d="M11.5 7V19"></path><path d="M15.5 7V19"></path></svg>Delete
+            </button>
+            <button type="button" class="kz-gt" onClick="{{ clearSel }}" style="margin-left: auto; height: 40px; padding: 0 4px; border: none; background: transparent; color: #3F0FB7; font-size: 14px; white-space: nowrap">Clear selection</button>
+          </sc-if>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 16px">
+          <sc-for list="{{ rows }}" as="item" hint-placeholder-count="5">
+            <article class="kz-card" style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 12px; padding: 24px 24px 24px 4px; border: 1px solid {{ item.border }}; border-radius: 12px; background: {{ item.bg }}">
+              <label class="kz-cb-hit kz-above" style="margin-top: 8px">
+                <input type="checkbox" class="kz-cb" checked="{{ item.selected }}" onChange="{{ item.toggleSel }}" aria-label="{{ item.selLabel }}">
+              </label>
+              <div style="width: 8px; height: 56px; flex: none; display: flex; align-items: center; margin-top: 0">
+                <sc-if value="{{ item.unread }}" hint-placeholder-val="{{ false }}">
+                  <span aria-label="Unread" style="width: 8px; height: 8px; border-radius: 50%; background: #3F0FB7"></span>
+                </sc-if>
+              </div>
+              <div style="width: 56px; height: 56px; flex: none; border-radius: 9999px; background: {{ item.iconBg }}; color: {{ item.iconFg }}; display: flex; align-items: center; justify-content: center">
+                <sc-if value="{{ item.icReport }}" hint-placeholder-val="{{ true }}"><svg class="kz-ico" width="26" height="26" viewBox="0 0 24 24"><circle cx="17.5" cy="17.5" r="4"></circle><polyline points="15.5,17.5 17,19 19.5,16.5"></polyline><polyline points="11,21.5 0.5,21.5 0.5,0.5 11.5,0.5 16.5,5.5 16.5,10"></polyline><polyline points="11.5,0.5 11.5,5.5 16.5,5.5"></polyline><line x1="3.5" y1="8.5" x2="9" y2="8.5"></line><line x1="3.5" y1="11.5" x2="11" y2="11.5"></line></svg></sc-if>
+                <sc-if value="{{ item.icCheck }}" hint-placeholder-val="{{ false }}"><svg class="kz-ico" width="26" height="26" viewBox="0 0 24 24"><polyline points="17,8.5 9.5,15.5 7,13"></polyline><circle cx="12" cy="12" r="11.5"></circle></svg></sc-if>
+                <sc-if value="{{ item.icFlag }}" hint-placeholder-val="{{ false }}"><svg class="kz-ico" width="26" height="26" viewBox="0 0 24 24"><line x1="2.5" y1="0.5" x2="2.5" y2="23.5"></line><path d="M21.5,3.193c0,0-8.5,2.307-8.5-0.693s-8.5,0-8.5,0v12c0,0,8.5-3,8.5,0s8.5,0.735,8.5,0.735V3.193z"></path></svg></sc-if>
+                <sc-if value="{{ item.icTarget }}" hint-placeholder-val="{{ false }}"><svg class="kz-ico" width="26" height="26" viewBox="0 0 24 24"><path d="M17.965,8.82C18.936,10.31,19.5,12.09,19.5,14c0,5.247-4.253,9.5-9.5,9.5S0.5,19.247,0.5,14c0-5.247,4.253-9.5,9.5-9.5c1.85,0,3.576,0.528,5.035,1.443"></path><path d="M10.524,8.023C10.352,8.008,10.177,8,10,8c-3.313,0-6,2.687-6,6c0,3.314,2.687,6,6,6s6-2.686,6-6v-0.5"></path><polygon points="12.881,8.134 20.32,0.648 23.125,3.478 15.628,10.993 18.091,13.5 10.5,13.5 10.5,5.66"></polygon></svg></sc-if>
+                <sc-if value="{{ item.icPeople }}" hint-placeholder-val="{{ false }}"><svg class="kz-ico" width="26" height="26" viewBox="0 0 24 24"><path d="M7.919,21.5H15.5c0,0,0-3,0-4.5c0-0.5-3-2-5.5-3v-2c0,0,1-0.35,1-2.5c0.695,0,1-2,0.032-2c0-0.212,0.766-1.308,0.468-2.5C11,3,6,3,5.5,5C3.395,4.569,5,7.212,5,7.5c-1,0-0.696,2,0,2C5,11.65,6,12,6,12v2c-2.5,1-5.5,2.5-5.5,3c0,1,0,4.5,0,4.5H7.919z"></path><path d="M18,21.5h5.5c0,0,0-3.301,0-4.5c0-0.5-2.5-1.2-4.5-2v-1.5c0,0,1-0.28,1-2c0.557,0,0.774-2,0-2c0-0.169,0.811-1.067,0.5-2C20,6,16,6,15.5,7.5c-1.685-0.345-0.5,1.77-0.5,2c-0.8,0-0.557,2,0,2c0,1.72,1,2,1,2v1"></path></svg></sc-if>
+              </div>
+              <div style="flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 4px; text-align: left">
+                <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+                  <button type="button" class="kz-open" onClick="{{ item.act }}" style="padding: 0; border: none; background: transparent; text-align: left; font-size: 18px; line-height: 1.5; font-weight: {{ item.titleWeight }}; color: {{ item.titleColor }}">{{ item.title }}</button>
+                  <sc-if value="{{ item.isUrgent }}" hint-placeholder-val="{{ false }}">
+                    <span style="padding: 4px 10px; border-radius: 9999px; background: #FEF2F2; color: #991B1B; font-size: 12px; line-height: 14px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px"><span style="width: 6px; height: 6px; border-radius: 50%; background: #C00000"></span>Urgent</span>
+                  </sc-if>
+                  <sc-if value="{{ item.isAction }}" hint-placeholder-val="{{ false }}">
+                    <span style="padding: 4px 10px; border-radius: 9999px; background: #FFF1DA; color: #92400E; font-size: 12px; line-height: 14px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px"><span style="width: 6px; height: 6px; border-radius: 50%; background: #ED6C02"></span>Action needed</span>
+                  </sc-if>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; align-items: center; column-gap: 12px; overflow: hidden; font-size: 16px; line-height: 1.6; color: #64748B">
+                  <span>{{ item.sub }}</span>
+                  <sc-if value="{{ item.hasLink }}" hint-placeholder-val="{{ false }}">
+                    <span style="display: inline-flex; align-items: center; margin-left: -13px; padding-left: 12px; border-left: 1px solid #CBD5E1; line-height: 18px; white-space: nowrap">
+                    <button type="button" class="kz-gt kz-above" onClick="{{ item.act }}" style="padding: 0; border: none; background: transparent; color: #3F0FB7; font-size: 16px">{{ item.linkLabel }}</button></span>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ item.hasBody }}" hint-placeholder-val="{{ false }}">
+                  <p class="{{ item.bodyClass }}" style="margin: 4px 0 0; font-size: 16px; line-height: 1.6; color: #334155">{{ item.body }}</p>
+                  <button type="button" class="kz-gt kz-above" onClick="{{ item.toggleMore }}" style="align-self: flex-start; padding: 0; border: none; background: transparent; color: #3F0FB7; font-size: 14px">{{ item.moreLabel }}</button>
+                </sc-if>
+              </div>
+              <div class="kz-above" style="flex: 0 0 auto; display: flex; align-items: center; gap: 16px; padding-top: 6px">
+                <span style="font-size: 16px; color: {{ item.timeColor }}; font-weight: {{ item.timeWeight }}; white-space: nowrap">{{ item.time }}</span>
+                <button type="button" class="kz-ib" onClick="{{ item.toggleRead }}" aria-label="{{ item.readLabel }}" title="{{ item.readLabel }}" style="width: 44px; height: 44px; border: none; border-radius: 9999px; background: transparent; color: {{ item.bookColor }}; display: flex; align-items: center; justify-content: center">
+                  <sc-if value="{{ item.unread }}" hint-placeholder-val="{{ true }}"><svg class="kz-ico" width="26" height="26" viewBox="0 0 24 24"><path d="M5 0.5h13.5v20H5c-1.4 0-2.5 1.1-2.5 2.5V3c0-1.4 1.1-2.5 2.5-2.5z"></path><path d="M2.5 23c0-1.4 1.1-2.5 2.5-2.5"></path><path d="M5 23.5h13.5"></path></svg></sc-if>
+                  <sc-if value="{{ item.isRead }}" hint-placeholder-val="{{ false }}"><svg class="kz-ico" width="26" height="26" viewBox="0 0 24 24"><path d="M12 5.5C9.5 3.5 5.5 3 1.5 3.5v16c4-.5 8 0 10.5 2 2.5-2 6.5-2.5 10.5-2v-16c-4-.5-8 0-10.5 2z"></path><line x1="12" y1="5.5" x2="12" y2="21.5"></line></svg></sc-if>
+                </button>
+              </div>
+            </article>
+          </sc-for>
+
+          <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+            <div style="padding: 48px 24px; border: 1px dashed #CBD5E1; border-radius: 12px; text-align: center; display: flex; flex-direction: column; gap: 4px">
+              <span style="font-size: 18px; font-weight: 500; color: #0F172A">No notifications match</span>
+              <span style="font-size: 14px; color: #64748B">Try a different filter.</span>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <sc-if value="{{ showToast }}" hint-placeholder-val="{{ false }}">
+    <div role="status" aria-live="polite" style="position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 500; display: inline-flex; align-items: center; padding-left: 24px; max-width: 90vw; animation: kzToastIn .2s ease">
+      <span aria-hidden="true" style="position: absolute; left: 0; z-index: 2; width: 48px; height: 48px; box-sizing: border-box; border-radius: 9999px; background: #2342EE; border: 2px solid #FFFFFF; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+        <svg class="kz-ico" width="22" height="22" viewBox="0 0 24 24" style="stroke-width: 1.5"><circle cx="12" cy="12" r="11.5"></circle><line x1="12" y1="10.5" x2="12" y2="17.5"></line><line x1="12" y1="6.5" x2="12" y2="6.6"></line></svg>
+      </span>
+      <div style="position: relative; overflow: hidden; display: inline-flex; align-items: center; gap: 12px; min-width: 300px; max-width: 440px; padding: 28px 24px 28px 36px; box-sizing: border-box; border-radius: 12px; background: #2342EE; box-shadow: 0 8px 24px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.14)">
+        <div style="flex: 1; min-width: 0; text-align: left">
+          <div style="font-size: 14px; font-weight: 700; line-height: 1.3; color: #FFFFFF">{{ toastTitle }}</div>
+          <div style="margin-top: 3px; font-size: 12px; line-height: 1.5; color: rgba(255,255,255,0.72)">Anything urgent or needing action stays in My Plan.</div>
+        </div>
+        <button type="button" onClick="{{ undo }}" style="flex: none; padding: 0; border: none; background: none; color: rgba(255,255,255,0.9); font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: underline; text-underline-offset: 3px">Undo</button>
+        <div aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 0; height: 3px">
+          <div style="height: 100%; background: rgba(255,255,255,0.40); animation: kzShrink 6s linear forwards"></div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1180}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { show: 'all', range: 'any', type: 'all', read: {}, sel: {}, deleted: {}, more: {}, undo: null };
+    this.toastTimer = null;
+  }
+  componentWillUnmount() { if (this.toastTimer) clearTimeout(this.toastTimer); }
+  items() {
+    return [
+      { id: 'c1', icon: 'report', cat: 'reports', when: 'today', title: 'Report Generated', sub: 'Your Soft Credit Pull is ready for you to review.', link: 'View', body: '', time: 'Today, 9:42 AM', read: false, action: false },
+      { id: 'c2', icon: 'flag', cat: 'documents', when: 'today', title: 'Pay Stub Needs Updating', sub: 'Housing Counselor Notification', link: 'Upload document', body: 'Your counselor could not read the pay stub dated September 15. Please upload a clearer copy so they can finish reviewing your income. You can take a photo with your phone or upload a PDF from your employer’s payroll site.', time: 'Today, 8:15 AM', read: false, action: true, urgent: false },
+      { id: 'c3', icon: 'people', cat: 'credit', when: 'week', title: 'Approve the Joint Credit Check', sub: 'Marcus approved. Your approval is needed too.', link: 'Review and approve', body: '', time: 'Oct 3, 4:20 PM', read: false, action: true, urgent: true },
+      { id: 'c4', icon: 'check', cat: 'documents', when: 'week', title: 'Document Verified', sub: 'Your bank statement for September was verified.', link: '', body: 'Nothing else is needed for this document. Your counselor will use it when preparing your Home Buying Readiness report.', time: 'Oct 2, 12:13 PM', read: true, action: false },
+      { id: 'c5', icon: 'target', cat: 'plan', when: 'month', title: 'New Target Shared', sub: 'Housing Counselor Notification', link: 'View in My Plan', body: 'Your counselor shared a new savings target: build a 3-month emergency fund. It has been added to your plan with three steps to get there, and you can comment on each step if you have questions.', time: 'Sep 24, 10:05 AM', read: true, action: false },
+      { id: 'c6', icon: 'target', cat: 'plan', when: 'month', title: 'New Goal Added by Your Housing Counselor', sub: 'Housing Counselor Notification', link: 'View in My Plan', body: 'A new goal, "Pay down card balance," was added to your plan.', time: 'Sep 18, 3:40 PM', read: true, action: false }
+    ];
+  }
+  isRead(it) { const r = this.state.read[it.id]; return r === undefined ? it.read : r; }
+  doDelete(ids) {
+    const d = Object.assign({}, this.state.deleted);
+    ids.forEach((id) => { d[id] = true; });
+    this.setState({ deleted: d, sel: {}, undo: ids });
+    if (this.toastTimer) clearTimeout(this.toastTimer);
+    this.toastTimer = setTimeout(() => this.setState({ undo: null }), 6000);
+  }
+  renderVals() {
+    const s = this.state;
+    const all = this.items().filter((i) => !s.deleted[i.id]);
+    const unread = all.filter((i) => !this.isRead(i));
+    const inRange = (i) => {
+      if (s.range === 'any') return true;
+      if (s.range === 'today') return i.when === 'today';
+      if (s.range === 'week') return i.when === 'today' || i.when === 'week';
+      if (s.range === 'lastweek') return false;
+      if (s.range === 'month') return true;
+      return true;
+    };
+    const base = all.filter((i) => inRange(i) && (s.type === 'all' || i.cat === s.type));
+    const byShow = {
+      all: base,
+      unread: base.filter((i) => !this.isRead(i)),
+      read: base.filter((i) => this.isRead(i)),
+      action: base.filter((i) => i.action)
+    };
+    const list = byShow[s.show];
+    const pad = (n) => (n < 10 ? '0' + n : '' + n);
+    const chipDefs = [
+      { id: 'all', label: 'All' }, { id: 'unread', label: 'Unread' }, { id: 'read', label: 'Read' }, { id: 'action', label: 'Action needed' }
+    ];
+    const chips = chipDefs.map((c) => {
+      const on = s.show === c.id;
+      return Object.assign({}, c, {
+        on: on,
+        count: pad(byShow[c.id].length),
+        bg: on ? '#F1EEFC' : '#FFFFFF',
+        border: on ? '#3F0FB7' : '#CBD5E1',
+        fg: on ? '#3F0FB7' : '#334155',
+        countBg: on ? '#FFFFFF' : '#F1F5F9',
+        countFg: on ? '#3F0FB7' : '#334155',
+        pick: () => this.setState({ show: c.id, sel: {} })
+      });
+    });
+
+    const rows = list.map((it) => {
+      const rd = this.isRead(it);
+      const sel = !!s.sel[it.id];
+      const open = !!s.more[it.id];
+      const long = it.body.length > 140;
+      return Object.assign({}, it, {
+        unread: !rd,
+        isRead: rd,
+        selected: sel,
+        selLabel: 'Select ' + it.title,
+        toggleSel: () => this.setState({ sel: Object.assign({}, s.sel, { [it.id]: !sel }) }),
+        border: sel ? '#3F0FB7' : '#CBD5E1',
+        bg: '#FFFFFF',
+        titleWeight: rd ? 500 : 700,
+        titleColor: rd ? '#334155' : '#020617',
+        timeWeight: rd ? 400 : 600,
+        timeColor: rd ? '#64748B' : '#020617',
+        bookColor: rd ? '#64748B' : '#3F0FB7',
+        readLabel: rd ? 'Mark as unread' : 'Mark as read',
+        isUrgent: !!it.urgent,
+        isAction: it.action && !it.urgent,
+        iconBg: it.urgent ? '#FEF2F2' : '#F1F5F9',
+        iconFg: it.urgent ? '#C00000' : '#64748B',
+        icReport: it.icon === 'report', icCheck: it.icon === 'check', icFlag: it.icon === 'flag', icTarget: it.icon === 'target', icPeople: it.icon === 'people',
+        hasLink: !!it.link,
+        linkLabel: it.link,
+        hasBody: !!it.body,
+        bodyClass: open || !long ? '' : 'kz-clamp',
+        moreLabel: long ? (open ? 'Show less' : 'Show more') : '',
+        toggleMore: () => this.setState({ more: Object.assign({}, s.more, { [it.id]: !open }) }),
+        toggleRead: () => this.setState({ read: Object.assign({}, s.read, { [it.id]: !rd }) }),
+        act: () => this.setState({ read: Object.assign({}, s.read, { [it.id]: true }) })
+      });
+    });
+
+    const ids = rows.map((r) => r.id);
+    const selIds = ids.filter((id) => s.sel[id]);
+    const has = selIds.length > 0;
+    const setReadFor = (v) => {
+      const r = Object.assign({}, s.read);
+      selIds.forEach((id) => { r[id] = v; });
+      this.setState({ read: r, sel: {} });
+    };
+    const filtered = s.range !== 'any' || s.type !== 'all';
+    const n = s.undo ? s.undo.length : 0;
+    return {
+      rows: rows,
+      chips: chips,
+      empty: rows.length === 0,
+      range: s.range, type: s.type,
+      filtered: filtered,
+      unreadTotal: unread.length,
+      hasUnread: unread.length > 0,
+      totalLabel: pad(all.length),
+      shownLabel: rows.length + (rows.length === 1 ? ' notification' : ' notifications'),
+      allSelected: ids.length > 0 && selIds.length === ids.length,
+      hasSelection: has,
+      noSelection: !has,
+      toolbarBg: has ? '#F1EEFC' : '#FFFFFF',
+      selText: selIds.length + ' of ' + ids.length + ' selected',
+      narrowed: filtered || s.show !== 'all',
+      filterSummary: 'Filtered: ' + [
+        ({ unread: 'Unread', read: 'Read', action: 'Action needed' })[s.show] || null,
+        s.range !== 'any' ? ({ today: 'Today', week: 'This week', lastweek: 'Last week', month: 'This month' })[s.range] : null,
+        s.type !== 'all' ? ({ reports: 'Reports', documents: 'Documents', plan: 'My Plan', credit: 'Credit' })[s.type] : null
+      ].filter(Boolean).join(', '),
+      toggleAll: () => {
+        if (ids.length > 0 && selIds.length === ids.length) { this.setState({ sel: {} }); return; }
+        const m = {}; ids.forEach((id) => { m[id] = true; }); this.setState({ sel: m });
+      },
+      clearSel: () => this.setState({ sel: {} }),
+      bulkRead: () => setReadFor(true),
+      bulkUnread: () => setReadFor(false),
+      bulkDelete: () => this.doDelete(selIds),
+      setRange: (e) => this.setState({ range: e.target.value, sel: {} }),
+      setType: (e) => this.setState({ type: e.target.value, sel: {} }),
+      clearFilters: () => this.setState({ range: 'any', type: 'all', sel: {} }),
+      showToast: n > 0,
+      toastTitle: n + (n === 1 ? ' notification deleted' : ' notifications deleted'),
+      undo: () => {
+        const d = Object.assign({}, s.deleted);
+        (s.undo || []).forEach((id) => { delete d[id]; });
+        if (this.toastTimer) clearTimeout(this.toastTimer);
+        this.setState({ deleted: d, undo: null });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
