@@ -86,7 +86,7 @@ select,input{font-family:inherit}
                 <span style="font-size: 14px; color: #64748B">Shown in the portal and to your counselor.</span>
               </label>
               <div></div>
-              <div style="display: flex; flex-direction: column; gap: 4px; text-align: left"><span style="font-size: 14px; line-height: 20px; color: #64748B">Legal name</span><span style="font-size: 18px; line-height: 1.6; color: #0F172A">Maria Rivera</span><span style="font-size: 14px; color: #64748B">From your application. Contact your counselor to correct it.</span></div>
+              <div style="display: flex; flex-direction: column; gap: 4px; text-align: left"><span style="font-size: 14px; line-height: 20px; color: #64748B">Legal name</span><span style="font-size: 18px; line-height: 1.6; color: #0F172A">Rhonda Santos</span><span style="font-size: 14px; color: #64748B">From your application. Contact your counselor to correct it.</span></div>
               <div style="display: flex; flex-direction: column; gap: 4px; text-align: left"><span style="font-size: 14px; line-height: 20px; color: #64748B">Date of birth</span><span style="font-size: 18px; line-height: 1.6; color: #0F172A">Mar 14, 1988</span><span style="font-size: 14px; color: #64748B">Used to confirm your identity.</span></div>
             </div>
             <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 32px">
@@ -256,7 +256,7 @@ select,input{font-family:inherit}
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    const saved = { name: 'Maria Rivera', phone: '(555) 201-4477', bPhone: '', bEmail: 'maria.r.personal@example.com', lang: 'Spanish', theme: 'light',
+    const saved = { name: 'Rhonda Santos', phone: '(555) 201-4477', bPhone: '', bEmail: 'rhonda.s.personal@example.com', lang: 'Spanish', theme: 'light',
       prefs: { action: { email: true, sms: false, push: true }, updates: { email: true, sms: false, push: false }, reminders: { email: true, sms: false, push: false } } };
     this.state = { sec: 'name', saved: saved, d: JSON.parse(JSON.stringify(saved)), err: {}, phoneStep: 'edit', code: '', resent: false, noChange: false,
       toast: null, hasPhoto: false, resetAsked: false, qSet: false };
@@ -314,10 +314,10 @@ class Component extends DCLogic {
     });
     return Object.assign({
       nav: nav, sec: sec,
-      initials: 'MR',
+      initials: 'RS',
       photoBg: s.hasPhoto ? '#475569' : A,
       hasPhoto: s.hasPhoto,
-      email: 'maria.rivera@example.com', phone: s.saved.phone,
+      email: 'rhonda.santos@example.com', phone: s.saved.phone,
       dName: s.d.name, dPhone: s.d.phone, dBPhone: s.d.bPhone, dBEmail: s.d.bEmail, dLang: s.d.lang, code: s.code,
       setDName: (ev) => this.upd('name', ev.target.value),
       setDPhone: (ev) => this.upd('phone', ev.target.value),
