@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lender Case Details (Prospect) - SCRUM-398</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Keyz Design System tokens (src/tokens), Partner Portal = blue */
+  :root {
+    --blue-base: #2342EE;
+    --blue-hover: #1633CF;
+    --blue-light: #E9EDFF;
+    --purple-light: #F1EEFC;
+    --purple-100: #E6DDFB;
+    --purple-base: #3F0FB7;
+    --n-900: #020617;
+    --n-800: #0F172A;
+    --n-700: #1E293B;
+    --n-600: #334155;
+    --n-500: #475569;
+    --n-400: #94A3B8;
+    --n-300: #AEBDCC;
+    --n-200: #CBD5E1;
+    --label: #64748B;
+    --divider: #E2E8F0;
+    --surface-subtle: #F8FAFC;
+    --surface-tint: #F0F3FD;
+    --success: #008800;
+    --success-bg: #F0FDF4;
+    --white: #FFFFFF;
+    --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-full: 9999px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --font: Inter, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: var(--font);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--n-700);
+    background: var(--white);
+    -webkit-font-smoothing: antialiased;
+  }
+  .icon { width: 24px; height: 24px; flex-shrink: 0; fill: none; stroke: currentColor;
+          stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10; }
+  .page { padding: 12px 20px 24px; }
+
+  /* Breadcrumb */
+  .breadcrumb { display: flex; gap: 6px; font-size: 12px; color: var(--n-500); }
+  .breadcrumb a { color: var(--blue-base); text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .breadcrumb .sep { color: var(--n-400); }
+
+  /* Page header */
+  .page-head { display: flex; align-items: center; gap: 16px; margin: 4px 0 12px; }
+  .page-head h1 { margin: 0; font-size: 28px; font-weight: 500; line-height: 1.3; color: var(--n-900); }
+  .badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: var(--r-full);
+           border: 1px solid var(--success); background: var(--success-bg); color: var(--success);
+           font-size: 12px; font-weight: 500; line-height: 1; }
+  .page-head .date { font-size: 12px; color: var(--label); }
+
+  /* Header tile card */
+  .tile { display: flex; align-items: stretch; gap: 24px; padding: 16px 20px;
+          background: var(--surface-subtle); border-radius: var(--r-lg); box-shadow: var(--shadow-sm);
+          border: 1px solid var(--divider); }
+  .tile-client { display: flex; gap: 16px; flex: 0 1 40%; min-width: 0; }
+  .avatar { width: 80px; height: 80px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center;
+            justify-content: center; background: var(--purple-light); border: 4px solid var(--purple-100);
+            font-size: 26px; font-weight: 500; color: var(--n-600); }
+  .client-name { font-size: 22px; font-weight: 600; line-height: 1.35; color: var(--n-800); }
+  .client-role { font-size: 14px; color: var(--label); }
+  .meta-row { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 20px; margin-top: 4px; }
+  .meta { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--n-700); }
+  .meta .icon { width: 16px; height: 16px; color: var(--label); }
+  .meta.muted { color: var(--label); }
+  .progress { margin-top: 8px; max-width: 220px; }
+  .progress-track { height: 4px; border-radius: var(--r-full); background: var(--divider); overflow: hidden; }
+  .progress-fill { height: 100%; width: 100%; background: var(--success); border-radius: var(--r-full); }
+  .progress-label { display: flex; align-items: center; gap: 8px; margin-top: 4px; font-size: 12px; color: var(--n-700); }
+  .progress-label i { width: 6px; height: 6px; border-radius: 50%; background: var(--n-300); }
+  .tile-divider { width: 1px; background: var(--n-200); }
+  .tile-info { flex: 1; display: grid; grid-template-columns: auto auto auto; justify-content: space-between; gap: 12px 24px; align-content: start; }
+  .field { display: flex; gap: 12px; min-width: 0; }
+  .field .icon { width: 20px; height: 20px; color: var(--label); margin-top: 2px; }
+  .label-md { font-size: 14px; color: var(--label); line-height: 1.5; }
+  .tile-info .label-md, .tile-info .value-md { white-space: nowrap; }
+  .value-md { font-size: 18px; color: var(--n-800); line-height: 1.35; }
+  .value-md.success { color: var(--success); font-weight: 500; }
+  .tile-expand { align-self: flex-end; width: 36px; height: 36px; border-radius: var(--r-md); border: 1px solid var(--divider);
+                 background: var(--white); color: var(--n-600); display: flex; align-items: center; justify-content: center;
+                 cursor: pointer; box-shadow: var(--shadow-sm); }
+  .tile-expand .icon { width: 14px; height: 14px; stroke-width: 2; }
+  .tile-expand:hover { background: var(--blue-light); color: var(--blue-hover); border-color: #B7CCFF; }
+
+  /* Tinted work area */
+  .panel { margin-top: 16px; padding: 16px 16px 20px; background: var(--surface-tint); border-radius: var(--r-lg); }
+
+  /* Tabs (DS Tabs, variant="icon", cardSelected) */
+  .tabs { display: flex; align-items: flex-end; border-bottom: 1px solid var(--n-200); }
+  .tab { position: relative; display: inline-flex; align-items: center; gap: 4px; padding: 8px 12px; margin-right: 28px;
+         font-family: var(--font); font-size: 18px; font-weight: 400; color: var(--n-500); background: none; border: 0;
+         cursor: pointer; white-space: nowrap; transition: all 0.14s ease; }
+  .tab:hover { color: var(--n-700); }
+  .tab[aria-selected="true"] { font-weight: 700; color: var(--blue-base); background: var(--white);
+                               border-radius: var(--r-md) var(--r-md) 0 0; }
+  .tab[aria-selected="true"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px;
+                                      background: var(--blue-base); }
+  .tab:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(35,66,238,0.10); }
+
+  /* Dashboard tab */
+  .tabpanel { margin-top: 16px; }
+  .dash { display: grid; grid-template-columns: minmax(0, 1.9fr) minmax(300px, 1fr); gap: 12px; align-items: start; }
+  .card { background: var(--white); border-radius: var(--r-md); box-shadow: var(--shadow-sm); padding: 16px 20px 20px; }
+  .card h2 { margin: 0 0 12px; font-size: 20px; font-weight: 500; line-height: 1.3; color: var(--n-900); }
+
+  .overview-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px;
+                  padding: 12px 24px 16px; border-bottom: 1px solid var(--divider); }
+  .overview-row .value-md { font-weight: 600; color: var(--success); }
+
+  .card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+  .link { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font); font-size: 16px; color: var(--blue-base);
+          background: none; border: 0; padding: 0; cursor: pointer; text-decoration: none; }
+  .link:hover { color: var(--blue-hover); text-decoration: underline; }
+  .link .icon { width: 20px; height: 20px; }
+  .downloads { margin-top: 28px; }
+  .downloads h3 { margin: 0 0 12px; font-size: 16px; font-weight: 600; line-height: 1.5; color: var(--n-900); }
+  .dl-row { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: center; gap: 16px;
+            padding: 12px 0; border-top: 1px solid var(--divider); font-size: 16px; color: var(--n-600); }
+  .dl-row:last-child { border-bottom: 1px solid var(--divider); }
+
+  /* Documents & Data tab */
+  .data-card { padding: 20px 24px 24px; }
+  .data-actions { display: flex; gap: 24px; }
+  .data-list { display: flex; flex-direction: column; gap: 16px; margin: 12px 48px 0; }
+  .data-item { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 16px;
+               border: 1px solid var(--divider); border-radius: var(--r-md); }
+  .data-item .t { font-size: 16px; font-weight: 600; color: var(--n-900); }
+  .data-item .v { font-size: 20px; font-weight: 600; color: var(--success); line-height: 1.4; }
+  .btn-outline { height: 44px; padding: 0 28px; border-radius: var(--r-md); border: 1px solid var(--blue-base);
+                 background: var(--white); color: var(--blue-base); font-family: var(--font); font-size: 16px;
+                 font-weight: 400; cursor: pointer; }
+  .btn-outline:hover { background: var(--blue-light); border-color: var(--blue-hover); color: var(--blue-hover); }
+  .btn-outline:focus-visible, .link:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(35,66,238,0.10); }
+
+  /* Activity Tracker (DS VerticalMilestoneStepper) */
+  .ms { display: flex; gap: 12px; }
+  .ms-rail { width: 24px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
+  .ms-line { width: 1px; flex: 1; min-height: 16px; background: var(--n-200); margin: 3px 0; }
+  .ms-body { flex: 1; min-width: 0; padding-bottom: 12px; }
+  .ms:last-child .ms-body { padding-bottom: 0; }
+  .orb { border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+         background: var(--success); color: var(--white); }
+  .orb.parent { width: 24px; height: 24px; }
+  .orb.sub { width: 16px; height: 16px; }
+  .orb svg { fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .orb.parent svg { width: 14px; height: 14px; }
+  .orb.sub svg { width: 8px; height: 8px; }
+  .ms-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 24px; }
+  .ms-row .lbl { font-size: 16px; font-weight: 600; color: var(--n-700); line-height: 1.4; }
+  .ms-row .dt { font-size: 14px; font-weight: 500; color: var(--n-500); white-space: nowrap; }
+  .subs { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .sub-row { display: flex; align-items: center; gap: 8px; }
+  .sub-row .ms-row { flex: 1; min-height: 0; }
+  .sub-row .lbl { font-size: 14px; font-weight: 400; }
+
+  /* Empty state (DS EmptyState) */
+  .empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+           padding: 40px 24px; text-align: center; border: 1px dashed var(--n-200); border-radius: 16px;
+           background: #FAFBFD; min-height: 260px; }
+  .empty .icon { width: 40px; height: 40px; color: var(--n-300); margin-bottom: 4px; }
+  .empty .t { font-size: 14px; font-weight: 600; color: var(--n-700); line-height: 1.3; }
+  .empty .d { font-size: 12px; color: var(--n-500); max-width: 320px; }
+
+  [hidden] { display: none !important; }
+
+  @media (max-width: 900px) {
+    .tile { flex-direction: column; }
+    .tile-client { flex-basis: auto; }
+    .tile-divider { width: auto; height: 1px; }
+    .tile-info { grid-template-columns: 1fr 1fr; }
+    .dash { grid-template-columns: 1fr; }
+    .data-list { margin: 12px 0 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Keyz DS icons (src/icons/svg) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-computer-check" viewBox="0 0 24 24"><path d="M23.5,19.912c0,0.877-0.671,1.588-1.5,1.588H2c-0.828,0-1.5-0.71-1.5-1.588V5.088C0.5,4.211,1.172,3.5,2,3.5h20c0.829,0,1.5,0.711,1.5,1.588V19.912z"/><line x1="5" y1="23.5" x2="19" y2="23.5"/><line x1="12" y1="21.5" x2="12" y2="23.5"/><circle cx="12" cy="19.5" r="0.5"/><line x1="0.5" y1="17.5" x2="23.5" y2="17.5"/><polyline points="15.5,8.5 11.5,12.5 9.5,10.5"/><path d="M16.5,10.5c0,2.486-2.015,4.5-4.5,4.5s-4.5-2.014-4.5-4.5C7.5,8.015,9.515,6,12,6c0.75,0,1.457,0.184,2.079,0.508"/></symbol>
+  <symbol id="i-comment" viewBox="0 0 24 24"><polygon points="23.5,17.482 11.5,17.482 7.5,21.482 7.5,17.482 0.5,17.482 0.5,1.482 23.5,1.482"/><line x1="5.5" y1="6.482" x2="14.5" y2="6.482"/><line x1="5.5" y1="9.482" x2="18.5" y2="9.482"/><line x1="5.5" y1="12.482" x2="18.5" y2="12.482"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><polygon points="16,22.5 12.5,23.5 13.5,20 21.002,12.498 23.502,14.998"/><line x1="19.002" y1="14.498" x2="21.502" y2="16.998"/><line x1="13.5" y1="20" x2="16" y2="22.5"/><polyline points="9.5,20.5 0.5,20.5 0.5,0.5 19.5,0.5 19.5,9.5"/><path d="M4,0.5V4 M8,0.5V4 M12,0.5V4 M16,0.5V4"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><polygon points="12,0.5 15,8.5 23.5,8.5 16.5,14.5 19.5,23.5 12,18 4.5,23.5 7.5,14.5 0.5,8.5 9,8.5"/></symbol>
+  <symbol id="i-time-zone" viewBox="0 0 24 24"><circle cx="18.5" cy="18.5" r="5"/><polyline points="20.5,19.5 18.5,19.5 18.5,16"/><line x1="1.898" y1="17.5" x2="11.5" y2="17.5"/><line x1="2.512" y1="5.5" x2="21.496" y2="5.5"/><line x1="23.5" y1="11.5" x2="0.511" y2="11.5"/><path d="M11.378,23.484C5.315,23.16,0.5,18.144,0.5,12C0.5,5.648,5.648,0.5,12,0.5c6.185,0,11.237,4.879,11.5,11"/><path d="M11.27,0.526c-6,6.5-5.892,14.958,0.108,22.958"/><path d="M12.73,0.526c3.015,3.266,4.486,7.025,4.445,10.974"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="11.935" cy="14" r="9.5"/><line x1="6.587" y1="21.847" x2="4.935" y2="23.5"/><line x1="17.279" y1="21.845" x2="18.935" y2="23.5"/><polyline points="8.435,14.5 12.435,14.5 12.435,8.5"/><path d="M1.935,8.5c-1.562-1.562-1.562-3.938,0-5.5s3.938-1.562,5.5,0"/><path d="M21.935,8.5c1.562-1.562,1.562-3.938,0-5.5s-3.938-1.562-5.5,0"/></symbol>
+  <symbol id="i-address" viewBox="0 0 24 24"><polyline points="3.5,12.5 3.5,23.5 13.5,23.5"/><polyline points="0.5,12 12,1.5 23.5,12"/><polyline points="16,2.5 19.5,2.5 19.5,6"/><rect x="10.5" y="6.5" width="3" height="3"/><path d="M22,16.5c0,2.208-4,7-4,7s-4-4.792-4-7c0-2.21,1.79-4,4-4C20.208,12.5,22,14.29,22,16.5z"/><circle cx="18" cy="16.5" r="1.5"/></symbol>
+  <symbol id="i-co-client" viewBox="0 0 24 24"><path d="M7.919,21.5H15.5c0,0,0-3,0-4.5c0-0.5-3-2-5.5-3v-2c0,0,1-0.35,1-2.5c0.695,0,1-2,0.032-2c0-0.212,0.766-1.308,0.468-2.5C11,3,6,3,5.5,5C3.395,4.569,5,7.212,5,7.5c-1,0-0.696,2,0,2C5,11.65,6,12,6,12v2c-2.5,1-5.5,2.5-5.5,3c0,1,0,4.5,0,4.5H7.919z"/><path d="M18,21.5h5.5c0,0,0-3.301,0-4.5c0-0.5-2.5-1.2-4.5-2v-1.5c0,0,1-0.28,1-2c0.557,0,0.774-2,0-2c0-0.169,0.811-1.067,0.5-2C20,6,16,6,15.5,7.5c-1.685-0.345-0.5,1.77-0.5,2c-0.8,0-0.557,2,0,2c0,1.72,1,2,1,2v1"/></symbol>
+  <symbol id="i-gender" viewBox="0 0 24 24"><polyline points="8.5,23.5 0.5,23.5 0.5,15.5"/><polyline points="8.5,0.5 0.5,0.5 0.5,8.5"/><polyline points="15.5,23.5 23.5,23.5 23.5,15.5"/><polyline points="15.5,0.5 23.5,0.5 23.5,8.5"/><circle cx="12" cy="8.5" r="4"/><path d="M19,18.5H5c0-3.834,3.166-6,7-6C15.835,12.5,19,14.666,19,18.5z"/></symbol>
+  <symbol id="i-email" viewBox="0 0 24 24"><path d="M22.5,17c0,0.828-0.672,1.5-1.5,1.5H3c-0.828,0-1.5-0.672-1.5-1.5V6c0-0.829,0.672-1.5,1.5-1.5h18c0.828,0,1.5,0.671,1.5,1.5V17z"/><polyline points="22,5 12,13 2,5"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M8.586,7.902c0.902-0.903,0.902-2.368,0-3.271L6.132,2.178c-0.903-0.903-2.368-0.903-3.271,0L1.516,3.523C0.348,4.691,0.167,6.512,1.077,7.889c3.909,5.91,9.124,11.125,15.034,15.034c1.375,0.909,3.201,0.728,4.365-0.438l1.346-1.346c0.903-0.903,0.903-2.368,0-3.271l-2.453-2.453c-0.902-0.904-2.367-0.904-3.271,0l-0.817,0.817c-2.69-2.204-5.309-4.823-7.513-7.514L8.586,7.902z"/></symbol>
+  <symbol id="i-chevron-down" viewBox="0 0 24 24"><polyline points="0.501,5.5 12.001,18.5 23.501,5.5"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M22.5,17.718v1.913c0,1.584-1.285,2.869-2.869,2.869H3.369c-1.585,0-2.869-1.285-2.869-2.869v-1.913"/><line x1="11.5" y1="17.608" x2="11.5" y2="0.5"/><polyline points="18.5,10.608 11.5,17.608 4.5,10.608"/></symbol>
+  <symbol id="i-document" viewBox="0 0 24 24"><polygon points="20.5,23.5 3.5,23.5 3.5,0.5 14.5,0.5 20.5,6.5"/><polyline points="14.5,0.5 14.5,6.5 20.5,6.5"/><line x1="7.5" y1="11.5" x2="16.5" y2="11.5"/><line x1="7.5" y1="15" x2="16.5" y2="15"/><line x1="7.5" y1="18.5" x2="13.5" y2="18.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><polyline points="4,12 9,17 20,7"/></symbol>
+</svg>
+
+<main class="page">
+
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="#">Home</a><span class="sep">/</span>
+    <a href="#">Cases</a><span class="sep">/</span>
+    <span>Case Details</span>
+  </nav>
+
+  <div class="page-head">
+    <h1>CaseID: CI123456</h1>
+    <span class="badge">Active</span>
+    <span class="date">10/10/2026</span>
+  </div>
+
+  <!-- Header tile card -->
+  <section class="tile" aria-label="Client summary">
+    <div class="tile-client">
+      <div class="avatar" aria-hidden="true">RS</div>
+      <div style="min-width:0">
+        <div class="client-name">Rhonda Santos</div>
+        <div class="client-role">Primary Client</div>
+        <div class="meta-row">
+          <span class="meta muted"><svg class="icon"><use href="#i-gender"/></svg>Female</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta"><svg class="icon"><use href="#i-email"/></svg>rhonda123@email.com</span>
+          <span class="meta"><svg class="icon"><use href="#i-phone"/></svg>703 000 0001</span>
+        </div>
+        <div class="progress">
+          <div class="progress-track"><div class="progress-fill"></div></div>
+          <div class="progress-label">5/5 Steps <i></i> 100%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tile-divider"></div>
+
+    <div class="tile-info">
+      <div class="field">
+        <svg class="icon"><use href="#i-star"/></svg>
+        <div><div class="label-md">Status</div><div class="value-md success">Active</div></div>
+      </div>
+      <div class="field">
+        <svg class="icon"><use href="#i-time-zone"/></svg>
+        <div><div class="label-md">Time zone</div><div class="value-md">Eastern</div></div>
+      </div>
+      <div class="field">
+        <svg class="icon"><use href="#i-clock"/></svg>
+        <div><div class="label-md">Last logged on</div><div class="value-md">01/10/2026</div></div>
+      </div>
+      <div class="field">
+        <svg class="icon"><use href="#i-address"/></svg>
+        <div><div class="label-md">Address</div><div class="value-md">123 Main Street<br>Anytown, AB 12345</div></div>
+      </div>
+      <div class="field">
+        <svg class="icon"><use href="#i-co-client"/></svg>
+        <div><div class="label-md">Co-borrower/co-buyer</div><div class="value-md">--</div></div>
+      </div>
+    </div>
+
+    <button class="tile-expand" type="button" aria-label="Show more client details">
+      <svg class="icon"><use href="#i-chevron-down"/></svg>
+    </button>
+  </section>
+
+  <!-- Tabs + content -->
+  <section class="panel">
+    <div class="tabs" role="tablist" aria-label="Case sections">
+      <button class="tab" role="tab" id="tab-dashboard" aria-controls="panel-dashboard" aria-selected="true">
+        <svg class="icon"><use href="#i-computer-check"/></svg>Dashboard
+      </button>
+      <button class="tab" role="tab" id="tab-responses" aria-controls="panel-responses" aria-selected="false" tabindex="-1">
+        <svg class="icon"><use href="#i-comment"/></svg>Responses
+      </button>
+      <button class="tab" role="tab" id="tab-docs" aria-controls="panel-docs" aria-selected="false" tabindex="-1">
+        <svg class="icon"><use href="#i-document"/></svg>Documents &amp; Data
+      </button>
+      <button class="tab" role="tab" id="tab-closing" aria-controls="panel-closing" aria-selected="false" tabindex="-1">
+        <svg class="icon"><use href="#i-note"/></svg>Closing Notes
+      </button>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="tabpanel" role="tabpanel" id="panel-dashboard" aria-labelledby="tab-dashboard">
+      <div class="dash">
+        <div class="card">
+          <div class="card-head">
+            <h2>Case Overview</h2>
+            <button class="link" type="button">View</button>
+          </div>
+          <div class="overview-row">
+            <div><div class="label-md">Gross Monthly Income</div><div class="value-md">$7,500</div></div>
+            <div><div class="label-md">Current Housing Expense</div><div class="value-md">$1,500</div></div>
+            <div><div class="label-md">Monthly Debt</div><div class="value-md">$600</div></div>
+          </div>
+          <div class="overview-row">
+            <div><div class="label-md">Total Assets</div><div class="value-md">$22,700</div></div>
+            <div><div class="label-md">Net Monthly Cash Flow</div><div class="value-md">$50</div></div>
+            <div><div class="label-md">Credit Score</div><div class="value-md">692</div></div>
+          </div>
+
+          <div class="downloads">
+            <h3>Downloads</h3>
+            <div class="dl-row">
+              <span>MISMO File</span>
+              <span><button class="link" type="button"><svg class="icon"><use href="#i-download"/></svg>Download</button></span>
+            </div>
+            <div class="dl-row">
+              <span>Data and Documents</span>
+              <span><button class="link" type="button"><svg class="icon"><use href="#i-download"/></svg>Download</button></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Activity Tracker</h2>
+          <div id="tracker"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Responses -->
+    <div class="tabpanel" role="tabpanel" id="panel-responses" aria-labelledby="tab-responses" hidden>
+      <div class="empty">
+        <svg class="icon"><use href="#i-comment"/></svg>
+        <div class="t">Responses</div>
+        <div class="d">Requests for information and messages exchanged with the client will appear here.</div>
+      </div>
+    </div>
+
+    <!-- Documents & Data -->
+    <div class="tabpanel" role="tabpanel" id="panel-docs" aria-labelledby="tab-docs" hidden>
+      <div class="card data-card">
+        <div class="card-head">
+          <h2>Client Data</h2>
+          <div class="data-actions">
+            <button class="link" type="button"><svg class="icon"><use href="#i-download"/></svg>All Data</button>
+            <button class="link" type="button"><svg class="icon"><use href="#i-download"/></svg>MISMO</button>
+          </div>
+        </div>
+        <div class="data-list">
+          <div class="data-item">
+            <div><div class="t">Total Assets</div><div class="v">$22,700</div></div>
+            <button class="btn-outline" type="button">Details</button>
+          </div>
+          <div class="data-item">
+            <div><div class="t">Monthly Gross Income</div><div class="v">$7,500</div></div>
+            <button class="btn-outline" type="button">Details</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Closing Notes -->
+    <div class="tabpanel" role="tabpanel" id="panel-closing" aria-labelledby="tab-closing" hidden>
+      <div class="empty">
+        <svg class="icon"><use href="#i-note"/></svg>
+        <div class="t">Closing Notes</div>
+        <div class="d">Post selection details you submit for this case will appear here.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // Activity Tracker data: Keyz DS canonical workflow order (all steps complete)
+  var milestones = [
+    { label: "Invited", date: "09/02/2026", subs: [["Sent", "09/01/2026"], ["Accepted", "09/02/2026"]] },
+    { label: "Onboarding", date: "09/06/2026", subs: [["About Me", "09/03/2026"], ["Payment Completed", "09/04/2026"], ["Verify Identity", "09/06/2026"]] },
+    { label: "My Data", date: "09/24/2026", subs: [["Assets", "09/10/2026"], ["Employment & Income", "09/12/2026"], ["Budget", "09/15/2026"], ["Soft Credit Check", "09/18/2026"], ["Required Documents", "09/24/2026"]] },
+    { label: "Assessments", date: "10/07/2026", subs: [["Current State", "10/01/2026"], ["Target Shared", "10/07/2026"]] },
+    { label: "Action Plan", date: "10/20/2026", subs: [["Shared", "10/09/2026"], ["In Progress", "10/14/2026"], ["Completed", "10/20/2026"]] }
+  ];
+  var check = '<svg viewBox="0 0 24 24"><polyline points="4,12 9,17 20,7"/></svg>';
+  function esc(s) { return s.replace(/&/g, "&amp;"); }
+  document.getElementById("tracker").innerHTML = milestones.map(function (m, i) {
+    var last = i === milestones.length - 1;
+    return '<div class="ms"><div class="ms-rail"><span class="orb parent">' + check + '</span>' +
+      (last ? '' : '<span class="ms-line"></span>') + '</div><div class="ms-body">' +
+      '<div class="ms-row"><span class="lbl">' + esc(m.label) + '</span><span class="dt">' + m.date + '</span></div>' +
+      '<div class="subs">' + m.subs.map(function (s) {
+        return '<div class="sub-row"><span class="orb sub">' + check + '</span><div class="ms-row"><span class="lbl">' +
+          esc(s[0]) + '</span><span class="dt">' + s[1] + '</span></div></div>';
+      }).join('') + '</div></div></div>';
+  }).join('');
+
+  // Tabs
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  function select(tab) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { select(t); });
+    t.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      var next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+      next.focus(); select(next);
+    });
+  });
+</script>
+</body>
+</html>
