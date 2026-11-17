@@ -625,6 +625,17 @@
     });
     renderForm(); renderHistory();
   })();
+  // Deep link: add #responses, #dashboard, #documents or #closing-notes to the end of the address to open that tab
+  (function () {
+    var map = { dashboard: ['tab-dashboard'], responses: ['tab-responses', 'tab-response'], response: ['tab-responses', 'tab-response'],
+                documents: ['tab-docs'], 'closing-notes': ['tab-closing'] };
+    function go() {
+      var ids = map[decodeURIComponent(location.hash.slice(1)).toLowerCase()] || [];
+      for (var i = 0; i < ids.length; i++) { var t = document.getElementById(ids[i]); if (t) { select(t); return; } }
+    }
+    go();
+    window.addEventListener('hashchange', go);
+  })();
 </script>
 </body>
 </html>
