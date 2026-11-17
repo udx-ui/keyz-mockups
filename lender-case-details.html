@@ -64,9 +64,14 @@
   .page-head .date { font-size: 12px; color: var(--label); }
 
   /* Header tile card */
-  .tile { display: flex; align-items: stretch; gap: 24px; padding: 16px 20px;
+  .tile { position: relative; padding: 16px 20px;
           background: var(--surface-subtle); border-radius: var(--r-lg); box-shadow: var(--shadow-sm);
           border: 1px solid var(--divider); }
+  .tile-top { display: flex; align-items: stretch; gap: 24px; }
+  .tile-more { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px 24px; margin-top: 16px; padding: 12px 56px 0 0;
+               border-top: 1px solid var(--divider); }
+  .tile.open .when-closed { display: none; }
+  .tile.open .tile-expand .icon { transform: rotate(180deg); }
   .tile-client { display: flex; gap: 16px; flex: 0 1 40%; min-width: 0; }
   .avatar { width: 80px; height: 80px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center;
             justify-content: center; background: var(--purple-light); border: 4px solid var(--purple-100);
@@ -90,7 +95,7 @@
   .tile-info .label-md, .tile-info .value-md { white-space: nowrap; }
   .value-md { font-size: 18px; color: var(--n-800); line-height: 1.35; }
   .value-md.success { color: var(--success); font-weight: 500; }
-  .tile-expand { align-self: flex-end; width: 36px; height: 36px; border-radius: var(--r-md); border: 1px solid var(--divider);
+  .tile-expand { position: absolute; right: 20px; bottom: 16px; width: 36px; height: 36px; border-radius: var(--r-md); border: 1px solid var(--divider);
                  background: var(--white); color: var(--n-600); display: flex; align-items: center; justify-content: center;
                  cursor: pointer; box-shadow: var(--shadow-sm); }
   .tile-expand .icon { width: 14px; height: 14px; stroke-width: 2; }
@@ -135,7 +140,7 @@
   /* Documents & Data tab */
   .data-card { padding: 20px 24px 24px; }
   .data-actions { display: flex; gap: 24px; }
-  .data-list { display: flex; flex-direction: column; gap: 16px; margin: 12px 48px 0; }
+  .data-list { display: flex; flex-direction: column; gap: 16px; margin: 12px 0 0; }
   .data-item { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 16px;
                border: 1px solid var(--divider); border-radius: var(--r-md); }
   .data-item .t { font-size: 16px; font-weight: 600; color: var(--n-900); }
@@ -175,10 +180,112 @@
   .empty .t { font-size: 14px; font-weight: 600; color: var(--n-700); line-height: 1.3; }
   .empty .d { font-size: 12px; color: var(--n-500); max-width: 320px; }
 
+  /* Responses tab: DS ClientQuestionPanel + response + RichTextField */
+  .resp-card { padding: 20px 24px 24px; }
+  .thread { display: flex; flex-direction: column; gap: 24px; }
+  .exchange { display: flex; flex-direction: column; gap: 16px; }
+  .exchange + .exchange { border-top: 1px solid var(--divider); padding-top: 24px; }
+  .msg-head { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; }
+  .msg-head h3 { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.5; color: var(--n-700); }
+  .msg-meta { font-size: 14px; color: var(--label); }
+  .badge-warn { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: var(--r-full);
+                border: 1px solid #ED6C02; background: #FFF1DA; color: #92400E; font-size: 12px; font-weight: 500; line-height: 1; }
+  .msg-body { margin-top: 8px; padding: 12px 16px; border: 1px solid var(--divider); border-radius: var(--r-md);
+              font-size: 16px; line-height: 1.5; color: var(--n-700); }
+  .msg-body p { margin: 0; } .msg-body p + p { margin-top: 8px; }
+  .msg-body ul, .msg-body ol { margin: 0; padding-left: 24px; }
+  .msg.client .msg-body { background: var(--surface-subtle); }
+  .msg.mine .msg-body { background: var(--white); }
+  .sub-label { font-size: 14px; color: var(--label); margin: 12px 0 4px; }
+  .sub-label:first-child { margin-top: 0; }
+  .kz-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .kz-table th { text-align: left; font-weight: 600; color: var(--n-700); background: var(--surface-subtle);
+                 padding: 12px 8px; border-bottom: 1px solid var(--divider); white-space: nowrap; }
+  .kz-table td { padding: 12px 8px; border-bottom: 1px solid var(--divider); color: var(--n-700); font-variant-numeric: tabular-nums; }
+  .kz-table tr:last-child td { border-bottom: none; }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--divider); border-radius: var(--r-sm); }
+  .reply { margin: 0; }
+  .rtf-label { display: block; font-size: 14px; color: var(--n-600); margin-bottom: 4px; }
+  .rtf { border: 1px solid #D4DCE8; border-radius: var(--r-md); background: var(--white);
+         transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+  .rtf:focus-within { border-color: var(--blue-base); box-shadow: 0 0 0 3px rgba(35,66,238,0.10); }
+  .rtf-bar { display: flex; align-items: center; gap: 4px; padding: 4px 8px; border-bottom: 1px solid var(--divider); }
+  .rtf-btn { width: 28px; height: 28px; border: 0; border-radius: var(--r-sm); background: transparent; color: var(--n-600);
+             font-family: var(--font); font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+  .rtf-btn:hover { background: var(--surface-subtle); }
+  .rtf-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+  .rtf-sep { width: 1px; height: 16px; background: var(--divider); margin: 0 4px; }
+  .rtf-edit { min-height: 96px; padding: 12px; font-size: 16px; line-height: 1.5; color: var(--n-900); outline: none; }
+  .rtf-edit:empty::before { content: attr(data-placeholder); color: var(--n-300); }
+  .rtf-edit ul, .rtf-edit ol { margin: 0; padding-left: 24px; }
+  .rtf-count { margin-top: 4px; text-align: right; font-size: 12px; color: var(--label); }
+  .rtf-count.over { color: #C00000; }
+  .hint { margin: 8px 0 0; font-size: 12px; color: #C00000; }
+  .actions { display: flex; gap: 16px; margin-top: 16px; }
+  .btn-primary { height: 44px; padding: 0 28px; border-radius: var(--r-md); border: 1px solid var(--blue-base);
+                 background: var(--blue-base); color: var(--white); font-family: var(--font); font-size: 16px; cursor: pointer; }
+  .btn-primary:hover { background: var(--blue-hover); border-color: var(--blue-hover); }
+  .btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(35,66,238,0.10); }
+
+  /* Closing Notes tab */
+  .cn-card { padding: 20px 24px 24px; }
+  .cn-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; padding: 12px 16px;
+                background: var(--surface-subtle); border: 1px solid var(--divider); border-radius: var(--r-md); }
+  .cn-summary .value-md { font-weight: 500; }
+  .badge-blue { display: inline-flex; align-items: center; padding: 6px 12px; border-radius: var(--r-full); border: 1px solid var(--blue-base);
+                background: var(--blue-light); color: #1225A8; font-size: 14px; font-weight: 500; line-height: 1; }
+  .badge-green { display: inline-flex; align-items: center; padding: 6px 12px; border-radius: var(--r-full); border: 1px solid var(--success);
+                 background: var(--success-bg); color: #1F7A3A; font-size: 14px; font-weight: 500; line-height: 1; }
+  .badge-red { display: inline-flex; align-items: center; padding: 6px 12px; border-radius: var(--r-full); border: 1px solid #C00000;
+               background: #FEF2F2; color: #991B1B; font-size: 14px; font-weight: 500; line-height: 1; }
+  .hstep { display: flex; margin: 20px 0 4px; }
+  .hstep-item { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; text-align: center; }
+  .hstep-item::before { content: ""; position: absolute; top: 12px; left: -50%; width: 100%; height: 1px; background: var(--n-200); }
+  .hstep-item:first-child::before { display: none; }
+  .hstep-item.done::before, .hstep-item.active::before { background: var(--success); }
+  .hstep-orb { position: relative; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+               background: var(--n-200); color: var(--n-500); font-size: 11px; font-weight: 600; }
+  .hstep-item.done .hstep-orb { background: var(--success); color: var(--white); }
+  .hstep-item.active .hstep-orb { background: var(--white); border: 2px solid var(--success); box-shadow: 0 0 0 3px var(--success-bg); }
+  .hstep-orb svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .hstep-lbl { margin-top: 8px; font-size: 14px; font-weight: 600; color: var(--n-700); }
+  .hstep-item.pending .hstep-lbl { font-weight: 400; color: var(--n-400); }
+  .hstep-dt { font-size: 12px; color: var(--label); }
+  .cn-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--divider); }
+  .cn-card > h2 { margin-bottom: 16px; }
+  .cn-section > h3 { margin: 0 0 12px; font-size: 16px; font-weight: 600; line-height: 1.5; color: var(--n-900); }
+  .form-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 20px; }
+  .fld label, .fld .fld-label { display: block; font-size: 14px; color: var(--n-600); margin-bottom: 4px; }
+  .fld .req { color: #C00000; }
+  .inp { width: 100%; height: 44px; padding: 0 12px; border: 1px solid var(--n-200); border-radius: var(--r-sm); background: #FAFBFD;
+         font-family: var(--font); font-size: 16px; color: var(--n-900); }
+  .inp:hover { border-color: var(--n-400); }
+  .inp:focus { outline: none; border-color: var(--blue-base); box-shadow: 0 0 0 3px rgba(35,66,238,0.10); }
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill { height: 44px; padding: 0 16px; border: 1px solid var(--n-200); border-radius: var(--r-md); background: var(--white);
+          font-family: var(--font); font-size: 14px; color: var(--n-600); cursor: pointer; }
+  .pill:hover { border-color: var(--blue-base); }
+  .pill[aria-pressed="true"] { border-color: var(--blue-base); background: var(--blue-light); color: #1225A8; font-weight: 600; }
+  .fld.wide { grid-column: 1 / -1; }
+  .cn-note { margin-top: 16px; }
+  .cn-note textarea { width: 100%; min-height: 96px; padding: 12px; border: 1px solid #D4DCE8; border-radius: var(--r-md); background: var(--white);
+                      font-family: var(--font); font-size: 16px; line-height: 1.5; color: var(--n-900); resize: vertical; }
+  .cn-note textarea:focus { outline: none; border-color: var(--blue-base); box-shadow: 0 0 0 3px rgba(35,66,238,0.10); }
+  .cn-note textarea::placeholder { color: var(--n-300); }
+  .rec { padding: 12px 16px; border: 1px solid var(--divider); border-radius: var(--r-md); }
+  .rec + .rec { margin-top: 12px; }
+  .rec-head { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; }
+  .rec-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px 20px; margin-top: 12px; }
+  .label-sm { font-size: 12px; color: var(--label); }
+  .value-sm { font-size: 16px; color: var(--n-800); }
+  .rec-note { margin: 12px 0 0; font-size: 16px; line-height: 1.5; color: var(--n-700); white-space: pre-wrap; }
+  @media (max-width: 900px) { .cn-summary, .form-grid, .rec-grid { grid-template-columns: 1fr 1fr; } }
+
   [hidden] { display: none !important; }
 
   @media (max-width: 900px) {
-    .tile { flex-direction: column; }
+    .tile-top { flex-direction: column; }
+    .tile-more { grid-template-columns: 1fr 1fr; }
     .tile-client { flex-basis: auto; }
     .tile-divider { width: auto; height: 1px; }
     .tile-info { grid-template-columns: 1fr 1fr; }
@@ -217,18 +324,19 @@
   </nav>
 
   <div class="page-head">
-    <h1>CaseID: CI123456</h1>
+    <h1>CaseID: 500-00-478</h1>
     <span class="badge">Active</span>
     <span class="date">10/10/2026</span>
   </div>
 
   <!-- Header tile card -->
-  <section class="tile" aria-label="Client summary">
+  <section class="tile" id="tile" aria-label="Client summary">
+   <div class="tile-top">
     <div class="tile-client">
       <div class="avatar" aria-hidden="true">RS</div>
       <div style="min-width:0">
         <div class="client-name">Rhonda Santos</div>
-        <div class="client-role">Primary Client</div>
+        <div class="client-role when-closed">Primary Client</div>
         <div class="meta-row">
           <span class="meta muted"><svg class="icon"><use href="#i-gender"/></svg>Female</span>
         </div>
@@ -236,7 +344,7 @@
           <span class="meta"><svg class="icon"><use href="#i-email"/></svg>rhonda123@email.com</span>
           <span class="meta"><svg class="icon"><use href="#i-phone"/></svg>703 000 0001</span>
         </div>
-        <div class="progress">
+        <div class="progress when-closed">
           <div class="progress-track"><div class="progress-fill"></div></div>
           <div class="progress-label">5/5 Steps <i></i> 100%</div>
         </div>
@@ -268,7 +376,19 @@
       </div>
     </div>
 
-    <button class="tile-expand" type="button" aria-label="Show more client details">
+   </div>
+
+    <div class="tile-more" id="tile-more" hidden>
+      <div><div class="label-md">Date of Birth</div><div class="value-md">04/12/1988</div></div>
+      <div><div class="label-md">Preferred Language</div><div class="value-md">English</div></div>
+      <div><div class="label-md">TBD</div><div class="value-md">Sample</div></div>
+      <div><div class="label-md">TBD</div><div class="value-md">Sample</div></div>
+      <div><div class="label-md">TBD</div><div class="value-md">Sample</div></div>
+      <div><div class="label-md">TBD</div><div class="value-md">Sample</div></div>
+      <div><div class="label-md">TBD</div><div class="value-md">Sample</div></div>
+    </div>
+
+    <button class="tile-expand" id="tile-toggle" type="button" aria-expanded="false" aria-controls="tile-more" aria-label="Show more client details">
       <svg class="icon"><use href="#i-chevron-down"/></svg>
     </button>
   </section>
@@ -331,10 +451,52 @@
 
     <!-- Responses -->
     <div class="tabpanel" role="tabpanel" id="panel-responses" aria-labelledby="tab-responses" hidden>
-      <div class="empty">
-        <svg class="icon"><use href="#i-comment"/></svg>
-        <div class="t">Responses</div>
-        <div class="d">Requests for information and messages exchanged with the client will appear here.</div>
+      <div class="card resp-card">
+        <div class="thread" id="thread">
+          <div class="exchange" id="open-exchange">
+          <div class="msg client" id="open-question">
+            <div class="msg-head"><h3>Client&rsquo;s Question</h3><span class="msg-meta">Rhonda Santos &middot; 11/05/2026, 9:02 AM</span><span class="badge-warn" id="needs-reply">Needs Reply</span></div>
+            <div class="msg-body"><p>Thank you. If I go with the FHA option, can the down payment assistance be applied toward my closing costs?</p></div>
+          </div>
+          <div class="reply">
+            <label class="rtf-label" id="rtf-label">Your Response</label>
+            <div class="rtf">
+              <div class="rtf-bar" role="toolbar" aria-label="Formatting">
+                <button class="rtf-btn" type="button" data-cmd="bold" aria-label="Bold"><b>B</b></button>
+                <button class="rtf-btn" type="button" data-cmd="italic" aria-label="Italic"><i>I</i></button>
+                <span class="rtf-sep"></span>
+                <button class="rtf-btn" type="button" data-cmd="insertUnorderedList" aria-label="Bullet list"><svg viewBox="0 0 24 24"><line x1="9" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="9" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg></button>
+                <button class="rtf-btn" type="button" data-cmd="insertOrderedList" aria-label="Numbered list"><svg viewBox="0 0 24 24"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 4v4M3 14h2l-2 3h2" stroke-width="1.5"/></svg></button>
+              </div>
+              <div class="rtf-edit" id="reply-edit" contenteditable="true" role="textbox" aria-multiline="true" aria-labelledby="rtf-label" data-placeholder="Type your response here..."></div>
+            </div>
+            <div class="rtf-count" id="reply-count">1000 characters remaining</div>
+            <p class="hint" id="reply-hint" hidden>Write a response before sending.</p>
+            <div class="actions">
+              <button class="btn-primary" type="button" id="reply-send">Send Response</button>
+            </div>
+          </div>
+          </div>
+          <div class="exchange">
+          <div class="msg client">
+            <div class="msg-head"><h3>Client&rsquo;s Question</h3><span class="msg-meta">Rhonda Santos &middot; 11/02/2026, 10:14 AM</span></div>
+            <div class="msg-body"><p>Hi, I just finished the Keyz program and I am looking at homes around $325,000. What loan options would I qualify for, and how much cash would I need at closing?</p></div>
+          </div>
+          <div class="msg mine">
+            <div class="msg-head"><h3>Your Response</h3><span class="msg-meta">Sent 11/03/2026, 2:30 PM</span></div>
+            <div class="msg-body"><div class="sub-label">Loan Options</div>
+              <div class="table-wrap"><table class="kz-table">
+                <thead><tr><th>Loan Type</th><th>Loan Term</th><th>Interest Rate</th><th>APR</th><th>Points</th><th>Cash to Close</th></tr></thead>
+                <tbody>
+                  <tr><td>Conventional</td><td>30 yr Fixed</td><td>6.25%</td><td>6.41%</td><td>0.5</td><td>$14,200</td></tr>
+                  <tr><td>FHA</td><td>30 yr Fixed</td><td>5.875%</td><td>6.62%</td><td>0</td><td>$11,900</td></tr>
+                </tbody>
+              </table></div>
+              <div class="sub-label">Comments</div>
+              <p>Both options fit your numbers. The FHA option needs less cash at closing; the Conventional option has a lower long-term cost.</p></div>
+          </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -354,7 +516,19 @@
             <button class="btn-outline" type="button">Details</button>
           </div>
           <div class="data-item">
-            <div><div class="t">Monthly Gross Income</div><div class="v">$7,500</div></div>
+            <div><div class="t">Gross Monthly Income</div><div class="v">$7,500</div></div>
+            <button class="btn-outline" type="button">Details</button>
+          </div>
+          <div class="data-item">
+            <div><div class="t">Net Monthly Cash Flow</div><div class="v">$50</div></div>
+            <button class="btn-outline" type="button">Details</button>
+          </div>
+          <div class="data-item">
+            <div><div class="t">Credit &amp; Liabilities</div><div class="v">692</div></div>
+            <button class="btn-outline" type="button">Details</button>
+          </div>
+          <div class="data-item">
+            <div><div class="t">Disclosures</div><div class="v">Submitted</div></div>
             <button class="btn-outline" type="button">Details</button>
           </div>
         </div>
@@ -363,10 +537,21 @@
 
     <!-- Closing Notes -->
     <div class="tabpanel" role="tabpanel" id="panel-closing" aria-labelledby="tab-closing" hidden>
-      <div class="empty">
-        <svg class="icon"><use href="#i-note"/></svg>
-        <div class="t">Closing Notes</div>
-        <div class="d">Post selection details you submit for this case will appear here.</div>
+      <div class="card cn-card">
+        <h2>Closing Notes</h2>
+          <div class="form-grid" id="cn-form"></div>
+          <div class="fld cn-note">
+            <label for="cn-note">Note</label>
+            <textarea id="cn-note" maxlength="1000" placeholder="Add a note..."></textarea>
+            <div class="rtf-count" id="cn-count">1000 characters remaining</div>
+          </div>
+          <p class="hint" id="cn-hint" hidden></p>
+          <div class="actions"><button class="btn-primary" type="button" id="cn-submit">Submit</button></div>
+
+        <div class="cn-section">
+          <h3>History</h3>
+          <div id="cn-history"></div>
+        </div>
       </div>
     </div>
   </section>
@@ -395,6 +580,17 @@
       }).join('') + '</div></div></div>';
   }).join('');
 
+  // Header card: expand / collapse
+  (function () {
+    var tile = document.getElementById('tile'), more = document.getElementById('tile-more'), btn = document.getElementById('tile-toggle');
+    btn.addEventListener('click', function () {
+      var open = more.hidden;
+      more.hidden = !open; tile.classList.toggle('open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.setAttribute('aria-label', open ? 'Show fewer client details' : 'Show more client details');
+    });
+  })();
+
   // Tabs
   var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
   function select(tab) {
@@ -413,6 +609,112 @@
       next.focus(); select(next);
     });
   });
+
+  // Responses: reply box (never a disabled button; a message explains what is missing)
+  (function () {
+    var edit = document.getElementById('reply-edit'), count = document.getElementById('reply-count'),
+        hint = document.getElementById('reply-hint'), LIMIT = 1000;
+    function text() { return edit.innerText.replace(/\u00a0/g, ' ').trim(); }
+    function refresh() {
+      if (!text() && !edit.querySelector('li')) edit.innerHTML = '';
+      var left = LIMIT - text().length;
+      count.textContent = left + ' characters remaining';
+      count.className = 'rtf-count' + (left < 0 ? ' over' : '');
+      if (text()) hint.hidden = true;
+    }
+    edit.addEventListener('input', refresh);
+    Array.prototype.forEach.call(document.querySelectorAll('.rtf-btn'), function (b) {
+      b.addEventListener('mousedown', function (e) { e.preventDefault(); });
+      b.addEventListener('click', function () { edit.focus(); document.execCommand(b.getAttribute('data-cmd')); refresh(); });
+    });
+    document.getElementById('reply-send').addEventListener('click', function () {
+      if (!text()) { hint.textContent = 'Write a response before sending.'; hint.hidden = false; return; }
+      if (text().length > LIMIT) { hint.textContent = 'Shorten your response to 1000 characters or fewer.'; hint.hidden = false; return; }
+      var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; }, h = d.getHours();
+      var stamp = p(d.getMonth() + 1) + '/' + p(d.getDate()) + '/' + d.getFullYear() + ', ' + ((h % 12) || 12) + ':' + p(d.getMinutes()) + (h < 12 ? ' AM' : ' PM');
+      var msg = document.createElement('div');
+      msg.className = 'msg mine';
+      msg.innerHTML = '<div class="msg-head"><h3>Your Response</h3><span class="msg-meta">Sent ' + stamp + '</span></div><div class="msg-body"></div>';
+      msg.querySelector('.msg-body').innerHTML = edit.innerHTML;
+      var reply = document.querySelector('.reply');
+      reply.parentNode.insertBefore(msg, reply);
+      reply.hidden = true;
+      var badge = document.getElementById('needs-reply'); if (badge) badge.remove();
+      edit.innerHTML = ''; refresh();
+    });
+  })();
+  // Closing Notes: status updates after selection, saved as a read-only history (newest on top)
+  (function () {
+    var CFG = {"by": "Jordan Blake, Lender", "outcomeOk": "Loan Closed", "notClosed": "Did Not Close", "milestones": ["Selected", "Pre-Approved", "Under Contract", "Closed"], "fields": {"Pre-Approved": [{"k": "preAmt", "label": "Pre-Approval Amount", "type": "money", "req": true}, {"k": "loanType", "label": "Loan Type", "type": "select", "options": ["Conventional", "FHA", "VA", "USDA", "Other"], "req": true}], "Under Contract": [{"k": "price", "label": "Purchase Price", "type": "money", "req": true}, {"k": "expClose", "label": "Expected Closing Date", "type": "date", "req": true}], "Closed": [{"k": "loanType", "label": "Loan Type", "type": "select", "options": ["Conventional", "FHA", "VA", "USDA", "Other"], "req": true}, {"k": "loanAmt", "label": "Loan Amount", "type": "money", "req": true}, {"k": "price", "label": "Purchase Price", "type": "money", "req": true}], "Did Not Close": [{"k": "reason", "label": "Reason", "type": "select", "req": true, "options": ["Client chose another lender", "Loan was not approved", "Client stopped responding", "Client paused or changed their mind", "Client could not find a home", "Other"]}]}, "seed": [{"status": "Selected", "date": "2026-11-06", "data": {}, "note": "Client selected you as their lender in the Marketplace.", "by": "Keyz", "at": "11/06/2026, 9:40 AM"}, {"status": "Pre-Approved", "date": "2026-11-10", "data": {"preAmt": "330000", "loanType": "FHA"}, "note": "Pre-approval letter sent to the client. She is starting her home search this week.", "by": "Jordan Blake, Lender", "at": "11/10/2026, 3:12 PM"}]};
+    var $ = function (id) { return document.getElementById(id); };
+    var check = '<svg viewBox="0 0 24 24"><polyline points="4,12 9,17 20,7"/></svg>';
+    var records = CFG.seed.slice(), form = {}, FINAL_OK = CFG.milestones[CFG.milestones.length - 1], FINAL_NO = CFG.notClosed;
+    function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+    function fmtDate(iso) { var p = iso.split('-'); return p[1] + '/' + p[2] + '/' + p[0]; }
+    function money(v) { var n = Number(String(v).replace(/[^0-9.]/g, '')); return isNaN(n) ? v : '$' + n.toLocaleString('en-US'); }
+    function show(f, v) { if (v === undefined || v === '') return '--'; return f.type === 'money' ? money(v) : f.type === 'date' ? fmtDate(v) : v; }
+    function fieldsFor(status) { return [{ k: 'date', label: 'Date', type: 'date', req: true }].concat(CFG.fields[status] || []); }
+    function latest(status) { for (var i = records.length - 1; i >= 0; i--) if (records[i].status === status) return records[i]; }
+
+    function d0() { var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); }
+    function current() { return records[records.length - 1].status; }
+    function renderHistory() {
+      $('cn-history').innerHTML = records.slice().reverse().map(function (r) {
+        var cls = r.status === FINAL_OK ? 'badge-green' : r.status === FINAL_NO ? 'badge-red' : 'badge-blue';
+        var cells = (r.noteOnly || r.status === CFG.milestones[0]) ? '' : fieldsFor(r.status).filter(function (f) { return !f.when || r.data[f.when[0]] === f.when[1]; }).map(function (f) {
+          return '<div><div class="label-sm">' + esc(f.label) + '</div><div class="value-sm">' + esc(show(f, f.k === 'date' ? r.date : r.data[f.k])) + '</div></div>';
+        }).join('');
+        return '<div class="rec"><div class="rec-head"><span class="' + cls + '">' + esc(r.status) + '</span><span class="msg-meta">' + esc(r.by) + ' &middot; ' + esc(r.at) + '</span></div>' +
+          (cells ? '<div class="rec-grid">' + cells + '</div>' : '') + (r.note ? '<p class="rec-note">' + esc(r.note) + '</p>' : '') + '</div>';
+      }).join('');
+    }
+    function renderForm() {
+      var st = form.status || current(), changed = st !== current();
+      var html = '<div class="fld"><label for="cn-f-status">Status <span class="req">*</span></label><select class="inp" id="cn-f-status">' +
+        CFG.milestones.slice(1).concat([FINAL_NO]).map(function (m) { return '<option' + (m === st ? ' selected' : '') + '>' + esc(m) + '</option>'; }).join('') + '</select></div>';
+      if (changed) fieldsFor(st).forEach(function (f) {
+        if (f.when && form[f.when[0]] !== f.when[1]) return;
+        var id = 'cn-f-' + f.k, v = form[f.k] || '', lab = esc(f.label) + (f.req ? ' <span class="req">*</span>' : '');
+        if (f.type === 'pills') {
+          html += '<div class="fld' + (f.options.length > 2 ? ' wide' : '') + '"><span class="fld-label">' + lab + '</span><div class="pills">' + f.options.map(function (o) {
+            return '<button type="button" class="pill" data-k="' + f.k + '" aria-pressed="' + (o === v) + '">' + esc(o) + '</button>'; }).join('') + '</div></div>';
+        } else if (f.type === 'select') {
+          html += '<div class="fld"><label for="' + id + '">' + lab + '</label><select class="inp" id="' + id + '" data-k="' + f.k + '"><option value="">Select</option>' +
+            f.options.map(function (o) { return '<option' + (o === v ? ' selected' : '') + '>' + esc(o) + '</option>'; }).join('') + '</select></div>';
+        } else {
+          html += '<div class="fld"><label for="' + id + '">' + lab + '</label><input class="inp" id="' + id + '" data-k="' + f.k + '" value="' + esc(v) + '"' +
+            (f.type === 'date' ? ' type="date"' : f.type === 'money' ? ' inputmode="decimal" placeholder="$"' : f.type === 'number' ? ' inputmode="numeric"' : '') + '></div>';
+        }
+      });
+      $('cn-form').innerHTML = html;
+    }
+    $('cn-form').addEventListener('change', function (e) {
+      if (e.target.id === 'cn-f-status') { form = { status: e.target.value, date: d0() }; renderForm(); $('cn-hint').hidden = true; }
+      else if (e.target.dataset.k) form[e.target.dataset.k] = e.target.value;
+    });
+    $('cn-form').addEventListener('input', function (e) { if (e.target.dataset.k) { form[e.target.dataset.k] = e.target.value; $('cn-hint').hidden = true; } });
+    $('cn-form').addEventListener('click', function (e) {
+      var b = e.target.closest('.pill'); if (!b) return;
+      form[b.dataset.k] = b.textContent; renderForm();
+    });
+    $('cn-note').addEventListener('input', function () { $('cn-count').textContent = (1000 - this.value.length) + ' characters remaining'; });
+    $('cn-submit').addEventListener('click', function () {
+      // Never a disabled button: a message explains what is missing.
+      var hint = $('cn-hint'), note = $('cn-note').value.trim(), missing = [], st = form.status || current(), changed = st !== current();
+      if (!changed && !note) { hint.textContent = 'Change the status or add a note before submitting.'; hint.hidden = false; return; }
+      if (changed) fieldsFor(st).forEach(function (f) { if (f.req && !form[f.k]) missing.push(f.label); });
+      if (form.reason === 'Other' && !note) missing.push('a Note explaining the reason');
+      if (missing.length) { hint.textContent = 'Please add: ' + missing.join(', ') + '.'; hint.hidden = false; return; }
+      if (!changed) { form = { status: st, date: d0() }; }
+      hint.hidden = true;
+      var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; }, h = d.getHours();
+      records.push({ status: form.status, date: form.date, data: form, note: note, noteOnly: !changed, by: CFG.by,
+        at: p(d.getMonth() + 1) + '/' + p(d.getDate()) + '/' + d.getFullYear() + ', ' + ((h % 12) || 12) + ':' + p(d.getMinutes()) + (h < 12 ? ' AM' : ' PM') });
+      form = {}; $('cn-note').value = ''; $('cn-count').textContent = '1000 characters remaining';
+      renderForm(); renderHistory();
+    });
+    renderForm(); renderHistory();
+  })();
 </script>
 </body>
 </html>
