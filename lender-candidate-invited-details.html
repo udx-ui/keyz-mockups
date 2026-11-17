@@ -296,7 +296,7 @@
   /* Candidate state */
   .tile.thin .tile-info { grid-template-columns: auto auto; justify-content: start; gap: 12px 64px; }
   .waiting { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center;
-             min-height: 300px; padding: 24px; border: 1px dashed var(--n-200); border-radius: var(--r-md); }
+             min-height: 220px; padding: 24px; margin-top: 16px; border: 1px dashed var(--n-200); border-radius: var(--r-md); }
   .waiting .icon { width: 48px; height: 48px; color: var(--n-400); margin-bottom: 8px; stroke-width: 1; }
   .waiting .t { font-size: 18px; font-weight: 600; color: var(--n-800); line-height: 1.35; }
   .waiting .d { font-size: 14px; color: var(--n-500); max-width: 380px; }
@@ -347,40 +347,67 @@
     <span class="date">11/02/2026</span>
   </div>
 
-  <!-- Header tile card: candidate (name and email only) -->
-  <section class="tile thin" aria-label="Candidate summary">
+  <section class="tile" id="tile" aria-label="Client summary">
    <div class="tile-top">
     <div class="tile-client">
       <div class="avatar" aria-hidden="true">ML</div>
       <div style="min-width:0">
         <div class="client-name">Marcus Lee</div>
-        <div class="client-role">Candidate</div>
+        <div class="client-role when-closed">Primary Client</div>
+        <div class="meta-row">
+          <span class="meta muted"><svg class="icon"><use href="#i-gender"/></svg>--</span>
+        </div>
         <div class="meta-row">
           <span class="meta"><svg class="icon"><use href="#i-email"/></svg>marcus.lee@email.com</span>
           <span class="meta"><svg class="icon"><use href="#i-phone"/></svg>703 000 0142</span>
         </div>
+        <div class="progress when-closed">
+          <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+          <div class="progress-label">0/5 Steps <i></i> 0%</div>
+        </div>
       </div>
     </div>
+
     <div class="tile-divider"></div>
+
     <div class="tile-info">
       <div class="field">
         <svg class="icon"><use href="#i-star"/></svg>
         <div><div class="label-md">Status</div><div class="value-md success">Invited</div></div>
       </div>
       <div class="field">
+        <svg class="icon"><use href="#i-time-zone"/></svg>
+        <div><div class="label-md">Time zone</div><div class="value-md">--</div></div>
+      </div>
+      <div class="field">
         <svg class="icon"><use href="#i-clock"/></svg>
-        <div><div class="label-md">Invited On</div><div class="value-md">11/01/2026</div></div>
+        <div><div class="label-md">Last logged on</div><div class="value-md">--</div></div>
       </div>
       <div class="field">
         <svg class="icon"><use href="#i-address"/></svg>
-        <div><div class="label-md">Looking to Buy In</div><div class="value-md">Ashburn, VA</div></div>
+        <div><div class="label-md">Address</div><div class="value-md">--</div></div>
       </div>
       <div class="field">
-        <svg class="icon"><use href="#i-time-zone"/></svg>
-        <div><div class="label-md">Planning to Buy</div><div class="value-md">3-6 months</div></div>
+        <svg class="icon"><use href="#i-co-client"/></svg>
+        <div><div class="label-md">Co-borrower/co-buyer</div><div class="value-md">--</div></div>
       </div>
     </div>
+
    </div>
+
+    <div class="tile-more" id="tile-more" hidden>
+      <div><div class="label-md">Date of Birth</div><div class="value-md">--</div></div>
+      <div><div class="label-md">Preferred Language</div><div class="value-md">--</div></div>
+      <div><div class="label-md">TBD</div><div class="value-md">--</div></div>
+      <div><div class="label-md">TBD</div><div class="value-md">--</div></div>
+      <div><div class="label-md">TBD</div><div class="value-md">--</div></div>
+      <div><div class="label-md">TBD</div><div class="value-md">--</div></div>
+      <div><div class="label-md">TBD</div><div class="value-md">--</div></div>
+    </div>
+
+    <button class="tile-expand" id="tile-toggle" type="button" aria-expanded="false" aria-controls="tile-more" aria-label="Show more client details">
+      <svg class="icon"><use href="#i-chevron-down"/></svg>
+    </button>
   </section>
 
   <section class="panel">
@@ -397,6 +424,11 @@
     <div class="dash stretch">
       <div class="card">
         <h2>Case Overview</h2>
+        <div class="overview-row">
+          <div><div class="label-md">Invited On</div><div class="value-md">11/01/2026</div></div>
+          <div><div class="label-md">Looking to Buy In</div><div class="value-md">Ashburn, VA</div></div>
+          <div><div class="label-md">Planning to Buy</div><div class="value-md">3-6 months</div></div>
+        </div>
         <div class="waiting">
           <svg class="icon"><use href="#i-hourglass"/></svg>
           <div class="t">Waiting on the candidate</div>
@@ -464,6 +496,17 @@
       row(m.label, m.s, m.date) + (subs.length ? '<div class="subs">' + subs.map(function (s) {
         return '<div class="sub-row">' + orb(s[1], 'sub') + row(s[0], s[1], s[2]) + '</div>'; }).join('') + '</div>' : '') + '</div></div>';
   }).join('');
+
+  // Header card: expand / collapse
+  (function () {
+    var tile = document.getElementById('tile'), more = document.getElementById('tile-more'), btn = document.getElementById('tile-toggle');
+    btn.addEventListener('click', function () {
+      var open = more.hidden;
+      more.hidden = !open; tile.classList.toggle('open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.setAttribute('aria-label', open ? 'Show fewer client details' : 'Show more client details');
+    });
+  })();
 
   // Tabs
   var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
