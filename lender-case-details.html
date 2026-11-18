@@ -351,18 +351,36 @@
   .value-sm { font-size: 16px; color: var(--n-800); }
   .rec-note { margin: 12px 0 0; font-size: 16px; line-height: 1.5; color: var(--n-700); white-space: pre-wrap; }
   @media (max-width: 900px) { .cn-summary, .form-grid, .rec-grid { grid-template-columns: 1fr 1fr; } }
-  /* Responses: Needs Reply + Previous Responses table */
-  .resp-h { margin: 0 0 16px; font-size: 20px; font-weight: 500; line-height: 1.3; color: var(--n-900); }
-  .prev-card { margin-top: 16px; }
+  /* Messages: Needs Reply / Send a Message + Previous Messages table */
+  .resp-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+  .resp-h { margin: 0; font-size: 20px; font-weight: 500; line-height: 1.3; color: var(--n-900); }
+  .prev-card > .resp-h { margin-bottom: 16px; }
+  .prev-card, .compose-card + .resp-card { margin-top: 16px; }
+  .ask-btn { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 20px; border-radius: var(--r-md);
+             border: 1px solid var(--blue-base); background: var(--white); color: var(--blue-base); font-family: var(--font); font-size: 14px; cursor: pointer; }
+  .ask-btn:hover { background: var(--blue-light); border-color: var(--blue-hover); color: var(--blue-hover); }
+  .ask-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(35,66,238,0.10); }
+  .ask-btn .icon { width: 16px; height: 16px; }
+  .compose-subj { max-width: 560px; margin-bottom: 16px; }
+  .compose-subj .inp { width: 100%; height: 44px; padding: 0 12px; border: 1px solid var(--n-200); border-radius: var(--r-sm); background: #FAFBFD;
+                       font-family: var(--font); font-size: 16px; color: var(--n-900); }
+  .compose-subj .inp:focus { outline: none; border-color: var(--blue-base); box-shadow: 0 0 0 3px rgba(35,66,238,0.10); }
+  .compose-card .req { color: #C00000; }
+  .compose-card .btn-outline { height: 44px; padding: 0 28px; border-radius: var(--r-md); border: 1px solid var(--blue-base); background: var(--white);
+                               color: var(--blue-base); font-family: var(--font); font-size: 16px; cursor: pointer; }
+  .compose-card .btn-outline:hover { background: var(--blue-light); }
   .resp-empty, .prev-none { margin: 0; font-size: 14px; color: var(--label); }
   .kz-table.prev td { vertical-align: top; line-height: 1.5; }
-  .kz-table.prev td.q, .kz-table.prev td.r { min-width: 240px; }
-  .kz-table.prev td.dt { white-space: nowrap; color: var(--n-600); }
+  .kz-table.prev td.q, .kz-table.prev td.r { min-width: 200px; }
+  .kz-table.prev td.dt, .kz-table.prev td.who { white-space: nowrap; color: var(--n-600); }
   .kz-table.prev td p { margin: 0; } .kz-table.prev td p + p { margin-top: 8px; }
+  .kz-table.prev .subj { font-weight: 600; color: var(--n-900); }
   .kz-table.prev .view-opts { display: block; margin-top: 8px; font-size: 14px; }
   .kz-table.prev tr.prev-x > td { background: var(--surface-subtle); padding: 12px 16px; }
   .kz-table.prev tr.prev-x .table-wrap { background: var(--white); }
-
+  .badge-ok { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: var(--r-full); border: 1px solid var(--success);
+              background: var(--success-bg); color: #1F7A3A; font-size: 12px; font-weight: 500; line-height: 1; white-space: nowrap; }
+  .kz-table.prev .badge-warn { white-space: nowrap; }
   [hidden] { display: none !important; }
 
   @media (max-width: 900px) {
@@ -584,6 +602,10 @@
               <button class="btn-primary" type="button" id="reply-send">Send Response</button>
             </div>
           </div>
+          </div>
+          <div class="exchange" data-from="you" data-subject="Pay Stubs">
+          <div class="msg mine"><div class="msg-head"><h3>Your Message</h3><span class="msg-meta">Sent 11/04/2026, 11:20 AM</span></div><div class="msg-body"><p>Could you upload your two most recent pay stubs so I can finish the pre-approval?</p></div></div>
+          <div class="msg client"><div class="msg-head"><h3>Client&rsquo;s Reply</h3><span class="msg-meta">Rhonda Santos &middot; 11/04/2026, 4:05 PM</span></div><div class="msg-body"><p>Done, I uploaded them this morning.</p></div></div>
           </div>
           <div class="exchange">
           <div class="msg client">
@@ -900,43 +922,88 @@
     m.addEventListener('click', function (e) { if (e.target === m) close(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !m.hidden) close(); });
   })();
-  // Responses layout: "Needs Reply" on top, answered questions in a "Previous Responses" table below
+  // Messages layout: partner can reply to the client and start a message; "Send a Message" shows when nothing is waiting.
   (function () {
     var panel = document.getElementById('panel-responses') || document.getElementById('panel-response');
     if (!panel) return;
+    var twoWay = true; // all pages are two-way: partners can reply and start messages, including with anonymous graduates
     var top = panel.querySelector('.resp-card');
-    top.insertAdjacentHTML('afterbegin', '<h2 class="resp-h">Needs Reply</h2>');
-    top.insertAdjacentHTML('beforeend', '<p class="resp-empty" id="resp-empty" hidden>No questions are waiting for a reply.</p>');
+    function stamp() {
+      var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; }, h = d.getHours();
+      return p(d.getMonth() + 1) + '/' + p(d.getDate()) + '/' + d.getFullYear() + ', ' + ((h % 12) || 12) + ':' + p(d.getMinutes()) + (h < 12 ? ' AM' : ' PM');
+    }
+    function metaOf(m) { return ((m.querySelector('.msg-meta') || {}).textContent || '').replace(/^Sent\s+/, '').trim(); }
+    function whoOf(m) { var t = metaOf(m); return t.indexOf('·') > -1 ? t.split('·')[0].trim() : 'Client'; }
+    function whenOf(m) { return metaOf(m).split('·').pop().trim(); }
+    function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+
+    top.insertAdjacentHTML('afterbegin', '<div class="resp-head"><h2 class="resp-h">Needs Reply</h2>' +
+      (twoWay ? '<button class="ask-btn" type="button" id="ask-btn"><svg class="icon"><use href="#i-comment"/></svg>Ask a Question</button>' : '') + '</div>');
+    if (!twoWay) top.insertAdjacentHTML('beforeend', '<p class="resp-empty" id="resp-empty" hidden>No questions are waiting for a reply.</p>');
+
+    // ── Send a Message (two-way only) ──
+    var compose = null;
+    if (twoWay) {
+      compose = document.createElement('div');
+      compose.className = 'card resp-card compose-card'; compose.hidden = true;
+      compose.innerHTML = '<div class="resp-head"><h2 class="resp-h">Send a Message</h2></div>' +
+        '<div class="fld compose-subj"><label class="rtf-label" for="cm-subject">Subject <span class="req">*</span></label><input class="inp" id="cm-subject" maxlength="100"></div>' +
+        '<label class="rtf-label" id="cm-label">Message <span class="req">*</span></label>' +
+        '<div class="rtf"><div class="rtf-bar" role="toolbar" aria-label="Formatting">' +
+        '<button class="cm-btn rtf-btn" type="button" data-cmd="bold" aria-label="Bold"><b>B</b></button>' +
+        '<button class="cm-btn rtf-btn" type="button" data-cmd="italic" aria-label="Italic"><i>I</i></button><span class="rtf-sep"></span>' +
+        '<button class="cm-btn rtf-btn" type="button" data-cmd="insertUnorderedList" aria-label="Bullet list"><svg viewBox="0 0 24 24"><line x1="9" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="9" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg></button>' +
+        '<button class="cm-btn rtf-btn" type="button" data-cmd="insertOrderedList" aria-label="Numbered list"><svg viewBox="0 0 24 24"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 4v4M3 14h2l-2 3h2" stroke-width="1.5"/></svg></button></div>' +
+        '<div class="rtf-edit" id="cm-edit" contenteditable="true" role="textbox" aria-multiline="true" aria-labelledby="cm-label" data-placeholder="Type your message here..."></div></div>' +
+        '<div class="rtf-count" id="cm-count">1000 characters remaining</div><p class="hint" id="cm-hint" hidden></p>' +
+        '<div class="actions"><button class="btn-primary" type="button" id="cm-send">Send Message</button>' +
+        '<button class="btn-outline" type="button" id="cm-cancel" hidden>Cancel</button></div>';
+      top.parentNode.insertBefore(compose, top);
+    }
+
+    // ── Previous Messages / Previous Responses table ──
     var prev = document.createElement('div');
     prev.className = 'card resp-card prev-card';
-    prev.innerHTML = '<h2 class="resp-h">Previous Responses</h2><div class="table-wrap"><table class="kz-table prev">' +
-      '<thead><tr><th>Question</th><th>Asked On</th><th>Response</th><th>Responded On</th></tr></thead><tbody id="prev-body"></tbody></table></div>' +
-      '<p class="prev-none" id="prev-none">No previous responses yet.</p>';
+    var cols = twoWay ? ['From', 'Message', 'Sent On', 'Reply', 'Replied On', 'Status'] : ['Question', 'Asked On', 'Response', 'Responded On'];
+    prev.innerHTML = '<h2 class="resp-h">' + (twoWay ? 'Previous Messages' : 'Previous Responses') + '</h2><div class="table-wrap"><table class="kz-table prev">' +
+      '<thead><tr>' + cols.map(function (c) { return '<th>' + c + '</th>'; }).join('') + '</tr></thead><tbody id="prev-body"></tbody></table></div>' +
+      '<p class="prev-none" id="prev-none">No previous ' + (twoWay ? 'messages' : 'responses') + ' yet.</p>';
     top.parentNode.insertBefore(prev, top.nextSibling);
     var body = document.getElementById('prev-body'), n = 0;
-    function meta(m, strip) { var t = (m.querySelector('.msg-meta') || {}).textContent || ''; t = t.replace(/^Sent\s+/, ''); return strip ? t.split('·').pop().trim() : t.trim(); }
-    function addRow(q, r, first) {
-      var rb = r.querySelector('.msg-body').cloneNode(true), lt = rb.querySelector('.table-wrap'), id = 'prev-x' + (++n);
-      if (lt) { lt.remove(); Array.prototype.forEach.call(rb.querySelectorAll('.sub-label'), function (s) { s.remove(); }); }
-      var tr = document.createElement('tr');
-      tr.innerHTML = '<td class="q"></td><td class="dt">' + meta(q, true) + '</td><td class="r"></td><td class="dt">' + meta(r) + '</td>';
-      tr.querySelector('.q').innerHTML = q.querySelector('.msg-body').innerHTML;
-      tr.querySelector('.r').innerHTML = rb.innerHTML.trim() || '--';
+
+    // row: { from, subject, msg (html), sent, reply (html or ''), replied, status: 'answered' | 'awaiting', loan (element) }
+    function addRow(r, first) {
+      var id = 'prev-x' + (++n), tr = document.createElement('tr'), cells = [];
+      var msg = (r.subject ? '<div class="subj">' + esc(r.subject) + '</div>' : '') + r.msg;
+      var reply = r.reply || '--';
+      if (twoWay) cells = ['<td class="who">' + esc(r.from) + '</td>', '<td class="q">' + msg + '</td>', '<td class="dt">' + r.sent + '</td>',
+                           '<td class="r">' + reply + '</td>', '<td class="dt">' + (r.replied || '--') + '</td>',
+                           '<td>' + (r.status === 'answered' ? '<span class="badge-ok">Answered</span>' : '<span class="badge-warn">Awaiting Client Reply</span>') + '</td>'];
+      else cells = ['<td class="q">' + msg + '</td>', '<td class="dt">' + r.sent + '</td>', '<td class="r">' + reply + '</td>', '<td class="dt">' + (r.replied || '--') + '</td>'];
+      tr.innerHTML = cells.join('');
       var rows = [tr];
-      if (lt) {
-        var count = lt.querySelectorAll('tbody tr').length;
+      if (r.loan) {
+        var count = r.loan.querySelectorAll('tbody tr').length;
         tr.querySelector('.r').insertAdjacentHTML('beforeend', '<button class="link view-opts" type="button" aria-expanded="false" aria-controls="' + id + '">View Loan Options (' + count + ')</button>');
         var x = document.createElement('tr'); x.id = id; x.className = 'prev-x'; x.hidden = true;
-        x.innerHTML = '<td colspan="4"></td>'; x.firstChild.appendChild(lt); rows.push(x);
+        x.innerHTML = '<td colspan="' + cols.length + '"></td>'; x.firstChild.appendChild(r.loan); rows.push(x);
       }
       var at = first ? body.firstChild : null;
       rows.forEach(function (row) { body.insertBefore(row, at); });
       document.getElementById('prev-none').hidden = true;
     }
+    function fromExchange(q, a, you, subject) {
+      // q = the message that started it, a = the answer; a partner's own answer may carry a loan options table
+      var ab = a.querySelector('.msg-body').cloneNode(true), lt = ab.querySelector('.table-wrap');
+      if (lt) { lt.remove(); Array.prototype.forEach.call(ab.querySelectorAll('.sub-label'), function (s) { s.remove(); }); }
+      return { from: you ? 'You' : whoOf(q), subject: subject || '', msg: q.querySelector('.msg-body').innerHTML, sent: whenOf(q),
+               reply: ab.innerHTML.trim(), replied: whenOf(a), status: 'answered', loan: lt };
+    }
     Array.prototype.forEach.call(panel.querySelectorAll('.exchange'), function (ex) {
       if (ex.id === 'open-exchange') return;
-      var q = ex.querySelector('.msg.client'), r = ex.querySelector('.msg.mine');
-      if (q && r) addRow(q, r, false);
+      var you = ex.getAttribute('data-from') === 'you';
+      var q = ex.querySelector(you ? '.msg.mine' : '.msg.client'), a = ex.querySelector(you ? '.msg.client' : '.msg.mine');
+      if (q && a) addRow(fromExchange(q, a, you, ex.getAttribute('data-subject')), false);
       ex.remove();
     });
     body.addEventListener('click', function (e) {
@@ -945,11 +1012,52 @@
       x.hidden = !open; b.setAttribute('aria-expanded', open ? 'true' : 'false');
       b.textContent = (open ? 'Hide' : 'View') + b.textContent.replace(/^(View|Hide)/, '');
     });
+
+    // ── which top card shows ──
+    var ask = document.getElementById('ask-btn');
+    function refresh() {
+      var waiting = !!top.querySelector('.msg.client');
+      if (!twoWay) { document.getElementById('resp-empty').hidden = waiting; return; }
+      top.hidden = !waiting;
+      if (!waiting) { compose.hidden = false; document.getElementById('cm-cancel').hidden = true; }
+      else if (compose.hidden) ask.hidden = false;
+    }
     document.addEventListener('response-sent', function () {
-      var q = top.querySelector('.msg.client'), r = top.querySelector('.msg.mine');
-      if (q && r) { addRow(q, r, true); q.remove(); r.remove(); }
-      document.getElementById('resp-empty').hidden = false;
+      var q = top.querySelector('.msg.client'), a = top.querySelector('.msg.mine');
+      if (q && a) { addRow(fromExchange(q, a, false), true); q.remove(); a.remove(); }
+      refresh();
     });
+
+    if (twoWay) {
+      var subj = document.getElementById('cm-subject'), edit = document.getElementById('cm-edit'), count = document.getElementById('cm-count'),
+          hint = document.getElementById('cm-hint'), cancel = document.getElementById('cm-cancel'), LIMIT = 1000;
+      function text() { return edit.innerText.replace(/ /g, ' ').trim(); }
+      function upd() {
+        if (!text() && !edit.querySelector('li')) edit.innerHTML = '';
+        var left = LIMIT - text().length; count.textContent = left + ' characters remaining'; count.className = 'rtf-count' + (left < 0 ? ' over' : '');
+      }
+      edit.addEventListener('input', function () { upd(); hint.hidden = true; });
+      subj.addEventListener('input', function () { hint.hidden = true; });
+      Array.prototype.forEach.call(compose.querySelectorAll('.cm-btn'), function (b) {
+        b.addEventListener('mousedown', function (e) { e.preventDefault(); });
+        b.addEventListener('click', function () { edit.focus(); document.execCommand(b.getAttribute('data-cmd')); upd(); });
+      });
+      function close() { compose.hidden = true; ask.hidden = false; subj.value = ''; edit.innerHTML = ''; upd(); hint.hidden = true; ask.focus(); }
+      ask.addEventListener('click', function () { compose.hidden = false; cancel.hidden = false; ask.hidden = true; subj.focus(); });
+      cancel.addEventListener('click', close);
+      document.getElementById('cm-send').addEventListener('click', function () {
+        // Never a disabled button: a message explains what is missing
+        var missing = [];
+        if (!subj.value.trim()) missing.push('Subject');
+        if (!text()) missing.push('Message');
+        if (missing.length) { hint.textContent = 'Please add: ' + missing.join(', ') + '.'; hint.hidden = false; return; }
+        if (text().length > LIMIT) { hint.textContent = 'Shorten your message to 1000 characters or fewer.'; hint.hidden = false; return; }
+        addRow({ from: 'You', subject: subj.value.trim(), msg: edit.innerHTML, sent: stamp(), reply: '', replied: '', status: 'awaiting' }, true);
+        subj.value = ''; edit.innerHTML = ''; upd();
+        if (top.querySelector('.msg.client')) close(); else subj.focus();
+      });
+    }
+    refresh();
   })();
 </script>
 </body>
