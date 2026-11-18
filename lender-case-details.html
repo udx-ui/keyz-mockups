@@ -303,19 +303,24 @@
                  background: var(--success-bg); color: #1F7A3A; font-size: 14px; font-weight: 500; line-height: 1; }
   .badge-red { display: inline-flex; align-items: center; padding: 6px 12px; border-radius: var(--r-full); border: 1px solid #C00000;
                background: #FEF2F2; color: #991B1B; font-size: 14px; font-weight: 500; line-height: 1; }
-  .hstep { display: flex; margin: 20px 0 4px; }
-  .hstep-item { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; text-align: center; }
-  .hstep-item::before { content: ""; position: absolute; top: 12px; left: -50%; width: 100%; height: 1px; background: var(--n-200); }
+  /* Closing Notes stepper: Keyz DS Stepper (horizontal, alternative label), Partner Portal blue */
+  .hstep { display: flex; margin: 8px 0 24px; padding: 8px 0 4px; }
+  .hstep-item { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; text-align: center; min-width: 0; }
+  .hstep-item::before { content: ""; position: absolute; top: 18px; left: calc(-50% + 22px); right: calc(50% + 22px); height: 2px;
+                        border-radius: 1px; background: var(--n-200); }
   .hstep-item:first-child::before { display: none; }
-  .hstep-item.done::before, .hstep-item.active::before { background: var(--success); }
-  .hstep-orb { position: relative; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-               background: var(--n-200); color: var(--n-500); font-size: 11px; font-weight: 600; }
-  .hstep-item.done .hstep-orb { background: var(--success); color: var(--white); }
-  .hstep-item.active .hstep-orb { background: var(--white); border: 2px solid var(--success); box-shadow: 0 0 0 3px var(--success-bg); }
-  .hstep-orb svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
-  .hstep-lbl { margin-top: 8px; font-size: 14px; font-weight: 600; color: var(--n-700); }
-  .hstep-item.pending .hstep-lbl { font-weight: 400; color: var(--n-400); }
-  .hstep-dt { font-size: 12px; color: var(--label); }
+  .hstep-item.done::before, .hstep-item.active::before { background: var(--blue-base); }
+  .hstep-orb { width: 28px; height: 28px; margin: 4px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+               background: var(--n-200); color: var(--n-500); font-size: 12px; font-weight: 600; transition: background-color 200ms ease, box-shadow 200ms ease; }
+  .hstep-item.done .hstep-orb { background: var(--blue-base); color: var(--white); }
+  .hstep-item.active .hstep-orb { background: var(--blue-base); color: var(--white); box-shadow: 0 0 0 4px rgba(35,66,238,0.20); }
+  .hstep-item.stopped .hstep-orb { background: #C00000; color: var(--white); }
+  .hstep-orb svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .hstep-lbl { margin-top: 12px; font-size: 14px; font-weight: 500; color: var(--n-800); }
+  .hstep-item.active .hstep-lbl { font-weight: 600; color: var(--blue-base); }
+  .hstep-item.pending .hstep-lbl { font-weight: 400; color: var(--n-500); }
+  .hstep-item.stopped .hstep-lbl { color: #991B1B; }
+  .hstep-dt { margin-top: 2px; font-size: 12px; color: var(--label); }
   .cn-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--divider); }
   .cn-card > h2 { margin-bottom: 16px; }
   .cn-section > h3 { margin: 0 0 12px; font-size: 16px; font-weight: 600; line-height: 1.5; color: var(--n-900); }
@@ -332,6 +337,7 @@
   .pill:hover { border-color: var(--blue-base); }
   .pill[aria-pressed="true"] { border-color: var(--blue-base); background: var(--blue-light); color: #1225A8; font-weight: 600; }
   .fld.wide { grid-column: 1 / -1; }
+  .fld-help { margin-top: 4px; font-size: 12px; color: var(--label); }
   .cn-note { margin-top: 16px; }
   .cn-note textarea { width: 100%; min-height: 96px; padding: 12px; border: 1px solid #D4DCE8; border-radius: var(--r-md); background: var(--white);
                       font-family: var(--font); font-size: 16px; line-height: 1.5; color: var(--n-900); resize: vertical; }
@@ -345,6 +351,17 @@
   .value-sm { font-size: 16px; color: var(--n-800); }
   .rec-note { margin: 12px 0 0; font-size: 16px; line-height: 1.5; color: var(--n-700); white-space: pre-wrap; }
   @media (max-width: 900px) { .cn-summary, .form-grid, .rec-grid { grid-template-columns: 1fr 1fr; } }
+  /* Responses: Needs Reply + Previous Responses table */
+  .resp-h { margin: 0 0 16px; font-size: 20px; font-weight: 500; line-height: 1.3; color: var(--n-900); }
+  .prev-card { margin-top: 16px; }
+  .resp-empty, .prev-none { margin: 0; font-size: 14px; color: var(--label); }
+  .kz-table.prev td { vertical-align: top; line-height: 1.5; }
+  .kz-table.prev td.q, .kz-table.prev td.r { min-width: 240px; }
+  .kz-table.prev td.dt { white-space: nowrap; color: var(--n-600); }
+  .kz-table.prev td p { margin: 0; } .kz-table.prev td p + p { margin-top: 8px; }
+  .kz-table.prev .view-opts { display: block; margin-top: 8px; font-size: 14px; }
+  .kz-table.prev tr.prev-x > td { background: var(--surface-subtle); padding: 12px 16px; }
+  .kz-table.prev tr.prev-x .table-wrap { background: var(--white); }
 
   [hidden] { display: none !important; }
 
@@ -631,6 +648,7 @@
     <div class="tabpanel" role="tabpanel" id="panel-closing" aria-labelledby="tab-closing" hidden>
       <div class="card cn-card">
         <h2>Closing Notes</h2>
+        <div class="hstep" id="cn-steps" role="list" aria-label="Closing progress"></div>
           <div class="form-grid" id="cn-form"></div>
           <div class="fld cn-note">
             <label for="cn-note">Note</label>
@@ -741,12 +759,13 @@
       reply.parentNode.insertBefore(msg, reply);
       reply.hidden = true;
       var badge = document.getElementById('needs-reply'); if (badge) badge.remove();
+      document.dispatchEvent(new CustomEvent('response-sent'));
       edit.innerHTML = ''; refresh();
     });
   })();
   // Closing Notes: status updates after selection, saved as a read-only history (newest on top)
   (function () {
-    var CFG = {"by": "Jordan Blake, Lender", "outcomeOk": "Loan Closed", "notClosed": "Did Not Close", "milestones": ["Selected", "Pre-Approved", "Under Contract", "Closed"], "fields": {"Pre-Approved": [{"k": "preAmt", "label": "Pre-Approval Amount", "type": "money", "req": true}, {"k": "loanType", "label": "Loan Type", "type": "select", "options": ["Conventional", "FHA", "VA", "USDA", "Other"], "req": true}], "Under Contract": [{"k": "price", "label": "Purchase Price", "type": "money", "req": true}, {"k": "expClose", "label": "Expected Closing Date", "type": "date", "req": true}], "Closed": [{"k": "loanType", "label": "Loan Type", "type": "select", "options": ["Conventional", "FHA", "VA", "USDA", "Other"], "req": true}, {"k": "loanAmt", "label": "Loan Amount", "type": "money", "req": true}, {"k": "price", "label": "Purchase Price", "type": "money", "req": true}], "Did Not Close": [{"k": "reason", "label": "Reason", "type": "select", "req": true, "options": ["Client chose another lender", "Loan was not approved", "Client stopped responding", "Client paused or changed their mind", "Client could not find a home", "Other"]}]}, "seed": [{"status": "Selected", "date": "2026-11-06", "data": {}, "note": "Client selected you as their lender in the Marketplace.", "by": "Keyz", "at": "11/06/2026, 9:40 AM"}, {"status": "Pre-Approved", "date": "2026-11-10", "data": {"preAmt": "330000", "loanType": "FHA"}, "note": "Pre-approval letter sent to the client. She is starting her home search this week.", "by": "Jordan Blake, Lender", "at": "11/10/2026, 3:12 PM"}]};
+    var CFG = {"by": "Jordan Blake, Lender", "outcomeOk": "Loan Closed", "notClosed": "Did Not Close", "milestones": ["Selected", "Pre-Approved", "Under Contract", "Rate Locked", "Closed"], "fields": {"Pre-Approved": [{"k": "preAmt", "label": "Pre-Approval Amount", "type": "money", "req": true}, {"k": "loanType", "label": "Loan Type", "type": "select", "options": ["Conventional", "FHA", "VA", "USDA", "Other"], "req": true}], "Under Contract": [{"k": "price", "label": "Purchase Price", "type": "money", "req": true}, {"k": "expClose", "label": "Expected Closing Date", "type": "date", "req": true}], "Rate Locked": [{"k": "rate", "label": "Interest Rate (%)", "type": "number", "req": true}, {"k": "lockExp", "label": "Lock Expiration Date", "type": "date", "req": true}], "Closed": [{"k": "loanType", "label": "Loan Type", "type": "select", "options": ["Conventional", "FHA", "VA", "USDA", "Other"], "req": true}, {"k": "loanAmt", "label": "Loan Amount", "type": "money", "req": true}, {"k": "price", "label": "Purchase Price", "type": "money", "req": true}], "Did Not Close": [{"k": "reason", "label": "Reason", "type": "select", "req": true, "options": ["Client chose another lender", "Loan was not approved", "Client stopped responding", "Client paused or changed their mind", "Client could not find a home", "Other"]}]}, "seed": [{"status": "Selected", "date": "2026-11-06", "data": {}, "note": "Client selected you as their lender in the Marketplace.", "by": "Keyz", "at": "11/06/2026, 9:40 AM"}, {"status": "Pre-Approved", "date": "2026-11-10", "data": {"preAmt": "330000", "loanType": "FHA"}, "note": "Pre-approval letter sent to the client. She is starting her home search this week.", "by": "Jordan Blake, Lender", "at": "11/10/2026, 3:12 PM"}]};
     var $ = function (id) { return document.getElementById(id); };
     var check = '<svg viewBox="0 0 24 24"><polyline points="4,12 9,17 20,7"/></svg>';
     var records = CFG.seed.slice(), form = {}, FINAL_OK = CFG.milestones[CFG.milestones.length - 1], FINAL_NO = CFG.notClosed;
@@ -759,7 +778,21 @@
 
     function d0() { var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); }
     function current() { return records[records.length - 1].status; }
+    function renderSteps() {
+      // Visual of the status order: done (green check), current (green ring), next steps (grey number), stopped (red)
+      var cur = current(), stopped = cur === FINAL_NO, reached = 0;
+      CFG.milestones.forEach(function (m, i) { if (latest(m)) reached = i; });
+      $('cn-steps').innerHTML = CFG.milestones.map(function (m, i) {
+        var r = latest(m), lastDone = i === reached && (m === FINAL_OK || stopped);
+        var st = i < reached || lastDone ? 'done' : i === reached ? 'active' : stopped && i === reached + 1 ? 'stopped' : 'pending';
+        var label = st === 'stopped' ? FINAL_NO : m, rec = st === 'stopped' ? latest(FINAL_NO) : r;
+        var orb = st === 'done' ? check : st === 'stopped' ? '<svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>' : i + 1;
+        return '<div class="hstep-item ' + st + '" role="listitem"' + (st === 'active' ? ' aria-current="step"' : '') + '><span class="hstep-orb">' + orb + '</span>' +
+          '<span class="hstep-lbl">' + esc(label) + '</span><span class="hstep-dt">' + (rec ? fmtDate(rec.date) : '-- --') + '</span></div>';
+      }).join('');
+    }
     function renderHistory() {
+      renderSteps();
       $('cn-history').innerHTML = records.slice().reverse().map(function (r) {
         var cls = r.status === FINAL_OK ? 'badge-green' : r.status === FINAL_NO ? 'badge-red' : 'badge-blue';
         var cells = (r.noteOnly || r.status === CFG.milestones[0]) ? '' : fieldsFor(r.status).filter(function (f) { return !f.when || r.data[f.when[0]] === f.when[1]; }).map(function (f) {
@@ -771,8 +804,13 @@
     }
     function renderForm() {
       var st = form.status || current(), changed = st !== current();
+      // Statuses go in order: only the current status, the next step, or the not-closed outcome can be chosen
+      var cur = current(), ci = CFG.milestones.indexOf(cur), done = cur === FINAL_NO || ci === CFG.milestones.length - 1;
+      var opts = done ? [cur] : [cur, CFG.milestones[ci + 1], FINAL_NO];
+      var help = done ? 'This case is closed. You can still add a note.' : 'Statuses are updated in order. Next step: ' + esc(CFG.milestones[ci + 1]) + '.';
       var html = '<div class="fld"><label for="cn-f-status">Status <span class="req">*</span></label><select class="inp" id="cn-f-status">' +
-        CFG.milestones.slice(1).concat([FINAL_NO]).map(function (m) { return '<option' + (m === st ? ' selected' : '') + '>' + esc(m) + '</option>'; }).join('') + '</select></div>';
+        opts.map(function (m) { return '<option value="' + esc(m) + '"' + (m === st ? ' selected' : '') + '>' + esc(m) + (m === cur ? ' (current)' : '') + '</option>'; }).join('') +
+        '</select><div class="fld-help">' + help + '</div></div>';
       if (changed) fieldsFor(st).forEach(function (f) {
         if (f.when && form[f.when[0]] !== f.when[1]) return;
         var id = 'cn-f-' + f.k, v = form[f.k] || '', lab = esc(f.label) + (f.req ? ' <span class="req">*</span>' : '');
@@ -861,6 +899,57 @@
     document.getElementById('dpa-x').addEventListener('click', close);
     m.addEventListener('click', function (e) { if (e.target === m) close(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !m.hidden) close(); });
+  })();
+  // Responses layout: "Needs Reply" on top, answered questions in a "Previous Responses" table below
+  (function () {
+    var panel = document.getElementById('panel-responses') || document.getElementById('panel-response');
+    if (!panel) return;
+    var top = panel.querySelector('.resp-card');
+    top.insertAdjacentHTML('afterbegin', '<h2 class="resp-h">Needs Reply</h2>');
+    top.insertAdjacentHTML('beforeend', '<p class="resp-empty" id="resp-empty" hidden>No questions are waiting for a reply.</p>');
+    var prev = document.createElement('div');
+    prev.className = 'card resp-card prev-card';
+    prev.innerHTML = '<h2 class="resp-h">Previous Responses</h2><div class="table-wrap"><table class="kz-table prev">' +
+      '<thead><tr><th>Question</th><th>Asked On</th><th>Response</th><th>Responded On</th></tr></thead><tbody id="prev-body"></tbody></table></div>' +
+      '<p class="prev-none" id="prev-none">No previous responses yet.</p>';
+    top.parentNode.insertBefore(prev, top.nextSibling);
+    var body = document.getElementById('prev-body'), n = 0;
+    function meta(m, strip) { var t = (m.querySelector('.msg-meta') || {}).textContent || ''; t = t.replace(/^Sent\s+/, ''); return strip ? t.split('·').pop().trim() : t.trim(); }
+    function addRow(q, r, first) {
+      var rb = r.querySelector('.msg-body').cloneNode(true), lt = rb.querySelector('.table-wrap'), id = 'prev-x' + (++n);
+      if (lt) { lt.remove(); Array.prototype.forEach.call(rb.querySelectorAll('.sub-label'), function (s) { s.remove(); }); }
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td class="q"></td><td class="dt">' + meta(q, true) + '</td><td class="r"></td><td class="dt">' + meta(r) + '</td>';
+      tr.querySelector('.q').innerHTML = q.querySelector('.msg-body').innerHTML;
+      tr.querySelector('.r').innerHTML = rb.innerHTML.trim() || '--';
+      var rows = [tr];
+      if (lt) {
+        var count = lt.querySelectorAll('tbody tr').length;
+        tr.querySelector('.r').insertAdjacentHTML('beforeend', '<button class="link view-opts" type="button" aria-expanded="false" aria-controls="' + id + '">View Loan Options (' + count + ')</button>');
+        var x = document.createElement('tr'); x.id = id; x.className = 'prev-x'; x.hidden = true;
+        x.innerHTML = '<td colspan="4"></td>'; x.firstChild.appendChild(lt); rows.push(x);
+      }
+      var at = first ? body.firstChild : null;
+      rows.forEach(function (row) { body.insertBefore(row, at); });
+      document.getElementById('prev-none').hidden = true;
+    }
+    Array.prototype.forEach.call(panel.querySelectorAll('.exchange'), function (ex) {
+      if (ex.id === 'open-exchange') return;
+      var q = ex.querySelector('.msg.client'), r = ex.querySelector('.msg.mine');
+      if (q && r) addRow(q, r, false);
+      ex.remove();
+    });
+    body.addEventListener('click', function (e) {
+      var b = e.target.closest('.view-opts'); if (!b) return;
+      var x = document.getElementById(b.getAttribute('aria-controls')), open = x.hidden;
+      x.hidden = !open; b.setAttribute('aria-expanded', open ? 'true' : 'false');
+      b.textContent = (open ? 'Hide' : 'View') + b.textContent.replace(/^(View|Hide)/, '');
+    });
+    document.addEventListener('response-sent', function () {
+      var q = top.querySelector('.msg.client'), r = top.querySelector('.msg.mine');
+      if (q && r) { addRow(q, r, true); q.remove(); r.remove(); }
+      document.getElementById('resp-empty').hidden = false;
+    });
   })();
 </script>
 </body>
