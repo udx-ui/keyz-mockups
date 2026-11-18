@@ -131,6 +131,19 @@
           background: none; border: 0; padding: 0; cursor: pointer; text-decoration: none; }
   .link:hover { color: var(--blue-hover); text-decoration: underline; }
   .link .icon { width: 20px; height: 20px; }
+  /* Left-right rows in tiles (DS SummaryRow) */
+  .ov-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; max-width: 880px; margin: 8px auto 0; }
+  .ov-tile { border: 1px solid var(--divider); border-radius: var(--r-md); padding: 12px 16px 4px; }
+  .ov-tile h3 { margin: 0 0 4px; font-size: 16px; font-weight: 600; line-height: 1.5; color: var(--n-900); }
+  .lr { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 10px 0; border-top: 1px solid var(--divider); }
+  .lr .l { font-size: 16px; color: var(--n-600); }
+  .lr .v { font-size: 18px; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .lr .v.green { color: var(--success); }
+  .lr .v.dark { font-size: 16px; color: var(--n-800); }
+  .ov-h { margin: 24px 0 0; font-size: 16px; font-weight: 600; line-height: 1.5; color: var(--n-900); }
+  .ov-dpa { display: flex; flex-wrap: wrap; align-items: center; padding: 8px 24px 16px; font-size: 16px; color: var(--n-600);
+            border-bottom: 1px solid var(--divider); }
+  .ov-dpa i { margin: 0 16px; color: #D4DCE8; font-style: normal; }
   .downloads { margin-top: 28px; }
   .downloads h3 { margin: 0 0 12px; font-size: 16px; font-weight: 600; line-height: 1.5; color: var(--n-900); }
   .dl-row { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: center; gap: 16px;
@@ -150,6 +163,58 @@
                  font-weight: 400; cursor: pointer; }
   .btn-outline:hover { background: var(--blue-light); border-color: var(--blue-hover); color: var(--blue-hover); }
   .btn-outline:focus-visible, .link:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(35,66,238,0.10); }
+
+  /* DPA Programs: dashboard rows + detail modal (DS DPACard, register variant, saved) */
+  .dpa-list { padding: 4px 0 8px; border-bottom: 1px solid var(--divider); }
+  .dpa-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 24px; }
+  .dpa-row + .dpa-row { border-top: 1px solid var(--divider); }
+  .dpa-name { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 16px; font-weight: 600; color: var(--n-900); }
+  .dpa-meta { display: flex; flex-wrap: wrap; gap: 4px 24px; margin-top: 4px; font-size: 14px; color: var(--n-700); }
+  .dpa-meta .k { color: var(--label); }
+  .chip-loan { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: var(--r-full); border: 1px solid var(--purple-base);
+               background: var(--purple-light); color: var(--purple-base); font-size: 12px; font-weight: 500; line-height: 1; }
+  .badge-reg { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: var(--r-full); border: 1px dashed var(--success);
+               background: var(--success-bg); color: var(--success); font-size: 12px; font-weight: 500; line-height: 1; }
+  .badge-reg i { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+  .modal-back { position: fixed; inset: 0; background: rgba(15,23,42,0.45); display: flex; align-items: center; justify-content: center; z-index: 400; padding: 32px; }
+  .modal { width: 100%; max-width: 1200px; max-height: calc(100vh - 64px); overflow: auto; background: var(--white); border-radius: var(--r-lg);
+           box-shadow: 0 16px 40px rgba(0,0,0,0.12); padding: 24px; }
+  .modal-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+  .modal-head h2 { margin: 0; font-size: 24px; font-weight: 500; line-height: 1.3; color: var(--n-900); }
+  .modal-x { width: 36px; height: 36px; border: 0; background: none; border-radius: var(--r-full); color: var(--n-600); cursor: pointer;
+             display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .modal-x:hover { background: var(--surface-subtle); }
+  .modal-x .icon { width: 14px; height: 14px; stroke-width: 1.5; }
+  .dpa-card { border: 1px solid var(--divider); border-radius: var(--r-lg); overflow: hidden; }
+  .dpa-card-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 16px 24px; background: var(--blue-light); }
+  .dpa-card-head .t { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 20px; font-weight: 700; color: var(--n-900); }
+  .btn-outline-sm { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 20px; border-radius: var(--r-md);
+                    border: 1px solid var(--blue-base); background: var(--white); color: var(--blue-base); font-family: var(--font); font-size: 14px; cursor: pointer; }
+  .btn-outline-sm:hover { background: var(--blue-light); border-color: var(--blue-hover); color: var(--blue-hover); }
+  .btn-outline-sm .icon { width: 16px; height: 16px; }
+  .facts { display: grid; grid-template-columns: 1.15fr 1.15fr 0.85fr 0.7fr; gap: 16px 24px; padding: 16px 24px; }
+  .facts .l { font-size: 14px; color: var(--label); line-height: 1.5; margin-bottom: 2px; }
+  .facts .v { font-size: 16px; color: var(--n-900); line-height: 1.5; overflow-wrap: anywhere; }
+  .facts .sep { margin: 0 8px; color: #D4DCE8; font-style: normal; }
+  .inline-link { color: var(--blue-base); }
+  @media (max-width: 1180px) { .tab { margin-right: 16px; } }
+  .dpa-cards { display: flex; flex-direction: column; gap: 16px; }
+  .dpa-cards .dpa-card { background: var(--white); border: 0; box-shadow: var(--shadow-sm); scroll-margin-top: 16px; }
+  .dpa-cards .dpa-card:focus { outline: none; box-shadow: 0 0 0 3px rgba(35,66,238,0.25); }
+  .reg-box { margin: 0 24px 24px; border: 1px solid #7A8FA8; border-radius: var(--r-lg); overflow: hidden; }
+  .reg-band { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; padding: 12px 20px; background: var(--success-bg);
+              border-bottom: 1px solid rgba(0,136,0,0.33); }
+  .reg-band .t { font-size: 18px; font-weight: 600; color: var(--n-900); }
+  .reg-band .s { font-size: 14px; color: var(--n-500); }
+  .reg-box .facts { padding: 16px 20px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .more { padding: 16px 24px 24px; }
+  .more h3 { margin: 16px 0 4px; font-size: 16px; font-weight: 600; color: var(--n-900); }
+  .more h3:first-child { margin-top: 0; }
+  .more p { margin: 0; font-size: 16px; line-height: 1.5; color: var(--n-700); }
+  .back-link { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 12px; font-family: var(--font); font-size: 14px; color: var(--blue-base);
+               background: none; border: 0; padding: 0; cursor: pointer; }
+  .back-link .icon { width: 16px; height: 16px; }
+  @media (max-width: 900px) { .facts, .reg-box .facts { grid-template-columns: 1fr 1fr; } }
 
   /* Activity Tracker (DS VerticalMilestoneStepper) */
   .ms { display: flex; gap: 12px; }
@@ -327,6 +392,10 @@
   <symbol id="i-chevron-down" viewBox="0 0 24 24"><polyline points="0.501,5.5 12.001,18.5 23.501,5.5"/></symbol>
   <symbol id="i-download" viewBox="0 0 24 24"><path d="M22.5,17.718v1.913c0,1.584-1.285,2.869-2.869,2.869H3.369c-1.585,0-2.869-1.285-2.869-2.869v-1.913"/><line x1="11.5" y1="17.608" x2="11.5" y2="0.5"/><polyline points="18.5,10.608 11.5,17.608 4.5,10.608"/></symbol>
   <symbol id="i-document" viewBox="0 0 24 24"><polygon points="20.5,23.5 3.5,23.5 3.5,0.5 14.5,0.5 20.5,6.5"/><polyline points="14.5,0.5 14.5,6.5 20.5,6.5"/><line x1="7.5" y1="11.5" x2="16.5" y2="11.5"/><line x1="7.5" y1="15" x2="16.5" y2="15"/><line x1="7.5" y1="18.5" x2="13.5" y2="18.5"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5"/><line x1="12" y1="10.5" x2="12" y2="18"/><circle cx="12" cy="6.5" r="0.5"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><line x1="3" y1="3" x2="21" y2="21"/><line x1="21" y1="3" x2="3" y2="21"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="22.5" y1="12" x2="1.5" y2="12"/><polyline points="9,4.5 1.5,12 9,19.5"/></symbol>
+  <symbol id="i-coin-hand" viewBox="0 0 24 24"><rect x="0.5" y="13.5" width="4" height="8.042"/><path d="M4.5,20c10.5,3.5,7,3.5,19-2.5c-1.062-1.062-1.902-1.313-3-1l-4.434,1.471"/><path d="M4.5,14.5h3c2.353,0,4,1.5,4.5,2c0,0,1.5,0,3,0c1.594,0,1.594,2,0,2H9.5"/><circle cx="17.5" cy="3.5" r="3"/><circle cx="12.5" cy="10.5" r="3"/><line x1="12.5" y1="9.5" x2="12.5" y2="11.5"/><line x1="17.5" y1="2.5" x2="17.5" y2="4.5"/></symbol>
   <symbol id="i-hourglass" viewBox="0 0 24 24"><path d="M5.5 0.5h13M5.5 23.5h13M7.5 0.5v4.5c0 2 1 3.500 2.500 4.500L12 11.500l2-2c1.500-1 2.500-2.500 2.500-4.500V0.500M7.500 23.500V19c0-2 1-3.500 2.500-4.500l2-2 2 2c1.500 1 2.500 2.500 2.500 4.500v4.500"/></symbol>
   <symbol id="i-trash" viewBox="0 0 24 24"><path d="M19.5 3.5H3.5V23.5H19.5V3.5Z"/><path d="M15.5 0.5H7.5V3.5H15.5V0.5Z"/><path d="M1 3.5H23"/><path d="M7.5 7V19"/><path d="M11.5 7V19"/><path d="M15.5 7V19"/></symbol>
   <symbol id="i-add" viewBox="0 0 24 24"><line x1="11.5" y1="0.5" x2="11.5" y2="22.5"/><line x1="22.5" y1="11.5" x2="0.5" y2="11.5"/></symbol>
@@ -432,7 +501,7 @@
         <div class="waiting">
           <svg class="icon"><use href="#i-hourglass"/></svg>
           <div class="t">Waiting on the candidate</div>
-          <div class="d">Once the candidate graduates and becomes a prospect, you will be able to view more data.</div>
+          <div class="d">Once the candidate graduates and agrees to share their data with you, you will be able to view more data.</div>
         </div>
       </div>
       <div class="card">
