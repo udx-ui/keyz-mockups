@@ -122,6 +122,21 @@
   .card { background: var(--white); border-radius: var(--r-md); box-shadow: var(--shadow-sm); padding: 16px 20px 20px; }
   .card h2 { margin: 0 0 12px; font-size: 20px; font-weight: 500; line-height: 1.3; color: var(--n-900); }
 
+  .overview-row.loan-row { row-gap: 16px; }
+  .overview-row .value-md.stop { color: #C00000; }
+  /* Prototype only: loan status switcher */
+  .demo { position: fixed; right: 16px; bottom: 16px; z-index: 300; width: 220px; padding: 12px; background: var(--white);
+          border: 1px dashed var(--n-300); border-radius: var(--r-md); box-shadow: 0 8px 24px rgba(0,0,0,0.10); font-size: 12px; }
+  .demo-h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: 600; color: var(--n-700); }
+  .demo-x { border: 0; background: none; color: var(--n-500); cursor: pointer; font-size: 16px; line-height: 1; padding: 0 4px; }
+  .demo button.opt { display: block; width: 100%; margin-top: 4px; padding: 6px 8px; text-align: left; border: 1px solid var(--divider);
+                     border-radius: var(--r-sm); background: var(--white); color: var(--n-700); font-family: var(--font); font-size: 12px; cursor: pointer; }
+  .demo button.opt[aria-pressed="true"] { border-color: var(--blue-base); background: var(--blue-light); color: #1225A8; font-weight: 600; }
+  .demo-note { margin-top: 8px; color: var(--label); line-height: 1.4; }
+  .ov-sub { margin: 20px 0 0; font-size: 16px; font-weight: 600; line-height: 1.5; color: var(--n-900); }
+  .overview-row .badge-blue { margin-top: 4px; }
+  .ov-sub-note { margin: 0; font-size: 12px; color: var(--label); }
+  .overview-row .value-md.none { color: var(--label); font-weight: 400; }
   .overview-row.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .overview-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px;
                   padding: 12px 24px 16px; border-bottom: 1px solid var(--divider); }
@@ -231,6 +246,9 @@
   .hstep-item.active .hstep-lbl { font-weight: 600; color: var(--blue-base); }
   .hstep-item.pending .hstep-lbl { font-weight: 400; color: var(--n-500); }
   .hstep-item.stopped .hstep-lbl { color: #991B1B; }
+  .hstep-item.skipped::before { background: var(--blue-base); }
+  .hstep-item.skipped .hstep-orb { background: var(--white); border: 2px dashed var(--n-300); color: var(--n-400); width: 24px; height: 24px; margin: 6px; }
+  .hstep-item.skipped .hstep-lbl { font-weight: 400; color: var(--n-500); }
   .hstep-dt { margin-top: 2px; font-size: 12px; color: var(--label); }
   .cn-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--divider); }
   .cn-card > h2 { margin-bottom: 16px; }
@@ -420,13 +438,14 @@
       <div class="dash">
         <div class="card">
           <h2>Case Overview</h2>
-          <div class="overview-row two">
+          <div class="overview-row">
             <div><div class="label-md">Target Home Price</div><div class="value-md">$325,000</div></div>
             <div><div class="label-md">Down Payment</div><div class="value-md">$12,000</div></div>
+            <div><div class="label-md">Down Payment Assistance</div><div class="value-md">$10,000</div></div>
           </div>
-          <div class="overview-row two">
+          <div class="overview-row loan-row" id="loan-row">
             <div><div class="label-md">Lender Partner</div><div class="value-md">Stifel Bank &amp; Trust</div></div>
-            <div><div class="label-md">DPA</div><div class="value-md">$10,000</div></div>
+            <div><div class="label-md">Loan Status</div><div class="value-md" id="loan-status">--</div></div>
           </div>
         </div>
 
@@ -505,6 +524,12 @@
     </div>
   </section>
 
+  <!-- Prototype only: switch the lender's loan status. Also works from the link: ?loan=pre-approved, under-contract, rate-locked, closed, did-not-close, none -->
+  <aside class="demo" id="demo" aria-label="Prototype controls">
+    <div class="demo-h">Prototype: Loan Status <button class="demo-x" type="button" id="demo-x" aria-label="Hide prototype controls">&times;</button></div>
+    <div id="demo-opts"></div>
+    <div class="demo-note">Link: add ?loan=closed (or another status) to the address.</div>
+  </aside>
 </main>
 
 <script>
@@ -595,7 +620,7 @@
   })();
   // Closing Notes: status updates after selection, saved as a read-only history (newest on top)
   (function () {
-    var CFG = {"by": "Maria Lopez, Realtor", "outcomeOk": "Home Purchased", "notClosed": "Did Not Purchase", "milestones": ["Selected", "Home Search", "Under Contract", "Closed"], "fields": {"Home Search": [], "Under Contract": [{"k": "price", "label": "Offer Price", "type": "money", "req": true}, {"k": "expClose", "label": "Expected Closing Date", "type": "date", "req": true}], "Closed": [{"k": "price", "label": "Purchase Price", "type": "money", "req": true}, {"k": "zip", "label": "Property ZIP Code", "type": "text", "req": true}], "Did Not Purchase": [{"k": "reason", "label": "Reason", "type": "select", "req": true, "options": ["Client chose another realtor", "Financing fell through", "Client stopped responding", "Client paused or changed their mind", "No suitable home in budget", "Other"]}]}, "seed": [{"status": "Selected", "date": "2026-11-06", "data": {}, "note": "Client selected you as their realtor in the Marketplace.", "by": "Keyz", "at": "11/06/2026, 9:40 AM"}, {"status": "Home Search", "date": "2026-11-09", "data": {}, "note": "Toured three homes on Saturday. She liked the second one and wants to see two more before making an offer.", "by": "Maria Lopez, Realtor", "at": "11/09/2026, 5:45 PM"}]};
+    var CFG = {"by": "Maria Lopez, Realtor", "outcomeOk": "Home Purchased", "notClosed": "Did Not Purchase", "milestones": ["Selected", "Home Search", "Under Contract", "Closed"], "fields": {"Home Search": [], "Under Contract": [{"k": "price", "label": "Offer Price", "type": "money", "req": true}, {"k": "expClose", "label": "Expected Closing Date", "type": "date", "req": true}], "Closed": [{"k": "price", "label": "Purchase Price", "type": "money", "req": true}, {"k": "zip", "label": "Property ZIP Code", "type": "text", "req": true}], "Did Not Purchase": [{"k": "reason", "label": "Reason", "type": "select", "req": true, "options": ["Client chose another realtor", "Financing fell through", "Client stopped responding", "Client paused or changed their mind", "No suitable home in budget", "Other"]}]}, "seed": [{"status": "Selected", "date": "2026-11-06", "data": {}, "note": "Client selected you as their realtor in the Marketplace.", "by": "Keyz", "at": "11/06/2026, 9:40 AM"}], "optional": []};
     var $ = function (id) { return document.getElementById(id); };
     var check = '<svg viewBox="0 0 24 24"><polyline points="4,12 9,17 20,7"/></svg>';
     var records = CFG.seed.slice(), form = {}, FINAL_OK = CFG.milestones[CFG.milestones.length - 1], FINAL_NO = CFG.notClosed;
@@ -607,6 +632,7 @@
     function latest(status) { for (var i = records.length - 1; i >= 0; i--) if (records[i].status === status) return records[i]; }
 
     function d0() { var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); }
+    function isOpt(m) { return (CFG.optional || []).indexOf(m) > -1; }
     function current() { return records[records.length - 1].status; }
     function renderSteps() {
       // Visual of the status order: done (green check), current (green ring), next steps (grey number), stopped (red)
@@ -614,11 +640,11 @@
       CFG.milestones.forEach(function (m, i) { if (latest(m)) reached = i; });
       $('cn-steps').innerHTML = CFG.milestones.map(function (m, i) {
         var r = latest(m), lastDone = i === reached && (m === FINAL_OK || stopped);
-        var st = i < reached || lastDone ? 'done' : i === reached ? 'active' : stopped && i === reached + 1 ? 'stopped' : 'pending';
+        var st = i < reached && !r && isOpt(m) ? 'skipped' : i < reached || lastDone ? 'done' : i === reached ? 'active' : stopped && i === reached + 1 ? 'stopped' : 'pending';
         var label = st === 'stopped' ? FINAL_NO : m, rec = st === 'stopped' ? latest(FINAL_NO) : r;
-        var orb = st === 'done' ? check : st === 'stopped' ? '<svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>' : i + 1;
+        var orb = st === 'done' ? check : st === 'stopped' ? '<svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>' : st === 'skipped' ? '&ndash;' : i + 1;
         return '<div class="hstep-item ' + st + '" role="listitem"' + (st === 'active' ? ' aria-current="step"' : '') + '><span class="hstep-orb">' + orb + '</span>' +
-          '<span class="hstep-lbl">' + esc(label) + '</span><span class="hstep-dt">' + (rec ? fmtDate(rec.date) : '-- --') + '</span></div>';
+          '<span class="hstep-lbl">' + esc(label) + '</span><span class="hstep-dt">' + (st === 'skipped' ? 'Skipped' : rec ? fmtDate(rec.date) : isOpt(m) ? 'Optional' : '-- --') + '</span></div>';
       }).join('');
     }
     function renderHistory() {
@@ -636,8 +662,11 @@
       var st = form.status || current(), changed = st !== current();
       // Statuses go in order: only the current status, the next step, or the not-closed outcome can be chosen
       var cur = current(), ci = CFG.milestones.indexOf(cur), done = cur === FINAL_NO || ci === CFG.milestones.length - 1;
-      var opts = done ? [cur] : [cur, CFG.milestones[ci + 1], FINAL_NO];
-      var help = done ? 'This case is closed. You can still add a note.' : 'Statuses are updated in order. Next step: ' + esc(CFG.milestones[ci + 1]) + '.';
+      var nexts = [];
+      if (!done) { var k = ci + 1; nexts.push(CFG.milestones[k]); while (isOpt(CFG.milestones[k]) && k + 1 < CFG.milestones.length) { k++; nexts.push(CFG.milestones[k]); } }
+      var opts = done ? [cur] : [cur].concat(nexts, [FINAL_NO]);
+      var help = done ? 'This case is closed. You can still add a note.' : 'Statuses are updated in order. Next step: ' +
+        nexts.map(function (m) { return esc(m) + (isOpt(m) ? ' (optional)' : ''); }).join(' or ') + '.';
       var html = '<div class="fld"><label for="cn-f-status">Status <span class="req">*</span></label><select class="inp" id="cn-f-status">' +
         opts.map(function (m) { return '<option value="' + esc(m) + '"' + (m === st ? ' selected' : '') + '>' + esc(m) + (m === cur ? ' (current)' : '') + '</option>'; }).join('') +
         '</select><div class="fld-help">' + help + '</div></div>';
@@ -831,6 +860,37 @@
       });
     }
     refresh();
+  })();
+
+  // Loan Status on the Realtor Case Overview: comes from the lender's Closing Notes; the details shown depend on the status
+  (function () {
+    var S = {
+      'none':           { label: '--', fields: [] },
+      'pre-approved':   { label: 'Pre-Approved', fields: [['Pre-Approval Amount', '$330,000']] },
+      'under-contract': { label: 'Under Contract', fields: [['Purchase Price', '$325,000'], ['Expected Closing Date', '12/18/2026']] },
+      'rate-locked':    { label: 'Rate Locked', fields: [['Interest Rate', '6.25%'], ['Lock Expiration Date', '01/15/2027']] },
+      'closed':         { label: 'Closed', fields: [['Closing Date', '12/18/2026'], ['Purchase Price', '$325,000'], ['Loan Amount', '$313,625']] },
+      'did-not-close':  { label: 'Did Not Close', fields: [['Reason', 'Loan was not approved']] }
+    };
+    var row = document.getElementById('loan-row'), status = document.getElementById('loan-status'), opts = document.getElementById('demo-opts');
+    function show(key) {
+      if (!S[key]) key = 'pre-approved';
+      var st = S[key];
+      status.textContent = st.label; status.className = 'value-md' + (key === 'did-not-close' ? ' stop' : '');
+      Array.prototype.forEach.call(row.querySelectorAll('.loan-extra'), function (e) { e.remove(); });
+      st.fields.forEach(function (f) {
+        var d = document.createElement('div'); d.className = 'loan-extra';
+        d.innerHTML = '<div class="label-md"></div><div class="value-md"></div>';
+        d.firstChild.textContent = f[0]; d.lastChild.textContent = f[1]; row.appendChild(d);
+      });
+      Array.prototype.forEach.call(opts.children, function (b) { b.setAttribute('aria-pressed', b.dataset.k === key ? 'true' : 'false'); });
+      var u = new URL(location.href); u.searchParams.set('loan', key);
+      try { history.replaceState(null, '', u.pathname + u.search + u.hash); } catch (e) {}
+    }
+    opts.innerHTML = Object.keys(S).map(function (k) { return '<button type="button" class="opt" data-k="' + k + '">' + (k === 'none' ? 'Nothing recorded yet' : S[k].label) + '</button>'; }).join('');
+    opts.addEventListener('click', function (e) { var b = e.target.closest('.opt'); if (b) show(b.dataset.k); });
+    document.getElementById('demo-x').addEventListener('click', function () { document.getElementById('demo').hidden = true; });
+    show(new URLSearchParams(location.search).get('loan') || 'pre-approved');
   })();
 </script>
 </body>
