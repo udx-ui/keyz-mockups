@@ -320,6 +320,9 @@
   .hstep-item.active .hstep-lbl { font-weight: 600; color: var(--blue-base); }
   .hstep-item.pending .hstep-lbl { font-weight: 400; color: var(--n-500); }
   .hstep-item.stopped .hstep-lbl { color: #991B1B; }
+  .hstep-item.skipped::before { background: var(--blue-base); }
+  .hstep-item.skipped .hstep-orb { background: var(--white); border: 2px dashed var(--n-300); color: var(--n-400); width: 24px; height: 24px; margin: 6px; }
+  .hstep-item.skipped .hstep-lbl { font-weight: 400; color: var(--n-500); }
   .hstep-dt { margin-top: 2px; font-size: 12px; color: var(--label); }
   .cn-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--divider); }
   .cn-card > h2 { margin-bottom: 16px; }
@@ -787,7 +790,7 @@
   })();
   // Closing Notes: status updates after selection, saved as a read-only history (newest on top)
   (function () {
-    var CFG = {"by": "Jordan Blake, Lender", "outcomeOk": "Loan Closed", "notClosed": "Did Not Close", "milestones": ["Selected", "Pre-Approved", "Under Contract", "Rate Locked", "Closed"], "fields": {"Pre-Approved": [{"k": "preAmt", "label": "Pre-Approval Amount", "type": "money", "req": true}, {"k": "loanType", "label": "Loan Type", "type": "select", "options": ["Conventional", "FHA", "VA", "USDA", "Other"], "req": true}], "Under Contract": [{"k": "price", "label": "Purchase Price", "type": "money", "req": true}, {"k": "expClose", "label": "Expected Closing Date", "type": "date", "req": true}], "Rate Locked": [{"k": "rate", "label": "Interest Rate (%)", "type": "number", "req": true}, {"k": "lockExp", "label": "Lock Expiration Date", "type": "date", "req": true}], "Closed": [{"k": "loanType", "label": "Loan Type", "type": "select", "options": ["Conventional", "FHA", "VA", "USDA", "Other"], "req": true}, {"k": "loanAmt", "label": "Loan Amount", "type": "money", "req": true}, {"k": "price", "label": "Purchase Price", "type": "money", "req": true}], "Did Not Close": [{"k": "reason", "label": "Reason", "type": "select", "req": true, "options": ["Client chose another lender", "Loan was not approved", "Client stopped responding", "Client paused or changed their mind", "Client could not find a home", "Other"]}]}, "seed": [{"status": "Selected", "date": "2026-11-06", "data": {}, "note": "Client selected you as their lender in the Marketplace.", "by": "Keyz", "at": "11/06/2026, 9:40 AM"}, {"status": "Pre-Approved", "date": "2026-11-10", "data": {"preAmt": "330000", "loanType": "FHA"}, "note": "Pre-approval letter sent to the client. She is starting her home search this week.", "by": "Jordan Blake, Lender", "at": "11/10/2026, 3:12 PM"}]};
+    var CFG = {"by": "Jordan Blake, Lender", "outcomeOk": "Loan Closed", "notClosed": "Did Not Close", "milestones": ["Selected", "Pre-Approved", "Under Contract", "Rate Locked", "Closed"], "fields": {"Pre-Approved": [{"k": "preAmt", "label": "Pre-Approval Amount", "type": "money", "req": true}, {"k": "loanType", "label": "Loan Type", "type": "select", "options": ["Conventional", "FHA", "VA", "USDA", "Other"], "req": true}], "Under Contract": [{"k": "price", "label": "Purchase Price", "type": "money", "req": true}, {"k": "expClose", "label": "Expected Closing Date", "type": "date", "req": true}], "Rate Locked": [{"k": "rate", "label": "Interest Rate (%)", "type": "number", "req": true}, {"k": "lockExp", "label": "Lock Expiration Date", "type": "date", "req": true}], "Closed": [{"k": "loanType", "label": "Loan Type", "type": "select", "options": ["Conventional", "FHA", "VA", "USDA", "Other"], "req": true}, {"k": "loanAmt", "label": "Loan Amount", "type": "money", "req": true}, {"k": "price", "label": "Purchase Price", "type": "money", "req": true}], "Did Not Close": [{"k": "reason", "label": "Reason", "type": "select", "req": true, "options": ["Client chose another lender", "Loan was not approved", "Client stopped responding", "Client paused or changed their mind", "Client could not find a home", "Other"]}]}, "seed": [{"status": "Selected", "date": "2026-11-06", "data": {}, "note": "Client selected you as their lender in the Marketplace.", "by": "Keyz", "at": "11/06/2026, 9:40 AM"}], "optional": ["Rate Locked"]};
     var $ = function (id) { return document.getElementById(id); };
     var check = '<svg viewBox="0 0 24 24"><polyline points="4,12 9,17 20,7"/></svg>';
     var records = CFG.seed.slice(), form = {}, FINAL_OK = CFG.milestones[CFG.milestones.length - 1], FINAL_NO = CFG.notClosed;
@@ -799,6 +802,7 @@
     function latest(status) { for (var i = records.length - 1; i >= 0; i--) if (records[i].status === status) return records[i]; }
 
     function d0() { var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); }
+    function isOpt(m) { return (CFG.optional || []).indexOf(m) > -1; }
     function current() { return records[records.length - 1].status; }
     function renderSteps() {
       // Visual of the status order: done (green check), current (green ring), next steps (grey number), stopped (red)
@@ -806,11 +810,11 @@
       CFG.milestones.forEach(function (m, i) { if (latest(m)) reached = i; });
       $('cn-steps').innerHTML = CFG.milestones.map(function (m, i) {
         var r = latest(m), lastDone = i === reached && (m === FINAL_OK || stopped);
-        var st = i < reached || lastDone ? 'done' : i === reached ? 'active' : stopped && i === reached + 1 ? 'stopped' : 'pending';
+        var st = i < reached && !r && isOpt(m) ? 'skipped' : i < reached || lastDone ? 'done' : i === reached ? 'active' : stopped && i === reached + 1 ? 'stopped' : 'pending';
         var label = st === 'stopped' ? FINAL_NO : m, rec = st === 'stopped' ? latest(FINAL_NO) : r;
-        var orb = st === 'done' ? check : st === 'stopped' ? '<svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>' : i + 1;
+        var orb = st === 'done' ? check : st === 'stopped' ? '<svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>' : st === 'skipped' ? '&ndash;' : i + 1;
         return '<div class="hstep-item ' + st + '" role="listitem"' + (st === 'active' ? ' aria-current="step"' : '') + '><span class="hstep-orb">' + orb + '</span>' +
-          '<span class="hstep-lbl">' + esc(label) + '</span><span class="hstep-dt">' + (rec ? fmtDate(rec.date) : '-- --') + '</span></div>';
+          '<span class="hstep-lbl">' + esc(label) + '</span><span class="hstep-dt">' + (st === 'skipped' ? 'Skipped' : rec ? fmtDate(rec.date) : isOpt(m) ? 'Optional' : '-- --') + '</span></div>';
       }).join('');
     }
     function renderHistory() {
@@ -828,8 +832,11 @@
       var st = form.status || current(), changed = st !== current();
       // Statuses go in order: only the current status, the next step, or the not-closed outcome can be chosen
       var cur = current(), ci = CFG.milestones.indexOf(cur), done = cur === FINAL_NO || ci === CFG.milestones.length - 1;
-      var opts = done ? [cur] : [cur, CFG.milestones[ci + 1], FINAL_NO];
-      var help = done ? 'This case is closed. You can still add a note.' : 'Statuses are updated in order. Next step: ' + esc(CFG.milestones[ci + 1]) + '.';
+      var nexts = [];
+      if (!done) { var k = ci + 1; nexts.push(CFG.milestones[k]); while (isOpt(CFG.milestones[k]) && k + 1 < CFG.milestones.length) { k++; nexts.push(CFG.milestones[k]); } }
+      var opts = done ? [cur] : [cur].concat(nexts, [FINAL_NO]);
+      var help = done ? 'This case is closed. You can still add a note.' : 'Statuses are updated in order. Next step: ' +
+        nexts.map(function (m) { return esc(m) + (isOpt(m) ? ' (optional)' : ''); }).join(' or ') + '.';
       var html = '<div class="fld"><label for="cn-f-status">Status <span class="req">*</span></label><select class="inp" id="cn-f-status">' +
         opts.map(function (m) { return '<option value="' + esc(m) + '"' + (m === st ? ' selected' : '') + '>' + esc(m) + (m === cur ? ' (current)' : '') + '</option>'; }).join('') +
         '</select><div class="fld-help">' + help + '</div></div>';
