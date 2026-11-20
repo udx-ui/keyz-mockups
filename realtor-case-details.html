@@ -623,7 +623,7 @@
   })();
   // Closing Notes: status updates after selection, saved as a read-only history (newest on top)
   (function () {
-    var CFG = {"by": "Maria Lopez, Realtor", "outcomeOk": "Home Purchased", "notClosed": "Did Not Purchase", "milestones": ["Selected", "Home Search", "Under Contract", "Closed"], "fields": {"Home Search": [], "Under Contract": [{"k": "price", "label": "Offer Price", "type": "money", "req": true}, {"k": "expClose", "label": "Expected Closing Date", "type": "date", "req": true}], "Closed": [{"k": "price", "label": "Purchase Price", "type": "money", "req": true}, {"k": "zip", "label": "Property ZIP Code", "type": "text", "req": true}], "Did Not Purchase": [{"k": "reason", "label": "Reason", "type": "select", "req": true, "options": ["Client chose another realtor", "Financing fell through", "Client stopped responding", "Client paused or changed their mind", "No suitable home in budget", "Other"]}]}, "seed": [{"status": "Selected", "date": "2026-11-06", "data": {}, "note": "Client selected you as their realtor in the Marketplace.", "by": "Keyz", "at": "11/06/2026, 9:40 AM"}], "optional": []};
+    var CFG = {"by": "Maria Lopez, Realtor", "outcomeOk": "Home Purchased", "notClosed": "Did Not Purchase", "milestones": ["Selected", "Home Search", "Under Contract", "Closed"], "fields": {"Home Search": [], "Under Contract": [{"k": "price", "label": "Offer Price", "type": "money", "req": true}, {"k": "expClose", "label": "Expected Closing Date", "type": "date", "req": true}], "Closed": [{"k": "price", "label": "Purchase Price", "type": "money", "req": true}, {"k": "zip", "label": "Property ZIP Code", "type": "text", "req": true}, {"k": "commRate", "label": "Commission Rate (%)", "type": "number", "req": true}, {"k": "commAmt", "label": "Commission Amount", "type": "money", "req": true}, {"k": "commPaidBy", "label": "Commission Paid By", "type": "select", "options": ["Seller", "Buyer", "Split"], "req": true}], "Did Not Purchase": [{"k": "reason", "label": "Reason", "type": "select", "req": true, "options": ["Client chose another realtor", "Financing fell through", "Client stopped responding", "Client paused or changed their mind", "No suitable home in budget", "Other"]}]}, "seed": [{"status": "Selected", "date": "2026-11-06", "data": {}, "note": "Client selected you as their realtor in the Marketplace.", "by": "Keyz", "at": "11/06/2026, 9:40 AM"}], "optional": []};
     var $ = function (id) { return document.getElementById(id); };
     var check = '<svg viewBox="0 0 24 24"><polyline points="4,12 9,17 20,7"/></svg>';
     var records = CFG.seed.slice(), form = {}, FINAL_OK = CFG.milestones[CFG.milestones.length - 1], FINAL_NO = CFG.notClosed;
@@ -693,7 +693,17 @@
       if (e.target.id === 'cn-f-status') { form = { status: e.target.value, date: d0() }; renderForm(); $('cn-hint').hidden = true; }
       else if (e.target.dataset.k) form[e.target.dataset.k] = e.target.value;
     });
-    $('cn-form').addEventListener('input', function (e) { if (e.target.dataset.k) { form[e.target.dataset.k] = e.target.value; $('cn-hint').hidden = true; } });
+    $('cn-form').addEventListener('input', function (e) {
+      var k = e.target.dataset.k; if (!k) return;
+      form[k] = e.target.value; $('cn-hint').hidden = true;
+      // Commission Amount is worked out from Purchase Price and Commission Rate until the realtor types their own amount
+      if (k === 'commAmt') form.commAmtEdited = true;
+      if ((k === 'price' || k === 'commRate') && !form.commAmtEdited && $('cn-f-commAmt')) {
+        var price = parseFloat(String(form.price || '').replace(/[^0-9.]/g, '')), rate = parseFloat(form.commRate);
+        var amt = price && rate ? String(Math.round(price * rate / 100)) : '';
+        form.commAmt = amt; $('cn-f-commAmt').value = amt;
+      }
+    });
     $('cn-form').addEventListener('click', function (e) {
       var b = e.target.closest('.pill'); if (!b) return;
       form[b.dataset.k] = b.textContent; renderForm();
